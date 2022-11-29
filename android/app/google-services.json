@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "63735933830",
+    "project_id": "emotion-detection-acaad",
+    "storage_bucket": "emotion-detection-acaad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63735933830:android:d167824750e344ec8b5a07",
+        "android_client_info": {
+          "package_name": "com.example.facecam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63735933830-1ltqq27cf9gvtnidqmjhiqterj02spcj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.facecam",
+            "certificate_hash": "4f564c3ac8cf1e781632595b80f11ea7d1920140"
+          }
+        },
+        {
+          "client_id": "63735933830-3k4uau3a4rccu94ffbtmjqoqi74rk29f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgy_CZlb_nDKBfNUF5CFyPhZtsYoRD6PA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63735933830-3k4uau3a4rccu94ffbtmjqoqi74rk29f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

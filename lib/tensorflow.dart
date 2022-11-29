@@ -66,6 +66,7 @@ class _TensorflowState extends State<Tensorflow> {
   Widget build(BuildContext context) {
     List emoji = ["...😡", "...😀", "...😥", "...😯"];
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -89,7 +90,7 @@ class _TensorflowState extends State<Tensorflow> {
                     )
                   : Center(
                       child: Container(
-                        width: MediaQuery.of(context).size.width * .7,
+                        width: MediaQuery.of(context).size.width * .8,
                         height: MediaQuery.of(context).size.height * .7,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,15 +106,13 @@ class _TensorflowState extends State<Tensorflow> {
                                             MediaQuery.of(context).size.height *
                                                 .5),
                                   ),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10),
                             _image == null
                                 ? Container(
                                     child: Text(
                                       'No image selected',
                                       style: TextStyle(
-                                          fontSize: 25,
+                                          fontSize: 22,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey[500]),
                                     ),

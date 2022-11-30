@@ -66,7 +66,19 @@ class _TensorflowState extends State<Tensorflow> {
   Widget build(BuildContext context) {
     List emoji = ["...😡", "...😀", "...😥", "...😯"];
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        leading: Icon(
+          Icons.flutter_dash,
+          color: Colors.amber,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Emotion Detection',
+          style: TextStyle(
+              color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 28),
+        ),
+      ),
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:facecam/ui/launch.dart';
-import 'package:facecam/ui/home.dart';
-import 'package:facecam/ui/login.dart';
+import 'package:facecam/ui/auth/home.dart';
+import 'package:facecam/ui/auth/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

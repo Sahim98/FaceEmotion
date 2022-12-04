@@ -55,7 +55,7 @@ class _TensorflowState extends State<Tensorflow> {
   }
 
   void pickimage() async {
-    var imgGallery = await imgPicker.getImage(source: ImageSource.gallery);
+    var imgGallery = await imgPicker.getImage(source: ImageSource.camera);
     setState(() {
       _image = File(imgGallery!.path);
     });

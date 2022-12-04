@@ -1,11 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:facecam/ui/auth/login.dart';
 import 'package:facecam/ui/tensorflow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,8 +16,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool isAuth = false;
-  final style =
-      TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Colors.purple);
+  final style = TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 40, color: Colors.purple);
 
   Widget buildAuthScreen() {
     return Text('Authinticated');
@@ -40,22 +40,20 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-  width: 250.0,
-  child: DefaultTextStyle(
-    style:  GoogleFonts.aladin(
-      textStyle: style,
-    ),
-    child: AnimatedTextKit(
-      repeatForever: true,
-      
-      animatedTexts: [
-        ScaleAnimatedText('Emotion detection'),
-        ScaleAnimatedText('😡😃😥😮')
-       
-      ],
-    ),
-  ),
-),
+              width: 250.0,
+              child: DefaultTextStyle(
+                style: GoogleFonts.aladin(
+                  textStyle: style,
+                ),
+                child: AnimatedTextKit(
+                  repeatForever: true,
+                  animatedTexts: [
+                    ScaleAnimatedText('Emotion detection'),
+                    ScaleAnimatedText('😡😃😥😮')
+                  ],
+                ),
+              ),
+            ),
             SizedBox(
               height: 10,
             ),
@@ -73,36 +71,11 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return Tensorflow();
+                    return Login();
                   },
                 ));
-                // showDialog(
-                //   context: context,
-                //   builder: (context) {
-                //     return AboutDialog(
-                //       children: [
-                //         TextField(
-                //           decoration: const InputDecoration(
-                //             labelText: 'Name',
-                //             border: OutlineInputBorder(
-                //               borderRadius:
-                //                   BorderRadius.all(Radius.circular(10)),
-                //             ),
-                //             filled: true,
-                //             fillColor: Color.fromARGB(255, 211, 208, 208),
-                //           ),
-                //           keyboardType: TextInputType.text,
-                //           maxLength: 40,
-                //           autocorrect: true,
-                //           cursorColor: Colors.blue,
-                //           cursorWidth: 3,
-                //         ),
-                //       ],
-                //     );
-                //   },
-                // );
               },
-              child: Text('Sign Up'),
+              child: Text('Sign in'),
             ),
           ],
         ));

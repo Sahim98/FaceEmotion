@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class splashServices {
   void isLogin(BuildContext context) {
     Timer(
-      const Duration(seconds: 7),
+      const Duration(seconds: 4),
       () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {

@@ -1,6 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:facecam/ui/auth/login.dart';
-import 'package:facecam/ui/tensorflow.dart';
+import 'package:facecam/ui/utils/tensorflow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_signin_button/button_view.dart';

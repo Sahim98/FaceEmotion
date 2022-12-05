@@ -122,7 +122,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       onPressed: () {
                         if (_formfield.currentState!.validate()) {
-                          //  loading = true;
+                         
                           _auth
                               .createUserWithEmailAndPassword(
                             email: emailController.text.toString(),

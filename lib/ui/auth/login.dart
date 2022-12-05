@@ -1,5 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:facecam/ui/auth/signup.dart';
+import 'package:facecam/ui/auth/tensorflow.dart';
+import 'package:facecam/ui/utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +22,24 @@ class _LoginState extends State<Login> {
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+
+  void login() {
+    _auth
+        .signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passController.text.toString())
+        .then((value) {
+      Utils().toastMessage(value.user!.email.toString());
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return Tensorflow();
+        },
+      ));
+    }).onError((error, stackTrace) {
+      Utils().toastMessage(error.toString());
+    });
+  }
 
   @override
   void dispose() {
@@ -124,7 +146,9 @@ class _LoginState extends State<Login> {
                         onPrimary: Colors.white, // foreground
                       ),
                       onPressed: () {
-                        if (_formfield.currentState!.validate()) {}
+                        if (_formfield.currentState!.validate()) {
+                          login();
+                        }
                       },
                       child: Text('Login'),
                     ),

@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:facecam/ui/auth/home.dart';
+import 'package:facecam/ui/auth/login.dart';
+import 'package:facecam/ui/utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -13,6 +17,7 @@ class _TensorflowState extends State<Tensorflow> {
   File? _image;
   bool _loading = false;
   final imgPicker = ImagePicker();
+  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -76,8 +81,26 @@ class _TensorflowState extends State<Tensorflow> {
         title: Text(
           'Emotion Detection',
           style: TextStyle(
-              color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 28),
+              color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _auth.signOut().then((value) {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return Login();
+                    },
+                  ));
+                }).onError((error, stackTrace) {
+                  Utils().toastMessage(error.toString());
+                });
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Colors.black54,
+              ))
+        ],
       ),
       body: Container(
         color: Colors.white,

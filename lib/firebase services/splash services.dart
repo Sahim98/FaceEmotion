@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:facecam/ui/auth/tensorflow.dart';
-import 'package:facecam/launch.dart';
-import 'package:facecam/ui/auth/home.dart';
+import 'package:facecam/ui/launch.dart';
+
 import 'package:facecam/ui/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,7 +34,7 @@ class splashServices {
       () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return Home();
+            return Login();
           },
         ));
       },

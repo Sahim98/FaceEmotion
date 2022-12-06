@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:facecam/ui/auth/home.dart';
+
 import 'package:facecam/ui/auth/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -5,9 +5,11 @@ import 'package:facecam/ui/auth/design.dart';
 import 'package:facecam/ui/auth/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -17,14 +19,39 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  String name = '';
   bool _rememberMe = false;
+  bool loading = false;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  bool loading = false;
+  final _usrcontroller = TextEditingController();
+  final datab =
+      FirebaseDatabase.instance.ref('Username'); //creating table of Username
+
+  final ref = FirebaseDatabase.instance.ref('Username');
 
   FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void load_data() {
+    datab.ref.child(DateTime.now().microsecondsSinceEpoch.toString()).set({
+      'name': _usrcontroller.text.toString(),
+    }).then((value) {
+      Utils().toastMessage('Post added');
+      setState(() {
+        loading = false;
+      });
+    }).onError((error, stackTrace) {
+      Utils().toastMessage(error.toString());
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
+
+  
 
   @override
   void dispose() {
@@ -85,22 +112,36 @@ class _SignUpState extends State<SignUp> {
                         ),
                       )),
                 ),
+                SizedBox(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    'Hi ' + name,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple,
+                        fontFamily: 'OpenSans'),
+                  ),
+                ),
                 Form(
                   key: _formfield,
                   child: Column(
                     children: [
-                
                       TextFormField(
                         onChanged: (value) {
-                          
+                          setState(() {
+                            name = value;
+                          });
+
                         },
                         validator: (value) {
                           if (value!.isEmpty)
-                            return 'Unique should be UserName';
+                            return 'UserName shouldn\'t be empty';
                           else
                             return null;
                         },
-                        controller: emailController,
+                        controller: _usrcontroller,
                         decoration: const InputDecoration(
                           prefixIcon: Icon(
                             Icons.person_outline_rounded,
@@ -212,8 +253,7 @@ class _SignUpState extends State<SignUp> {
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     onPressed: () {
-                      if (_formfield.currentState!.validate()) {
-                        
+                      if (_formfield.currentState!.validate() ) {
                         _auth
                             .createUserWithEmailAndPassword(
                           email: emailController.text.toString(),
@@ -222,9 +262,11 @@ class _SignUpState extends State<SignUp> {
                             .then((value) {
                           setState(() {
                             loading = true;
+                            load_data();
                           });
                         }).onError((error, stackTrace) {
-                          Utils().toastMessage(error.toString());
+                          Utils().toastMessage(
+                              ErrorSummary(error.toString()).toString());
                           setState(() {
                             loading = false;
                           });

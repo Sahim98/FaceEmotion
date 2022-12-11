@@ -83,8 +83,7 @@ class _MyAppState extends State<MyApp> {
                     setState(() {
                       loading = true;
                     });
-                    datab.ref
-                        .child(DateTime.now().microsecondsSinceEpoch.toString())
+                    datab.child(DateTime.now().microsecondsSinceEpoch.toString())
                         .set({
                       'title': _usrcontroller.text.toString(),
                     }).then((value) {

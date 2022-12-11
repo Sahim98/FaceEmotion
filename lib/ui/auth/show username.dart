@@ -15,7 +15,7 @@ class usr extends StatefulWidget {
 
 class _usrState extends State<usr> {
   final auth = FirebaseDatabase.instance;
-  final ref = FirebaseDatabase.instance.ref('Username');
+  final database = FirebaseDatabase.instance.ref('Username');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +36,14 @@ class _usrState extends State<usr> {
             Expanded(
               child: FirebaseAnimatedList(
                 defaultChild: Text('Loading'),
-                query: ref,
+                query: database,
                 itemBuilder: (context, snapshot, animation, index) {
                   return ListTile(
-                    title: Text(snapshot.child('title').value.toString()),
+                    title: Text(snapshot.child('name').value.toString()),
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

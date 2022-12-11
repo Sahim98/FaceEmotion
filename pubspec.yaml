@@ -51,8 +51,6 @@ flutter:
     - assets/image/signin.jpeg
     - assets/labels.txt
     - assets/grayscale_quantized.tflite
-    - assets/logos/facebook.jpg
-    - assets/logos/google.jpg
   fonts:
     - family: OpenSans
       fonts:

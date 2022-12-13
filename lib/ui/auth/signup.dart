@@ -329,9 +329,16 @@ class _SignUpState extends State<SignUp> {
                                 auth = true;
                               });
                             }).onError((error, stackTrace) {
-                              Utils().toastMessage(error.toString());
+                              Utils()
+                                  .toastMessage(error.toString().substring(5));
                               setState(() {
                                 loading = false;
+                              });
+                              setState(() {
+                                auth = false;
+                              });
+                              setState(() {
+                                show = true;
                               });
                             });
                           }
@@ -400,4 +407,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-

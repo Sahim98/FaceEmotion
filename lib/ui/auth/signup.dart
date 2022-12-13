@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,15 +25,13 @@ class _SignUpState extends State<SignUp> {
   bool show = false;
 
   String name = '';
-  bool _rememberMe = false;
-  bool loading = false;
+  bool _rememberMe = false, loading = false, auth = false;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final _usrcontroller = TextEditingController();
-  final database =
-      FirebaseDatabase.instance.ref('Username'); //creating table of Username
+  //creating table of Username
   final firestore = FirebaseFirestore.instance
       .collection(
         'Username',
@@ -46,7 +45,6 @@ class _SignUpState extends State<SignUp> {
         .collection('Username')
         .add({'name': _usrcontroller.text.toString()});
   }
-
 
   checkUsernameIsUnique(String username) async {
     QuerySnapshot querySnapshot;
@@ -186,7 +184,7 @@ class _SignUpState extends State<SignUp> {
                           maxLength: 30,
                           autocorrect: true,
                         ),
-                        (loading || name.length == 0)
+                        (name.length == 0)
                             ? CircularProgressIndicator(
                                 color: Colors.deepOrange,
                                 strokeWidth: 5,
@@ -304,58 +302,69 @@ class _SignUpState extends State<SignUp> {
                     padding: EdgeInsets.symmetric(vertical: 25.0),
                     width: double.infinity,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.orange[700],
-                        elevation: 6,
-                        padding: EdgeInsets.all(15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                      ),
-                      onPressed: () {
-                        if (_formfield.currentState!.validate()) {
-                          _auth
-                              .createUserWithEmailAndPassword(
-                            email: emailController.text.toString(),
-                            password: passController.text.toString(),
-                          )
-                              .then((value) {
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.orange[700],
+                          elevation: 6,
+                          padding: EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        onPressed: () {
+                          if (_formfield.currentState!.validate() &&
+                              show == false) {
                             setState(() {
                               loading = true;
-                              addUsers();
                             });
-                          }).onError((error, stackTrace) {
-                            Utils().toastMessage(
-                                ErrorSummary(error.toString()).toString());
-                            setState(() {
-                              loading = false;
-                            });
-                          });
-                        }
-                      },
-                      child: loading
-                          ? Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.done,
-                                  size: 40,
-                                  color: Colors.green,
-                                ),
-                                Text('  Signed Up!!')
-                              ],
+                            _auth
+                                .createUserWithEmailAndPassword(
+                              email: emailController.text.toString(),
+                              password: passController.text.toString(),
                             )
-                          : Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                color: Colors.white,
-                                letterSpacing: 1.5,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                              ),
-                            ),
-                    ),
+                                .then((value) {
+                              setState(() {
+                                loading = false;
+                                addUsers();
+                              });
+                              setState(() {
+                                auth = true;
+                              });
+                            }).onError((error, stackTrace) {
+                              Utils().toastMessage(error.toString());
+                              setState(() {
+                                loading = false;
+                              });
+                            });
+                          }
+                        },
+                        child: loading
+                            ? CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                                strokeWidth: 5,
+                              )
+                            : auth
+                                ? Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.done,
+                                        size: 40,
+                                        color: Colors.green,
+                                      ),
+                                      Text('  Signed Up!!'),
+                                    ],
+                                  )
+                                : Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      letterSpacing: 1.5,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'OpenSans',
+                                    ),
+                                  )),
                   ),
                   SizedBox(
                     height: 20,
@@ -391,3 +400,4 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+

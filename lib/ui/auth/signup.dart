@@ -22,10 +22,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool show = false;
-
+  
   String name = '';
-  bool _rememberMe = false, loading = false, auth = false;
+  bool _rememberMe = false, loading = false, auth = false,unique_user = false;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -57,7 +56,7 @@ class _SignUpState extends State<SignUp> {
         .get();
 
     setState(() {
-      show = !(querySnapshot.docs.isEmpty);
+      unique_user = !(querySnapshot.docs.isEmpty);
     });
 
     setState(() {
@@ -150,9 +149,7 @@ class _SignUpState extends State<SignUp> {
                               setState(() {
                                 name = value;
                               });
-
                               checkUsernameIsUnique(value);
-
                               setState(() {
                                 loading = false;
                               });
@@ -161,6 +158,7 @@ class _SignUpState extends State<SignUp> {
                           validator: (value) {
                             if (value!.isEmpty)
                               return 'UserName shouldn\'t be empty';
+                            else if(unique_user)return 'UserName should be unique';
                             else if (value.length < 4)
                               return 'Username must be at least 4 characters';
                             else
@@ -189,7 +187,7 @@ class _SignUpState extends State<SignUp> {
                                 color: Colors.deepOrange,
                                 strokeWidth: 5,
                               )
-                            : (show
+                            : (unique_user
                                 ? SizedBox(
                                     child: Text(
                                       '*@' + name + ' already exists.',
@@ -310,8 +308,7 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: BorderRadius.circular(30)),
                         ),
                         onPressed: () {
-                          if (_formfield.currentState!.validate() &&
-                              show == false) {
+                          if (_formfield.currentState!.validate()) {
                             setState(() {
                               loading = true;
                             });
@@ -329,8 +326,7 @@ class _SignUpState extends State<SignUp> {
                                 auth = true;
                               });
                             }).onError((error, stackTrace) {
-                              Utils()
-                                  .toastMessage(error.toString().substring(5));
+                              Utils().toastMessage("SignUP failed");
                               setState(() {
                                 loading = false;
                               });
@@ -338,7 +334,7 @@ class _SignUpState extends State<SignUp> {
                                 auth = false;
                               });
                               setState(() {
-                                show = true;
+                                unique_user = false;
                               });
                             });
                           }
@@ -348,7 +344,7 @@ class _SignUpState extends State<SignUp> {
                                 backgroundColor: Colors.white,
                                 strokeWidth: 5,
                               )
-                            : auth
+                            : auth 
                                 ? Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,

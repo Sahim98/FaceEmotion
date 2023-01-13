@@ -1,8 +1,8 @@
 import 'dart:io';
-
-import 'package:facecam/ui/auth/login.dart';
+import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -64,6 +64,7 @@ class _TensorflowState extends State<Tensorflow> {
     setState(() {
       _image = File(imgGallery!.path);
     });
+
     classifyImage(_image);
   }
 
@@ -112,7 +113,7 @@ class _TensorflowState extends State<Tensorflow> {
             children: <Widget>[
               _loading
                   ? Container(
-                      height: MediaQuery.of(context).size.height * .7,
+                      height: MediaQuery.of(context).size.height,
                       child: Center(
                         child: Text(
                           'Select an image...',
@@ -125,8 +126,7 @@ class _TensorflowState extends State<Tensorflow> {
                     )
                   : Center(
                       child: Container(
-                        width: MediaQuery.of(context).size.width * .8,
-                        height: MediaQuery.of(context).size.height * .7,
+                        height: MediaQuery.of(context).size.height * .8,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +139,8 @@ class _TensorflowState extends State<Tensorflow> {
                                         fit: BoxFit.cover,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                .5),
+                                                .5,
+                                        colorBlendMode: BlendMode.colorBurn),
                                   ),
                             SizedBox(height: 10),
                             _image == null
@@ -171,22 +172,22 @@ class _TensorflowState extends State<Tensorflow> {
                                           ),
                                         ),
                                       )
-                                    : Container()
+                                    : Container(),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  
+                                  primary: Colors.amber),
+                              onPressed: pickimage,
+                              child: Icon(
+                                Icons.add_a_photo,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
-              FloatingActionButton(
-                elevation: 02,
-                tooltip: 'Pick Image',
-                onPressed: pickimage,
-                child: Icon(
-                  Icons.add_a_photo,
-                  size: 20,
-                  color: Colors.white,
-                ),
-                backgroundColor: Colors.amber,
-              ),
             ],
           ),
         ),

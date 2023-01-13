@@ -14,19 +14,16 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0
-  url_launcher: ^6.1.4
   google_maps_flutter: ^2.2.1
   google_maps_flutter_web: ^0.4.0+3
   http:
   uuid: ^3.0.7
   animated_text_kit: ^4.2.2
-  animate_do: ^3.0.2
   firebase_database: ^10.0.4
   firebase_core: ^2.1.0
   firebase_auth: ^4.0.2
   firebase_storage: ^11.0.6
   cloud_firestore: ^4.0.2
-  video_player: ^2.4.7
   google_fonts: ^3.0.1 
   image_picker: ^0.8.6
   tflite: ^1.0.4
@@ -34,6 +31,9 @@ dependencies:
   google_sign_in: ^5.4.2
   flutter_signin_button: ^2.0.0
   fluttertoast: ^8.1.1
+  bottom_navy_bar: ^6.0.0
+  profile: ^0.0.1
+  flutter_rating_bar: ^4.0.1
   
 dev_dependencies:
   flutter_test:
@@ -42,13 +42,10 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
-
-
   uses-material-design: true
 
   
   assets:
-    - assets/image/signin.jpeg
     - assets/labels.txt
     - assets/grayscale_quantized.tflite
   fonts:

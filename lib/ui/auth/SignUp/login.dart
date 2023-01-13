@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:facecam/ui/auth/design.dart';
-import 'package:facecam/ui/auth/signup.dart';
+import 'package:facecam/ui/auth/SignUp/signup.dart';
+import 'package:facecam/ui/auth/navigationbar.dart';
 import 'package:facecam/ui/auth/tensorflow.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,7 +39,7 @@ class _LoginState extends State<Login> {
       Utils().toastMessage(value.user!.email.toString());
       Navigator.push(context, MaterialPageRoute(
         builder: (context) {
-          return Tensorflow();
+          return MyApp();
         },
       ));
     }).onError((error, stackTrace) {

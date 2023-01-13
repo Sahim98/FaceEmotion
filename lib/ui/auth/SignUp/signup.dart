@@ -1,18 +1,14 @@
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/design.dart';
-import 'package:facecam/ui/auth/login.dart';
+import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -22,10 +18,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  
-  String name = '';
-  bool _rememberMe = false, loading = false, auth = false,unique_user = false;
+  bool _rememberMe = false, loading = false, auth = false, unique_user = false;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
+  String name = '';
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
@@ -43,6 +38,7 @@ class _SignUpState extends State<SignUp> {
     FirebaseFirestore.instance
         .collection('Username')
         .add({'name': _usrcontroller.text.toString()});
+ 
   }
 
   checkUsernameIsUnique(String username) async {
@@ -56,6 +52,7 @@ class _SignUpState extends State<SignUp> {
         .get();
 
     setState(() {
+      // ignore: prefer_is_not_empty
       unique_user = !(querySnapshot.docs.isEmpty);
     });
 
@@ -158,7 +155,8 @@ class _SignUpState extends State<SignUp> {
                           validator: (value) {
                             if (value!.isEmpty)
                               return 'UserName shouldn\'t be empty';
-                            else if(unique_user)return 'UserName should be unique';
+                            else if (unique_user)
+                              return 'UserName should be unique';
                             else if (value.length < 4)
                               return 'Username must be at least 4 characters';
                             else
@@ -344,7 +342,7 @@ class _SignUpState extends State<SignUp> {
                                 backgroundColor: Colors.white,
                                 strokeWidth: 5,
                               )
-                            : auth 
+                            : auth
                                 ? Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,

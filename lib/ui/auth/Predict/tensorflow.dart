@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -155,27 +154,28 @@ class _TensorflowState extends State<Tensorflow> {
                                   )
                                 : _outputs != null
                                     ? Card(
-                                        margin: EdgeInsets.all(8),
-                                        elevation: 10,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            _outputs![0]["label"].substring(
-                                                  1,
-                                                ) +
-                                                emoji[int.parse(
-                                                    _outputs![0]["label"][0])],
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                      margin: EdgeInsets.all(8),
+                                      elevation: 10,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          _outputs![0]["label"].substring(
+                                                1,
+                                              ) +
+                                              emoji[int.parse(_outputs![0]
+                                                  ["label"][0])],
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 15,
+                                              fontWeight:
+                                                  FontWeight.bold),
                                         ),
-                                      )
+                                      ),
+                                    )
                                     : Container(),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  
                                   primary: Colors.amber),
                               onPressed: pickimage,
                               child: Icon(

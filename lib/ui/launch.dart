@@ -1,6 +1,5 @@
-import 'package:facecam/ui/auth/SplashScreen.dart';
+import 'package:facecam/ui/auth/residual/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 

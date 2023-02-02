@@ -2,7 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
 import 'package:facecam/ui/auth/Home/home.dart';
-import 'package:facecam/ui/auth/tensorflow.dart';
+import 'package:facecam/ui/auth/Predict/tensorflow.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

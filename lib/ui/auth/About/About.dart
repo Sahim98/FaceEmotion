@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/ui/auth/About/comment.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
 import 'package:facecam/ui/auth/SignUp/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +11,8 @@ import 'package:intl/intl.dart';
 // Initialize the Realtime Database
 final data = FirebaseFirestore.instance.collection('Ratings');
 
+String User = 'Anynomious';
+
 void submitRating(double rating, String name, String comment) {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd - kk:mm').format(now);
@@ -23,6 +24,8 @@ void submitRating(double rating, String name, String comment) {
   });
 }
 
+getUsrName() {}
+
 class CommentDialog extends StatefulWidget {
   @override
   _CommentDialogState createState() => _CommentDialogState();
@@ -31,7 +34,6 @@ class CommentDialog extends StatefulWidget {
 class _CommentDialogState extends State<CommentDialog> {
   final _formKey = GlobalKey<FormState>();
   final cont = TextEditingController();
-  String? _comment, name = 'Sahim';
   double rate = 1.0;
 
   @override
@@ -76,7 +78,7 @@ class _CommentDialogState extends State<CommentDialog> {
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                         onPressed: () {
-                          submitRating(rate, name!, cont.text);
+                          submitRating(rate, User, cont.text);
                           cont.clear();
                         },
                         icon: Icon(Icons.send)),
@@ -106,10 +108,22 @@ class _CommentDialogState extends State<CommentDialog> {
                 child: StreamBuilder<QuerySnapshot>(
                     stream: data.snapshots(),
                     builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return CircularProgressIndicator.adaptive(
-                          backgroundColor: Colors.amber,
-                        );
+                      if (!snapshot.hasData) {
+                        return Container(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 20),
+                            Text(
+                              "Loading...",
+                              style: TextStyle(
+                                  fontFamily: 'OpenSans',
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ));
                       }
                       return ListView.builder(
                         itemCount: snapshot.data!.docs.length,
@@ -129,7 +143,7 @@ class _CommentDialogState extends State<CommentDialog> {
                                     Text(
                                       name,
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 18,
                                           fontFamily: 'OpenSans',
                                           fontWeight: FontWeight.bold,
                                           color: Colors.blueGrey),
@@ -146,16 +160,20 @@ class _CommentDialogState extends State<CommentDialog> {
                                     ),
                                   ],
                                 ),
-                                subtitle: Row(
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       comment,
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 15,
                                           fontFamily: 'OpenSans',
                                           color: Colors.blueGrey),
                                     ),
-                                    Text('  at ' + time)
+                                    Text(
+                                      'at ' + time,
+                                      style: TextStyle(fontSize: 10),
+                                    ),
                                   ],
                                 )),
                           );

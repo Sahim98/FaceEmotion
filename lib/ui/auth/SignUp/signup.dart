@@ -1,14 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:facecam/ui/auth/About/About.dart';
-import 'package:facecam/ui/auth/design.dart';
+import 'package:facecam/ui/auth/residual/design.dart';
 import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
+import 'package:intl/intl.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -18,13 +16,17 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool _rememberMe = false, loading = false, auth = false, unique_user = false;
+  bool _rememberMe = true, loading = false, auth = false, unique_user = false;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   String name = '';
+
+  DateTime _date = DateTime.now();
+
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final _usrcontroller = TextEditingController();
+  final _agecontroller = TextEditingController();
   //creating table of Username
   final firestore = FirebaseFirestore.instance
       .collection(
@@ -38,7 +40,12 @@ class _SignUpState extends State<SignUp> {
     FirebaseFirestore.instance
         .collection('Username')
         .add({'name': _usrcontroller.text.toString()});
- 
+
+    FirebaseFirestore.instance.collection('Users').add({
+      'name': _usrcontroller.text,
+      'email': emailController.text,
+      'age': _agecontroller.text
+    });
   }
 
   checkUsernameIsUnique(String username) async {
@@ -58,6 +65,21 @@ class _SignUpState extends State<SignUp> {
 
     setState(() {
       loading = false;
+    });
+  }
+
+  void showDate() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2030))
+        .then((value) {
+           DateTime now = value!;
+  String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+      setState(() {
+        _agecontroller.text = formattedDate;
+      });
     });
   }
 
@@ -244,7 +266,7 @@ class _SignUpState extends State<SignUp> {
                             else
                               return null;
                           },
-                          obscureText: true,
+                          obscureText: _rememberMe,
                           obscuringCharacter: '*',
                           controller: passController,
                           decoration: const InputDecoration(
@@ -263,6 +285,34 @@ class _SignUpState extends State<SignUp> {
                           keyboardType: TextInputType.text,
                           maxLength: 10,
                           autocorrect: true,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty)
+                              return 'Birthdate is required';
+                            else
+                              return null;
+                          },
+                          controller: _agecontroller,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.calendar_today),
+                            labelText: 'Birthdate',
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 246, 191, 135),
+                          ),
+                          keyboardType: TextInputType.text,
+                          maxLength: 10,
+                          autocorrect: true,
+                          onTap: () {
+                            showDate();
+                          },
                         ),
                       ],
                     ),
@@ -285,7 +335,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         Text(
-                          'Remember me',
+                          'show password',
                           style: kLabelStyle,
                         ),
                       ],

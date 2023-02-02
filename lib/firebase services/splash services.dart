@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:facecam/ui/auth/navigationbar.dart';
-import 'package:facecam/ui/auth/tensorflow.dart';
+import 'package:facecam/ui/auth/residual/navigationbar.dart';
+import 'package:facecam/ui/auth/Predict/tensorflow.dart';
 import 'package:facecam/ui/launch.dart';
 
 import 'package:facecam/ui/auth/SignUp/login.dart';

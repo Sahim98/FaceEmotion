@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -9,19 +8,63 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  String user = 'Sahim';
+final firestore = FirebaseFirestore.instance;
+String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
+Future<void> addToArrayField(
+    String documentId, String fieldName, List<dynamic> values) async {
+  await firestore.collection('Post').doc(documentId).update({
+    fieldName: FieldValue.arrayUnion(values),
+  });
+}
+
+Future<void> RemoveArrVal(String fieldName, String id) async {
+  await firestore.collection("Post").doc(id).update({
+    fieldName: FieldValue.arrayRemove([_user])
+  });
+}
+
+Future<void> findInArrayField(String fieldName, String id) async {
+  bool f = false;
+ 
+  await firestore
+      .collection("Post")
+      .where(fieldName, arrayContains: _user)
+      .get()
+      .then((querySnapshot) {
+    if (querySnapshot.docs.isNotEmpty) {
+      f = true;
+    }
+  });
+
+  if (f == false) {
+    await addToArrayField(id, fieldName, [_user]);
+  } else {
+   await RemoveArrVal(fieldName, id);
+  }
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              AlertDialog(
+                actions: [],
+              );
+            },
+            backgroundColor: Colors.amber,
+            child: Icon(
+              Icons.add,
+            ),
+          ),
           body: SafeArea(
               child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Images')
-                      .snapshots(),
+                  stream:
+                      FirebaseFirestore.instance.collection('Post').snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return SizedBox(
@@ -49,12 +92,10 @@ class _HomeState extends State<Home> {
                         itemBuilder: (context, index) {
                           DocumentSnapshot docum = snapshot.data!.docs[index];
                           String img = docum['image'];
-                          int like = docum['like'];
-                          int dislike = docum['dislike'];
-                          bool give_like = false,
-                              give_dislike = true,
-                              switched1 = false,
-                              switched2 = false;
+
+                          var like = docum['like'];
+                          var dislike = docum['dislike'];
+                          Color color = Colors.grey;
 
                           return ListTile(
                               title: Column(
@@ -62,7 +103,7 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(10.0),
-                                      child: Text(user),
+                                      child: Text(_user),
                                     ),
                                     Image.network(img)
                                   ]),
@@ -70,57 +111,25 @@ class _HomeState extends State<Home> {
                                 Row(
                                   children: [
                                     IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            switched1 = true;
-                                          });
-                                          setState(() {
-                                            give_like = !give_like;
-                                            if (give_like) give_dislike = false;
-                                          });
-                                          if (give_like)
-                                            docum.reference
-                                                .update({'like': like + 1});
-                                          else if (switched1)
-                                            docum.reference
-                                                .update({'like': like - 1});
-
-                                          print(give_like);
-                                          print(give_dislike);
+                                        onPressed: () async {
+                                          await findInArrayField(
+                                              'like', docum.id);
                                         },
-                                        icon: Icon(Icons.thumb_up,
-                                            color: (give_like
-                                                ? Colors.blue
-                                                : Colors.grey))),
-                                    Text('${like}')
+                                        icon:
+                                            Icon(Icons.thumb_up, color: color)),
+                                    Text('${like.length - 1}')
                                   ],
                                 ),
                                 Row(
                                   children: [
                                     IconButton(
-                                        onPressed: () {
-                                          print(FirebaseAuth
-                                              .instance.currentUser);
-                                          setState(() {
-                                            switched2 = false;
-                                          });
-                                          setState(() {
-                                            give_dislike = !give_dislike;
-                                            if (give_dislike) give_like = false;
-                                          });
-                                          if (give_dislike)
-                                            docum.reference.update(
-                                                {'dislike': dislike + 1});
-                                          else if (switched2)
-                                            docum.reference.update(
-                                                {'dislike': dislike - 1});
+                                        onPressed: () async {
+                                          await findInArrayField(
+                                              'dislike', docum.id);
                                         },
                                         icon: Icon(Icons.thumb_down,
-                                            color: (give_dislike
-                                                ? Color.fromARGB(
-                                                    255, 231, 81, 71)
-                                                : Colors.grey))),
-                                    Text('${dislike}')
+                                            color: color)),
+                                    Text('${dislike.length - 1}')
                                   ],
                                 ),
                               ]));

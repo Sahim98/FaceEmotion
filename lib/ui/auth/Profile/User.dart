@@ -1,19 +1,31 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+String? Current_User = '';
+
 class user extends StatefulWidget {
   const user({super.key});
-
   @override
   State<user> createState() => _userState();
 }
 
 class _userState extends State<user> {
   File? _image;
-  bool show = false;
+  int? age;
   final picker = ImagePicker();
+  String _user = FirebaseAuth.instance.currentUser!.email.toString();
+
+  @override
+  void initState() {
+   FirebaseFirestore.instance
+        .collection("Users")
+        .where("email", isEqualTo: _user).get().then((value) => print(value.docChanges));
+
+    super.initState();
+  }
 
   Future getImg() async {
     var picked = await picker.getImage(source: ImageSource.gallery);
@@ -95,7 +107,7 @@ class _userState extends State<user> {
                       width: 10,
                     ),
                     Text(
-                      'sahimsalem@gmail.com',
+                      _user,
                       style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 18,

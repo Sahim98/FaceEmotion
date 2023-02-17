@@ -3,6 +3,7 @@ import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
 import 'package:facecam/ui/auth/Home/home.dart';
 import 'package:facecam/ui/auth/Predict/tensorflow.dart';
+import 'package:facecam/ui/auth/video/videos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
-  List ls = [Home(), user(), Tensorflow(), CommentDialog()];
+  List ls = [Home(), user(), Tensorflow(),Videos(), CommentDialog()];
   final _auth = FirebaseAuth.instance;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -42,10 +43,15 @@ class _MyAppState extends State<MyApp> {
                 activeColor: Colors.blueAccent,
                 inactiveColor: Colors.amberAccent),
             BottomNavyBarItem(
+                icon: const Icon(Icons.video_collection),
+                title: const Text('Videos'),
+                activeColor: Colors.blueAccent,
+                inactiveColor: Colors.orangeAccent),
+            BottomNavyBarItem(
                 icon: const Icon(Icons.help),
                 title: const Text('About'),
                 activeColor: Colors.blueAccent,
-                inactiveColor: Colors.orangeAccent),
+                inactiveColor: Colors.orangeAccent)
           ],
           selectedIndex: _selectedIndex,
           onItemSelected: (value) {

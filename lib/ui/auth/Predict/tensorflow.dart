@@ -3,8 +3,13 @@ import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class Tensorflow extends StatefulWidget {
   @override
@@ -14,7 +19,7 @@ class Tensorflow extends StatefulWidget {
 class _TensorflowState extends State<Tensorflow> {
   List? _outputs;
   File? _image;
-  bool _loading = false;
+  bool _loading = false, visible = false;
   final imgPicker = ImagePicker();
   final _auth = FirebaseAuth.instance;
 
@@ -65,6 +70,45 @@ class _TensorflowState extends State<Tensorflow> {
     });
 
     classifyImage(_image);
+  }
+
+  String location = 'Null, Press Button';
+  String Address = 'search';
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    Address =
+        await '${place.name}, ${place.subThoroughfare},${place.administrativeArea}, ${place.country}';
   }
 
   @override
@@ -154,36 +198,97 @@ class _TensorflowState extends State<Tensorflow> {
                                   )
                                 : _outputs != null
                                     ? Card(
-                                      margin: EdgeInsets.all(8),
-                                      elevation: 10,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          _outputs![0]["label"].substring(
-                                                1,
-                                              ) +
-                                              emoji[int.parse(_outputs![0]
-                                                  ["label"][0])],
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 15,
-                                              fontWeight:
-                                                  FontWeight.bold),
+                                        margin: EdgeInsets.all(8),
+                                        elevation: 10,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            _outputs![0]["label"].substring(
+                                                  1,
+                                                ) +
+                                                emoji[int.parse(
+                                                    _outputs![0]["label"][0])],
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
-                                      ),
-                                    )
+                                      )
                                     : Container(),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.amber),
-                              onPressed: pickimage,
-                              child: Icon(
-                                Icons.add_a_photo,
-                                size: 20,
-                                color: Colors.white,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.amber),
+                                  onPressed: pickimage,
+                                  child: Icon(
+                                    Icons.add_a_photo,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.black54),
+                                    onPressed: () async {
+                                      setState(() {
+                                        visible = true;
+                                      });
+
+                                      setState(() async {
+                                        Position position =
+                                            await _getGeoLocationPosition();
+                                        location =
+                                            'Lat: ${position.latitude} , Long: ${position.longitude}';
+                                        GetAddressFromLatLong(position);
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: Colors.green[300],
+                                    ))
+                              ],
                             ),
+                            visible
+                                ? Column(
+                                    children: [
+                                      Text(
+                                        'Coordinates Points',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        location,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'ADDRESS',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('${Address}'),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 10,
+                                  )
                           ],
                         ),
                       ),

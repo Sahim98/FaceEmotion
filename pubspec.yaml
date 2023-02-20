@@ -14,8 +14,6 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0
-  google_maps_flutter: ^2.2.1
-  google_maps_flutter_web: ^0.4.0+3
   http:
   uuid: ^3.0.7
   animated_text_kit: ^4.2.2
@@ -35,7 +33,10 @@ dependencies:
   profile: ^0.0.1
   flutter_rating_bar: ^4.0.1
   youtube_player_flutter: ^8.1.2
-  
+  geolocator: ^9.0.2
+  geocoding: ^2.0.5
+  get: ^4.6.5
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter

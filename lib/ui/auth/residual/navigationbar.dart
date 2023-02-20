@@ -6,6 +6,7 @@ import 'package:facecam/ui/auth/Predict/tensorflow.dart';
 import 'package:facecam/ui/auth/video/videos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 
 class MyApp extends StatefulWidget {
   @override

@@ -1,10 +1,13 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecam/ui/auth/About/About.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-String? Current_User = '';
+var Current_User = 'null';
+var age = "null";
 
 class user extends StatefulWidget {
   const user({super.key});
@@ -13,48 +16,46 @@ class user extends StatefulWidget {
 }
 
 class _userState extends State<user> {
+  bool show = true;
   File? _image;
-  int? age;
   final picker = ImagePicker();
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
   @override
   void initState() {
-   FirebaseFirestore.instance
-        .collection("Users")
-        .where("email", isEqualTo: _user).get().then((value) => print(value.docChanges));
-
     super.initState();
   }
 
-  Future getImg() async {
-    var picked = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (picked != null) {
-        _image = File(picked.path);
-      } else {
-        Text('No image selected');
-      }
-    });
-    FirebaseFirestore data = FirebaseFirestore.instance;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.white10,
       body: Padding(
         padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: Container(
           child: SingleChildScrollView(
-            child: Column(
+            child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .where('email', isEqualTo: _user)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError || (!snapshot.hasData)) {
+                        show = false;
+                        return CircularProgressIndicator();
+                      }
+                      show = true;
+                      Current_User =  snapshot.data!.docs[0]['name'];
+                      age = snapshot.data!.docs[0]['age'];
+                      return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Center(
                   child: CircleAvatar(
                       // backgroundImage: AssetImage('user.jpeg'),
-                      // radius: 40,
+                       radius: 40,
                       ),
                 ),
                 Divider(
@@ -66,14 +67,16 @@ class _userState extends State<user> {
                   style: TextStyle(color: Colors.grey, letterSpacing: 2),
                 ),
                 SizedBox(height: 10),
-                Text(
-                  'Sahim Salem',
-                  style: TextStyle(
-                      color: Colors.amberAccent[200],
-                      letterSpacing: 2,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold),
-                ),
+                show
+                    ? Text(
+                        Current_User,
+                        style: TextStyle(
+                            color: Colors.amberAccent[200],
+                            letterSpacing: 2,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold),
+                      )
+                    : CircularProgressIndicator(),
                 SizedBox(height: 20),
                 Text(
                   'Level',
@@ -131,8 +134,125 @@ class _userState extends State<user> {
                     SizedBox(
                       width: 10,
                     ),
+                    show
+                        ? Text(
+                            age,
+                            style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 18,
+                                letterSpacing: 1),
+                          )
+                        : CircularProgressIndicator(),
+                  ],
+                )
+              ],
+            );
+                    }),
+
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+/*
+
+StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .where('email', isEqualTo: _user)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError || (!snapshot.hasData)) {
+                        show = false;
+                        return CircularProgressIndicator();
+                      }
+                      show = true;
+                      Current_User =  snapshot.data!.docs[0]['name'];
+                      age = snapshot.data!.docs[0]['age'];
+                      //print("from stream builder " + Current_User + ' ' + age +' ' +show.toString());
+
+                      return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .where('email', isEqualTo: _user)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError || (!snapshot.hasData)) {
+                        show = false;
+                        return CircularProgressIndicator();
+                      }
+                      show = true;
+                      Current_User =  snapshot.data!.docs[0]['name'];
+                      age = snapshot.data!.docs[0]['age'];
+                      //print("from stream builder " + Current_User + ' ' + age +' ' +show.toString());
+
+                      return Container();
+                    }),
+                Center(
+                  child: CircleAvatar(
+                      // backgroundImage: AssetImage('user.jpeg'),
+                      // radius: 40,
+                      ),
+                ),
+                Divider(
+                  height: 60,
+                  color: Colors.grey[800],
+                ),
+                Text(
+                  'Name',
+                  style: TextStyle(color: Colors.grey, letterSpacing: 2),
+                ),
+                SizedBox(height: 10),
+                show
+                    ? Text(
+                        Current_User,
+                        style: TextStyle(
+                            color: Colors.amberAccent[200],
+                            letterSpacing: 2,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold),
+                      )
+                    : CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text(
+                  'Level',
+                  style: TextStyle(color: Colors.grey, letterSpacing: 2),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '8',
+                  style: TextStyle(
+                      color: Colors.amberAccent[200],
+                      letterSpacing: 2,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.email,
+                      color: Colors.grey[400],
+                    ),
                     Text(
-                      '20/10/1998',
+                      ' E-mail',
+                      style: TextStyle(color: Colors.grey, letterSpacing: 2),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      _user,
                       style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 18,
@@ -140,46 +260,37 @@ class _userState extends State<user> {
                     ),
                   ],
                 ),
-                Center(
-                  child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Card(
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: TextButton(
-                                onPressed: () {
-                                  print(_image.toString());
-                                  getImg();
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.image,
-                                      size: 30,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      'Upload image',
-                                      style: TextStyle(
-                                          fontFamily: 'OpenSans',
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                          ),
-                        ),
-                      )),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Birthdate',
+                  style: TextStyle(color: Colors.grey, letterSpacing: 2),
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.date_range,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    show
+                        ? Text(
+                            age,
+                            style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 18,
+                                letterSpacing: 1),
+                          )
+                        : CircularProgressIndicator(),
+                  ],
                 )
               ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+            );
+                    }),
+
+
+
+*/

@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 // Initialize the Realtime Database
 final data = FirebaseFirestore.instance.collection('Ratings');
 
-String User = 'Anynomious';
+String User = Current_User;
 
 void submitRating(double rating, String name, String comment) {
   DateTime now = DateTime.now();

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,49 +16,75 @@ final firestore = FirebaseFirestore.instance;
 String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
 Future<void> addToArrayField(
-    String documentId, String fieldName, List<dynamic> values) async {
-  await firestore.collection('Post').doc(documentId).update({
+    String id, String fieldName, List<dynamic> values) async {
+  await firestore.collection("Post").doc(id).update({
     fieldName: FieldValue.arrayUnion(values),
   });
 }
 
-Future<void> RemoveArrVal(String fieldName, String id) async {
-  await firestore.collection("Post").doc(id).update({
-    fieldName: FieldValue.arrayRemove([_user])
-  });
+Future<void> RemoveArrVal(
+    String fieldName, String id, List<dynamic> values) async {
+  await firestore
+      .collection("Post")
+      .doc(id)
+      .update({fieldName: FieldValue.arrayRemove(values)});
 }
 
 Future<void> findInArrayField(String fieldName, String id) async {
   bool f = false;
- 
+
   await firestore
       .collection("Post")
       .where(fieldName, arrayContains: _user)
       .get()
       .then((querySnapshot) {
-    if (querySnapshot.docs.isNotEmpty) {
+    if (querySnapshot.docs.length > 0) {
       f = true;
     }
   });
+  print(f);
 
   if (f == false) {
     await addToArrayField(id, fieldName, [_user]);
   } else {
-   await RemoveArrVal(fieldName, id);
+    await RemoveArrVal(fieldName, id, [_user]);
   }
+  print("after call: ${f}");
 }
 
 class _HomeState extends State<Home> {
+  ImagePicker imagePicker = ImagePicker();
+  File? file;
+  String? imageUrl;
+  Future pickImageCamera() async {
+    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        file = image.path as File?;
+      });
+    }
+  }
+
+  Future uploadProfileImage(String path) async {
+    // Reference reference = FirebaseStorage.instance
+    //     .ref()
+    //     .child('images');
+    // UploadTask uploadTask = reference.putFile(File(path));
+    // TaskSnapshot snapshot = await uploadTask;
+    // imageUrl = await snapshot.ref.getDownloadURL();
+    // print(imageUrl);
+  }
+
+ 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              AlertDialog(
-                actions: [],
-              );
+            onPressed: () async {
+              await pickImageCamera();
             },
             backgroundColor: Colors.amber,
             child: Icon(
@@ -64,7 +94,7 @@ class _HomeState extends State<Home> {
           body: SafeArea(
               child: StreamBuilder<QuerySnapshot>(
                   stream:
-                      FirebaseFirestore.instance.collection('Post').snapshots(),
+                      FirebaseFirestore.instance.collection("Post").snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return SizedBox(

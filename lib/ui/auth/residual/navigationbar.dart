@@ -3,6 +3,7 @@ import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
 import 'package:facecam/ui/auth/Home/home.dart';
 import 'package:facecam/ui/auth/Predict/tensorflow.dart';
+import 'package:facecam/ui/auth/pagination.dart/pagination.dart';
 import 'package:facecam/ui/auth/video/videos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
-  List ls = [Home(), user(), Tensorflow(),Videos(), CommentDialog()];
+  List ls = [Home(),Pagination(), Tensorflow(),Videos(), CommentDialog()];
   final _auth = FirebaseAuth.instance;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -33,11 +34,16 @@ class _MyAppState extends State<MyApp> {
                 title: const Text('Home'),
                 activeColor: Colors.blueAccent,
                 inactiveColor: Colors.purpleAccent),
-            BottomNavyBarItem(
-                icon: const Icon(Icons.person),
-                title: const Text('Profile'),
+                  BottomNavyBarItem(
+                icon: const Icon(Icons.newspaper),
+                title: const Text('Feed'),
                 activeColor: Colors.blueAccent,
-                inactiveColor: Colors.blue),
+                inactiveColor: Colors.orangeAccent),
+            // BottomNavyBarItem(
+            //     icon: const Icon(Icons.person),
+            //     title: const Text('Profile'),
+            //     activeColor: Colors.blueAccent,
+            //     inactiveColor: Colors.blue),
             BottomNavyBarItem(
                 icon: const Icon(Icons.camera),
                 title: const Text('Predict'),

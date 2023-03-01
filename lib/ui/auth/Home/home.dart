@@ -66,13 +66,13 @@ class _HomeState extends State<Home> {
   }
 
   Future uploadProfileImage(String path) async {
-    // Reference reference = FirebaseStorage.instance
-    //     .ref()
-    //     .child('images');
-    // UploadTask uploadTask = reference.putFile(File(path));
-    // TaskSnapshot snapshot = await uploadTask;
-    // imageUrl = await snapshot.ref.getDownloadURL();
-    // print(imageUrl);
+    Reference reference = FirebaseStorage.instance
+        .ref()
+        .child('images');
+    UploadTask uploadTask = reference.putFile(File(path));
+    TaskSnapshot snapshot = await uploadTask;
+    imageUrl = await snapshot.ref.getDownloadURL();
+    print(imageUrl);
   }
 
  

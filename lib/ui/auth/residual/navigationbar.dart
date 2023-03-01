@@ -3,7 +3,7 @@ import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
 import 'package:facecam/ui/auth/Home/home.dart';
 import 'package:facecam/ui/auth/Predict/tensorflow.dart';
-import 'package:facecam/ui/auth/pagination.dart/pagination.dart';
+import 'package:facecam/ui/auth/Pagination/pagination.dart';
 import 'package:facecam/ui/auth/video/videos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

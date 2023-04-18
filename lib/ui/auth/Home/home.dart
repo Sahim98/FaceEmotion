@@ -15,6 +15,13 @@ class Home extends StatefulWidget {
 final firestore = FirebaseFirestore.instance;
 String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
+
+
+
+
+class _HomeState extends State<Home> {
+
+  
 Future<void> addToArrayField(
     String id, String fieldName, List<dynamic> values) async {
   await firestore.collection("Post").doc(id).update({
@@ -24,35 +31,31 @@ Future<void> addToArrayField(
 
 Future<void> RemoveArrVal(
     String fieldName, String id, List<dynamic> values) async {
-  await firestore
-      .collection("Post")
-      .doc(id)
-      .update({fieldName: FieldValue.arrayRemove(values)});
-}
-
-Future<void> findInArrayField(String fieldName, String id) async {
-  bool f = false;
-
-  await firestore
-      .collection("Post")
-      .where(fieldName, arrayContains: _user)
-      .get()
-      .then((querySnapshot) {
-    if (querySnapshot.docs.length > 0) {
-      f = true;
-    }
+  await firestore.collection("Post").doc(id).update({
+    fieldName: FieldValue.arrayRemove(values),
   });
-  print(f);
-
-  if (f == false) {
-    await addToArrayField(id, fieldName, [_user]);
-  } else {
-    await RemoveArrVal(fieldName, id, [_user]);
-  }
-  print("after call: ${f}");
 }
 
-class _HomeState extends State<Home> {
+  
+Future<void> findInArrayField(
+    String fieldName, String id, List<dynamic> values) async {
+  DocumentSnapshot doc = await firestore.collection("Post").doc(id).get();
+  List<dynamic> fieldValues = doc.get(fieldName);
+  if (fieldValues.contains(_user)) {
+    await firestore.collection("Post").doc(id).update({
+      fieldName: FieldValue.arrayRemove(values),
+    });
+  } else {
+    await firestore.collection("Post").doc(id).update({
+      fieldName: FieldValue.arrayUnion(values),
+    });
+  }
+}
+
+
+
+
+
   ImagePicker imagePicker = ImagePicker();
   File? file;
   String? imageUrl;
@@ -66,16 +69,11 @@ class _HomeState extends State<Home> {
   }
 
   Future uploadProfileImage(String path) async {
-    Reference reference = FirebaseStorage.instance
-        .ref()
-        .child('images');
+    Reference reference = FirebaseStorage.instance.ref().child('images');
     UploadTask uploadTask = reference.putFile(File(path));
     TaskSnapshot snapshot = await uploadTask;
     imageUrl = await snapshot.ref.getDownloadURL();
-    print(imageUrl);
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -118,53 +116,55 @@ class _HomeState extends State<Home> {
                     }
                     return SizedBox(
                       child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot docum = snapshot.data!.docs[index];
-                          String img = docum['image'];
+  itemCount: snapshot.data!.docs.length,
+  itemBuilder: (context, index) {
+    DocumentSnapshot docum = snapshot.data!.docs[index];
+    String img = docum['image'];
 
-                          var like = docum['like'];
-                          var dislike = docum['dislike'];
-                          Color color = Colors.grey;
+    var like = docum['like'];
+    var dislike = docum['dislike'];
+    Color likeColor = like.contains(_user) ? Colors.blue : Colors.grey;
+    Color dislikeColor = dislike.contains(_user) ? Colors.blue : Colors.grey;
 
-                          return ListTile(
-                              title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(_user),
-                                    ),
-                                    Image.network(img)
-                                  ]),
-                              subtitle: Row(children: [
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () async {
-                                          await findInArrayField(
-                                              'like', docum.id);
-                                        },
-                                        icon:
-                                            Icon(Icons.thumb_up, color: color)),
-                                    Text('${like.length - 1}')
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () async {
-                                          await findInArrayField(
-                                              'dislike', docum.id);
-                                        },
-                                        icon: Icon(Icons.thumb_down,
-                                            color: color)),
-                                    Text('${dislike.length - 1}')
-                                  ],
-                                ),
-                              ]));
-                        },
-                      ),
+    return Card(
+      elevation: 20,
+      margin: EdgeInsets.all(15),
+      child: ListTile(
+          title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(_user),
+                ),
+                Image.network(img)
+              ]),
+          subtitle: Row(children: [
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () async {
+                      await findInArrayField('like', docum.id,[_user]);
+                    },
+                    icon: Icon(Icons.thumb_up, color: likeColor)),
+                Text('${like.length}')
+              ],
+            ),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () async {
+                      await findInArrayField('dislike', docum.id,[_user]);
+                    },
+                    icon: Icon(Icons.thumb_down, color: dislikeColor)),
+                Text('${dislike.length}')
+              ],
+            ),
+          ])),
+    );
+  },
+),
+
                     );
                   }))),
     );

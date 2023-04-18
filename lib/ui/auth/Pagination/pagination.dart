@@ -57,7 +57,7 @@ class _PaginationState extends State<Pagination> {
         }
       } catch (err) {
         if (kDebugMode) {
-          print('Something went wrong!');
+          Text('Something went wrong!');
         }
       }
 

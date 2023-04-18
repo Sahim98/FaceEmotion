@@ -1,5 +1,6 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:facecam/ui/auth/About/About.dart';
+import 'package:facecam/ui/auth/Home/homepage.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
 import 'package:facecam/ui/auth/Home/home.dart';
 import 'package:facecam/ui/auth/Predict/tensorflow.dart';

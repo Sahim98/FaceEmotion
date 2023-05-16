@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecam/ui/auth/Home/addPost.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +13,11 @@ class Home extends StatefulWidget {
 }
 
 final firestore = FirebaseFirestore.instance;
-String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
 class _HomeState extends State<Home> {
+  String _user = FirebaseAuth.instance.currentUser!.email.toString();
+
+// ---------------add user
   Future<void> addToArrayField(
       String id, String fieldName, List<dynamic> values) async {
     await firestore.collection("Post").doc(id).update({
@@ -23,6 +25,7 @@ class _HomeState extends State<Home> {
     });
   }
 
+  // ---------------remove user
   Future<void> RemoveArrVal(
       String fieldName, String id, List<dynamic> values) async {
     await firestore.collection("Post").doc(id).update({
@@ -30,6 +33,7 @@ class _HomeState extends State<Home> {
     });
   }
 
+// ---------------update user
   Future<void> findInArrayField(
       String fieldName, String id, List<dynamic> values) async {
     DocumentSnapshot doc = await firestore.collection("Post").doc(id).get();
@@ -39,34 +43,15 @@ class _HomeState extends State<Home> {
         fieldName: FieldValue.arrayRemove(values),
       });
     } else {
-      if (fieldName == 'like') {
+      if (fieldName == 'like')
         RemoveArrVal('dislike', id, values);
-      } else
+      else
         RemoveArrVal('like', id, values);
 
       await firestore.collection("Post").doc(id).update({
         fieldName: FieldValue.arrayUnion(values),
       });
     }
-  }
-
-  ImagePicker imagePicker = ImagePicker();
-  File? file;
-  String? imageUrl;
-  Future pickImageCamera() async {
-    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        file = image.path as File?;
-      });
-    }
-  }
-
-  Future uploadProfileImage(String path) async {
-    Reference reference = FirebaseStorage.instance.ref().child('images');
-    UploadTask uploadTask = reference.putFile(File(path));
-    TaskSnapshot snapshot = await uploadTask;
-    imageUrl = await snapshot.ref.getDownloadURL();
   }
 
   @override
@@ -76,7 +61,9 @@ class _HomeState extends State<Home> {
       home: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              await pickImageCamera();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => AddPost(),
+              ));
             },
             backgroundColor: Colors.amber,
             child: Icon(
@@ -133,7 +120,12 @@ class _HomeState extends State<Home> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
-                                        child: Text(_user),
+                                        child: Text(
+                                          docum['username'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'OpenSans'),
+                                        ),
                                       ),
                                       Image.network(img)
                                     ]),

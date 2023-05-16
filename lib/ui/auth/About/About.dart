@@ -24,7 +24,7 @@ void submitRating(double rating, String name, String comment) {
   });
 }
 
-getUsrName() {}
+
 
 class CommentDialog extends StatefulWidget {
   @override

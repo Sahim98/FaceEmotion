@@ -16,18 +16,21 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool _rememberMe = true, loading = false, auth = false, unique_user = false;
+  //----------------------variable declaration
+
+  bool loading = false, auth = false, unique_user = false, showPass = true;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   String name = '';
 
   DateTime _date = DateTime.now();
-
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final _usrcontroller = TextEditingController();
   final _agecontroller = TextEditingController();
-  //creating table of Username
+
+  //-------------------creating table of Username
+
   final firestore = FirebaseFirestore.instance
       .collection(
         'Username',
@@ -59,7 +62,6 @@ class _SignUpState extends State<SignUp> {
         .get();
 
     setState(() {
-      // ignore: prefer_is_not_empty
       unique_user = !(querySnapshot.docs.isEmpty);
     });
 
@@ -68,6 +70,8 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
+//------------------Date picker
+
   void showDate() {
     showDatePicker(
             context: context,
@@ -75,8 +79,8 @@ class _SignUpState extends State<SignUp> {
             firstDate: DateTime(2000),
             lastDate: DateTime(2030))
         .then((value) {
-           DateTime now = value!;
-  String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+      DateTime now = value!;
+      String formattedDate = DateFormat('yyyy-MM-dd').format(now);
       setState(() {
         _agecontroller.text = formattedDate;
       });
@@ -266,7 +270,7 @@ class _SignUpState extends State<SignUp> {
                             else
                               return null;
                           },
-                          obscureText: _rememberMe,
+                          obscureText: !showPass,
                           obscuringCharacter: '*',
                           controller: passController,
                           decoration: const InputDecoration(
@@ -324,12 +328,12 @@ class _SignUpState extends State<SignUp> {
                         Theme(
                           data: ThemeData(unselectedWidgetColor: Colors.white),
                           child: Checkbox(
-                            value: _rememberMe,
+                            value: showPass,
                             checkColor: Colors.white,
                             activeColor: Colors.green,
                             onChanged: (value) {
                               setState(() {
-                                _rememberMe = value!;
+                                showPass = !showPass;
                               });
                             },
                           ),

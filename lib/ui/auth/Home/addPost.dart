@@ -112,11 +112,19 @@ class _AddPostState extends State<AddPost> {
                             child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
-                            height: 13.0,
-                            width: 13.0,
+                            height: 17.0,
+                            width: 17.0,
                           )
                         : Text("Upload"),
-                  )
+                  ),
+                  if(isLoading)Text('Uploading...', style: TextStyle(
+                        fontFamily: 'OpenSans',
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold)),
+                  if(isLoading)Text('Please keep patience.', style: TextStyle(
+                        fontFamily: 'OpenSans',
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold)),
               ],
             ),
           )),

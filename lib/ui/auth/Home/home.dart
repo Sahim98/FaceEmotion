@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/ui/auth/Home/addPost.dart';
+import 'package:facecam/ui/auth/SignUp/login.dart';
+import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +61,37 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar:  AppBar(
+        elevation: 0,
+        leading: Icon(
+          Icons.flutter_dash,
+          color: Colors.amber,
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Emotion Detection',
+          style: TextStyle(
+              color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut().then((value) {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return Login();
+                    },
+                  ));
+                }).onError((error, stackTrace) {
+                  Utils().toastMessage("Failed to logout.");
+                });
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Colors.black54,
+              ))
+        ],
+      ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               Navigator.push(context, MaterialPageRoute(

@@ -11,7 +11,7 @@ class DropdownScreen extends StatefulWidget {
 
 class _DropdownScreenState extends State<DropdownScreen> {
   String url =
-      "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries%2Bstates%2Bcities.json";
+      "https://github.com/Sahim98/FaceEmotion/blob/main/lib/country.json";
 
   var _countries = [];
   var _states = [];
@@ -37,7 +37,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
         _countries = jsonResponse;
       });
 
-      print(_countries);
+     // print(_countries);
     }
   }
 

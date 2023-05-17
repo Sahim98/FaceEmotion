@@ -24,8 +24,6 @@ void submitRating(double rating, String name, String comment) {
   });
 }
 
-
-
 class CommentDialog extends StatefulWidget {
   @override
   _CommentDialogState createState() => _CommentDialogState();
@@ -53,8 +51,9 @@ class _CommentDialogState extends State<CommentDialog> {
                   color: Colors.grey),
             ),
             RatingBar.builder(
-              initialRating: 1,
-              minRating: 1,
+              
+              initialRating: 0,
+              minRating: 0,
               direction: Axis.horizontal,
               allowHalfRating: true,
               itemCount: 5,
@@ -68,6 +67,8 @@ class _CommentDialogState extends State<CommentDialog> {
                   rate = rating;
                 });
               },
+              updateOnDrag: true,
+              
             ),
             SizedBox(
               height: 20,

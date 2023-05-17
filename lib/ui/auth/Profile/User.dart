@@ -22,7 +22,6 @@ class _userState extends State<user> {
   final picker = ImagePicker();
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
-
   @override
   void initState() {
     super.initState();
@@ -129,12 +128,15 @@ class _userState extends State<user> {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              _user,
-                              style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontSize: 18,
-                                  letterSpacing: 1),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                _user,
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: 18,
+                                    letterSpacing: 1),
+                              ),
                             ),
                           ],
                         ),
@@ -162,12 +164,15 @@ class _userState extends State<user> {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              age,
-                              style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontSize: 18,
-                                  letterSpacing: 1),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                age,
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: 18,
+                                    letterSpacing: 1),
+                              ),
                             ),
                           ],
                         ),
@@ -189,27 +194,26 @@ class _userState extends State<user> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                    color: Colors.blue,
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DropdownScreen()));
-                                    },
-                                    icon: Icon(Icons.update)),
-                                labelText: address,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5))),
+                          child: Text(
+                            address,
+                            style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 18,
+                                letterSpacing: 1),
                           ),
-                          
-                        
                         ),
-                        
-       
-
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 100.0, right: 100.0, bottom: 8.0, top: 8.0),
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => DropdownScreen()));
+                            },
+                            icon: Icon(Icons.update),
+                            label: Text('Update'),
+                          ),
+                        ),
                       ],
                     );
                   }),

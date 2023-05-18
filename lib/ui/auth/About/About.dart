@@ -32,9 +32,31 @@ class CommentDialog extends StatefulWidget {
 class _CommentDialogState extends State<CommentDialog> {
   final _formKey = GlobalKey<FormState>();
   final cont = TextEditingController();
-  double rate = 1.0;
+  double rate = 1.0, average = 0.0;
 
-  @override
+  Future<void> calculateAverageRating(double extra) async {
+    double totalRating = 0;
+    int totalDocuments = 0;
+
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('Ratings').get();
+
+    snapshot.docs.forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+      if (doc.exists && doc.data().containsKey('rating')) {
+        totalRating += doc.data()['rating'] as double;
+        totalDocuments++;
+      }
+    });
+
+    if (totalDocuments > 0) {
+      totalRating += extra;
+      totalDocuments++;
+      average = totalRating / totalDocuments;
+    } else {
+      average = 0.0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -43,7 +65,7 @@ class _CommentDialogState extends State<CommentDialog> {
         child: Column(
           children: [
             Text(
-              "Rate app",
+              "Our rating: " + average.toString(),
               style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'OpenSans',
@@ -51,7 +73,6 @@ class _CommentDialogState extends State<CommentDialog> {
                   color: Colors.grey),
             ),
             RatingBar.builder(
-              
               initialRating: 0,
               minRating: 0,
               direction: Axis.horizontal,
@@ -62,13 +83,15 @@ class _CommentDialogState extends State<CommentDialog> {
                 Icons.star,
                 color: Colors.amber,
               ),
-              onRatingUpdate: (rating) {
+              onRatingUpdate: (rating) async {
                 setState(() {
                   rate = rating;
                 });
+                setState(() async {
+                  await calculateAverageRating(rate);
+                });
               },
               updateOnDrag: true,
-              
             ),
             SizedBox(
               height: 20,
@@ -78,8 +101,9 @@ class _CommentDialogState extends State<CommentDialog> {
                 controller: cont,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
-                        onPressed: () {
-                          submitRating(rate, User, cont.text);
+                        onPressed: () async {
+                          submitRating(rate, Current_User, cont.text);
+
                           cont.clear();
                         },
                         icon: Icon(Icons.send)),

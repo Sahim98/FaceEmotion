@@ -14,96 +14,54 @@
         "native": "Bangladesh",
         "region": "Asia",
         "subregion": "Southern Asia",
-        "timezones": [
-            {
-                "zoneName": "Asia\/Dhaka",
-                "gmtOffset": 21600,
-                "gmtOffsetName": "UTC+06:00",
-                "abbreviation": "BDT",
-                "tzName": "Bangladesh Standard Time"
-            }
-        ],
-        "translations": {
-            "kr": "방글라데시",
-            "pt-BR": "Bangladesh",
-            "pt": "Bangladeche",
-            "nl": "Bangladesh",
-            "hr": "Bangladeš",
-            "fa": "بنگلادش",
-            "de": "Bangladesch",
-            "es": "Bangladesh",
-            "fr": "Bangladesh",
-            "ja": "バングラデシュ",
-            "it": "Bangladesh",
-            "cn": "孟加拉",
-            "tr": "Bangladeş"
-        },
-        "latitude": "24.00000000",
-        "longitude": "90.00000000",
-        "emoji": "🇧🇩",
-        "emojiU": "U+1F1E7 U+1F1E9",
+  
         "states": [
             {
                 "id": 796,
                 "name": "Bagerhat District",
-                "state_code": "05",
-                "latitude": "22.66024360",
-                "longitude": "89.78954780",
+           
                 "type": "district",
                 "cities": []
             },
             {
                 "id": 802,
                 "name": "Bahadia",
-                "state_code": "33",
-                "latitude": "23.78987120",
-                "longitude": "90.16714830",
-                "type": null,
+          
+                "type": "district",
                 "cities": []
             },
             {
                 "id": 752,
                 "name": "Bandarban District",
-                "state_code": "01",
-                "latitude": "21.83110020",
-                "longitude": "92.36863210",
                 "type": "district",
                 "cities": []
             },
             {
                 "id": 784,
                 "name": "Barguna District",
-                "state_code": "02",
-                "latitude": "22.09529150",
-                "longitude": "90.11206960",
                 "type": "district",
                 "cities": []
             },
             {
                 "id": 818,
                 "name": "Barisal District",
-                "state_code": "06",
-                "latitude": "22.70220980",
-                "longitude": "90.36963160",
+      
                 "type": "district",
                 "cities": [
                     {
                         "id": 8459,
-                        "name": "Barguna",
-                        "latitude": "22.13333000",
-                        "longitude": "90.13333000"
+                        "name": "Barguna"
+                     
                     },
                     {
                         "id": 8460,
-                        "name": "Barisal",
-                        "latitude": "22.80000000",
-                        "longitude": "90.50000000"
+                        "name": "Barisal"
+                       
                     },
                     {
                         "id": 8466,
-                        "name": "Bhāndāria",
-                        "latitude": "22.48898000",
-                        "longitude": "90.06273000"
+                        "name": "Bhāndāria"
+                     
                     },
                     {
                         "id": 8465,
@@ -1553,21 +1511,7 @@
                 "tzName": "Pakistan Standard Time"
             }
         ],
-        "translations": {
-            "kr": "파키스탄",
-            "pt-BR": "Paquistão",
-            "pt": "Paquistão",
-            "nl": "Pakistan",
-            "hr": "Pakistan",
-            "fa": "پاکستان",
-            "de": "Pakistan",
-            "es": "Pakistán",
-            "fr": "Pakistan",
-            "ja": "パキスタン",
-            "it": "Pakistan",
-            "cn": "巴基斯坦",
-            "tr": "Pakistan"
-        },
+      
         "latitude": "30.00000000",
         "longitude": "70.00000000",
         "emoji": "🇵🇰",

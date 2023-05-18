@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:facecam/ui/auth/SignUp/verify.dart';
 import 'package:facecam/ui/auth/residual/design.dart';
 import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
@@ -17,7 +18,6 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   //----------------------variable declaration
-
   bool loading = false, auth = false, unique_user = false, showPass = true;
   final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   String name = '';
@@ -30,7 +30,6 @@ class _SignUpState extends State<SignUp> {
   final _agecontroller = TextEditingController();
 
   //-------------------creating table of Username
-
   final firestore = FirebaseFirestore.instance
       .collection(
         'Username',
@@ -47,7 +46,8 @@ class _SignUpState extends State<SignUp> {
     FirebaseFirestore.instance.collection('Users').add({
       'name': _usrcontroller.text,
       'email': emailController.text,
-      'age': _agecontroller.text
+      'age': _agecontroller.text,
+      'address': "N/A"
     });
   }
 
@@ -71,7 +71,6 @@ class _SignUpState extends State<SignUp> {
   }
 
 //------------------Date picker
-
   void showDate() {
     showDatePicker(
             context: context,
@@ -257,7 +256,7 @@ class _SignUpState extends State<SignUp> {
                             fillColor: Color.fromARGB(255, 246, 191, 135),
                           ),
                           keyboardType: TextInputType.text,
-                          maxLength: 20,
+                          maxLength: 40,
                           autocorrect: true,
                         ),
                         SizedBox(
@@ -377,6 +376,9 @@ class _SignUpState extends State<SignUp> {
                               setState(() {
                                 auth = true;
                               });
+                              Navigator.of(context) //new screen
+                                  .pushReplacement(MaterialPageRoute(
+                                      builder: (context) => VerifyScreen()));
                             }).onError((error, stackTrace) {
                               Utils().toastMessage("SignUP failed");
                               setState(() {

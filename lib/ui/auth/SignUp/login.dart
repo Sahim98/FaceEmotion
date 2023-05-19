@@ -4,6 +4,7 @@ import 'package:facecam/ui/auth/SignUp/signup.dart';
 import 'package:facecam/ui/auth/residual/navigationbar.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/button_list.dart';
@@ -18,29 +19,43 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _rememberMe = false;
+  bool _rememberMe = false, verified = false;
   final style =
       TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
+ 
+  User? user =FirebaseAuth.instance.currentUser ;
 
   void login() {
-    _auth
-        .signInWithEmailAndPassword(
+   
+        FirebaseAuth.instance.signInWithEmailAndPassword(
             email: emailController.text,
             password: passController.text.toString())
         .then((value) {
-      Utils().toastMessage(value.user!.email.toString());
       Navigator.push(context, MaterialPageRoute(
         builder: (context) {
-          return MyApp();
+          if (FirebaseAuth.instance.currentUser!.emailVerified) {
+            Utils().toastMessage("Log-In Sucessful.");
+            return MyApp();
+          } else {
+            Utils().toastMessage('Verify mail');
+            FirebaseAuth.instance.signOut();
+            user = FirebaseAuth.instance.currentUser;
+            return Login();
+          }
         },
       ));
     }).onError((error, stackTrace) {
       Utils().toastMessage(error.toString());
     });
+  }
+
+  Future<bool> checkEmailVerified() async {
+    user = FirebaseAuth.instance.currentUser;
+    await user?.reload();
+    return (user!.emailVerified);
   }
 
   @override
@@ -117,6 +132,7 @@ class _LoginState extends State<Login> {
                           children: [
                             TextFormField(
                               validator: (value) {
+                                print(FirebaseAuth.instance.currentUser);
                                 if (value!.isEmpty)
                                   return 'E-mail is required';
                                 else
@@ -212,7 +228,7 @@ class _LoginState extends State<Login> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             login();
                           },
                           child: Text(
@@ -226,10 +242,11 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                      ), //Login button
+                      ),
                       SizedBox(
                         height: 10,
                       ),
+                     
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

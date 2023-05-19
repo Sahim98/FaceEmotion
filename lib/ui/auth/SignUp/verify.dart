@@ -1,13 +1,10 @@
 import 'dart:async';
-
-import 'package:facecam/ui/auth/Home/home.dart';
+import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/auth/SignUp/signup.dart';
 import 'package:facecam/ui/auth/residual/SplashScreen.dart';
+import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});
@@ -32,7 +29,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
     user?.sendEmailVerification();
     message = "An email has been sent to ${user!.email} Please verify.";
 
-    timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      Utils().toastMessage("Verify email to login");
       checkEmailVerified();
     });
     super.initState();
@@ -68,16 +66,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => flashScreen(),
+            builder: (context) => Login(),
           ));
-    } else {
-      message = "Invalid email address";
-       Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignUp(),
-          ));
-
     }
   }
 }

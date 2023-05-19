@@ -65,7 +65,7 @@ class _CommentDialogState extends State<CommentDialog> {
         child: Column(
           children: [
             Text(
-              "Our rating: " + average.toString(),
+              "Our rating: " + average.toStringAsFixed(1),
               style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'OpenSans',
@@ -98,6 +98,7 @@ class _CommentDialogState extends State<CommentDialog> {
             ),
             Form(
               child: TextFormField(
+                
                 controller: cont,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(

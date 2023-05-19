@@ -105,6 +105,7 @@ class _HomeState extends State<Home> {
           ),
           body: SafeArea(
               child: StreamBuilder<QuerySnapshot>(
+
                   stream:
                       FirebaseFirestore.instance.collection("Post").snapshots(),
                   builder: (context, snapshot) {
@@ -160,7 +161,9 @@ class _HomeState extends State<Home> {
                                               fontFamily: 'OpenSans'),
                                         ),
                                       ),
-                                      Image.network(img)
+                                   Image.network(img)
+
+                                  
                                     ]),
                                 subtitle: Row(children: [
                                   Row(

@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:facecam/ui/auth/residual/SplashScreen.dart';
 import 'package:facecam/ui/auth/residual/design.dart';
 import 'package:facecam/ui/auth/SignUp/signup.dart';
 import 'package:facecam/ui/auth/residual/navigationbar.dart';
@@ -19,34 +20,27 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _rememberMe = false, verified = false;
+  bool _rememberMe = false, verified = false, logged_in = false;
   final style =
       TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
- 
-  User? user =FirebaseAuth.instance.currentUser ;
+
+  User? user = FirebaseAuth.instance.currentUser;
 
   void login() {
-   
-        FirebaseAuth.instance.signInWithEmailAndPassword(
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
             email: emailController.text,
             password: passController.text.toString())
         .then((value) {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) {
-          if (FirebaseAuth.instance.currentUser!.emailVerified) {
-            Utils().toastMessage("Log-In Sucessful.");
-            return MyApp();
-          } else {
-            Utils().toastMessage('Verify mail');
-            FirebaseAuth.instance.signOut();
-            user = FirebaseAuth.instance.currentUser;
-            return Login();
-          }
-        },
-      ));
+      if (FirebaseAuth.instance.currentUser!.emailVerified)
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => flashScreen()));
+      else {
+        Utils().toastMessage('Verify email');
+      }
     }).onError((error, stackTrace) {
       Utils().toastMessage(error.toString());
     });
@@ -229,24 +223,57 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(30)),
                           ),
                           onPressed: () async {
+                            setState(() {
+                              logged_in = true;
+                            });
                             login();
+                            setState(() {
+                              logged_in = false;
+                            });
                           },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                              letterSpacing: 1.5,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'OpenSans',
-                            ),
-                          ),
+                          child: logged_in
+                              ? SizedBox(
+                                  height: 12,
+                                  width: 12,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    letterSpacing: 1.5,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'OpenSans',
+                                  ),
+                                ),
                         ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                     
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              verified = true;
+                            });
+                            FirebaseAuth.instance.currentUser!
+                                .sendEmailVerification();
+                            Utils().toastMessage('Email has been sent');
+                            setState(() {
+                              verified = false;
+                            });
+                          },
+                          icon: Icon(Icons.mail),
+                          label: verified
+                              ? SizedBox(
+                                  height: 12,
+                                  width: 12,
+                                  child: CircularProgressIndicator())
+                              : Text('Resend verification?')),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -270,54 +297,7 @@ class _LoginState extends State<Login> {
                       SizedBox(
                         height: 10,
                         width: MediaQuery.of(context).size.width,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text(
-                            '- or -',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 20),
-                          ),
-                          SizedBox(height: 20.0),
-                          Text(
-                            'Sign in with',
-                            style: kLabelStyle,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SignInButton(
-                                Buttons.Facebook,
-                                onPressed: () {},
-                                mini: true,
-                              ),
-                              SizedBox(
-                                width: 10,
-                                height: 10,
-                              ),
-                              SignInButton(
-                                Buttons.Email,
-                                onPressed: () {},
-                                mini: true,
-                              ),
-                              SizedBox(
-                                width: 10,
-                                height: 10,
-                              ),
-                              SignInButton(
-                                Buttons.LinkedIn,
-                                onPressed: () {},
-                                mini: true,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                      )
                     ],
                   ),
                 ),

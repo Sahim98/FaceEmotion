@@ -36,21 +36,18 @@ class _LoginState extends State<Login> {
             password: passController.text.toString())
         .then((value) {
       if (FirebaseAuth.instance.currentUser!.emailVerified)
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => flashScreen()));
-      else {
-        Utils().toastMessage('Verify email');
+      {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => flashScreen()));
+      }
+      else 
+      {
+         Utils().toastMessage('Verify email');
       }
     }).onError((error, stackTrace) {
       Utils().toastMessage(error.toString());
     });
   }
-
-  Future<bool> checkEmailVerified() async {
-    user = FirebaseAuth.instance.currentUser;
-    await user?.reload();
-    return (user!.emailVerified);
-  }
+ 
 
   @override
   void dispose() {
@@ -126,9 +123,11 @@ class _LoginState extends State<Login> {
                           children: [
                             TextFormField(
                               validator: (value) {
-                                print(FirebaseAuth.instance.currentUser);
                                 if (value!.isEmpty)
                                   return 'E-mail is required';
+                                else if (!FirebaseAuth
+                                    .instance.currentUser!.emailVerified)
+                                  return "email isn't varified!!";
                                 else
                                   return null;
                               },

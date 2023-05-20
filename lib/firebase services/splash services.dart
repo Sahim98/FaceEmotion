@@ -19,7 +19,7 @@ class splashServices {
         () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return MyApp();
+              return FirebaseAuth.instance.currentUser!.emailVerified?MyApp():Login();
             },
           ));
         },

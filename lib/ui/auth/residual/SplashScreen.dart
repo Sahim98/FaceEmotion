@@ -26,18 +26,20 @@ class _flashScreenState extends State<flashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-       
-        child: Center(
-          child: AnimatedTextKit(
-            animatedTexts: [
-              WavyAnimatedText('Loading...',
-                  textStyle: GoogleFonts.dancingScript(textStyle: style)),
-            ],
-            isRepeatingAnimation: true,
-          ),
-        ));
+    return Scaffold(
+      body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+         
+          child: Center(
+            child: AnimatedTextKit(
+              animatedTexts: [
+                WavyAnimatedText('Loading...',
+                    textStyle: GoogleFonts.dancingScript(textStyle: style)),
+              ],
+              isRepeatingAnimation: true,
+            ),
+          )),
+    );
   }
 }

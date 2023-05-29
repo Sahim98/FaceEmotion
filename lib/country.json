@@ -106,15 +106,13 @@
                 "cities": [
                     {
                         "id": 8457,
-                        "name": "Bandarban",
+                        "name": "Bandarban"
 
-                        "longitude": "92.33333000"
                     },
                     {
                         "id": 8468,
-                        "name": "Bibir Hat",
+                        "name": "Bibir Hat"
 
-                        "longitude": "91.79058000"
                     },
                     {
                         "id": 8470,
@@ -130,7 +128,7 @@
                     },
                     {
                         "id": 8478,
-                        "name": "Chhāgalnāiya",
+                        "name": "Chhagalnaiya",
 
                         "longitude": "91.51091000"
                     },
@@ -152,12 +150,7 @@
 
                         "longitude": "92.01528000"
                     },
-                    {
-                        "id": 8485,
-                        "name": "Cox’s Bāzār",
-
-                        "longitude": "92.00955000"
-                    },
+                   
                     {
                         "id": 8492,
                         "name": "Feni",
@@ -178,7 +171,7 @@
                     },
                     {
                         "id": 8525,
-                        "name": "Lākshām",
+                        "name": "Laksham",
 
                         "longitude": "91.12143000"
                     },
@@ -214,21 +207,20 @@
                     },
                     {
                         "id": 8579,
-                        "name": "Rāipur",
+                        "name": "Raipur"
 
-                        "longitude": "90.76808000"
+                       
                     },
                     {
                         "id": 8581,
-                        "name": "Rāmganj",
+                        "name": "Ramganj"
 
-                        "longitude": "90.84989000"
                     },
                     {
                         "id": 8576,
-                        "name": "Rangamati",
+                        "name": "Rangamati"
 
-                        "longitude": "92.20000000"
+                       
                     },
                     {
                         "id": 8578,
@@ -238,21 +230,20 @@
                     },
                     {
                         "id": 8584,
-                        "name": "Sandwīp",
+                        "name": "Sandwīp"
 
-                        "longitude": "91.45491000"
+                       
                     },
                     {
                         "id": 8597,
-                        "name": "Sātkania",
+                        "name": "Sātkania"
 
-                        "longitude": "92.04955000"
                     },
                     {
                         "id": 8600,
-                        "name": "Teknāf",
+                        "name": "Teknāf"
 
-                        "longitude": "92.29773000"
+                      
                     }
                 ]
             },
@@ -267,25 +258,24 @@
                 "cities": [
                     {
                         "id": 8454,
-                        "name": "Azimpur",
+                        "name": "Azimpur"
 
-                        "longitude": "90.38540000"
                     },
                     {
                         "id": 8472,
-                        "name": "Bājitpur",
+                        "name": "Bājitpur"
 
-                        "longitude": "90.95002000"
+                      
                     },
                     {
                         "id": 8463,
-                        "name": "Bhairab Bāzār",
+                        "name": "Bhairab Bāzār"
 
-                        "longitude": "90.97640000"
+                       
                     },
                     {
                         "id": 8476,
-                        "name": "Char Bhadrāsan"
+                        "name": "Char Bhadrasan"
 
                     },
                     {
@@ -300,75 +290,53 @@
                     },
                     {
                         "id": 8489,
-                        "name": "Dohār",
-
-                        "longitude": "90.14251000"
+                        "name": "Dohār"
+                        
                     },
                     {
                         "id": 8490,
-                        "name": "Faridpur",
-
-                        "longitude": "89.82147000"
+                        "name": "Faridpur"
                     },
                     {
                         "id": 8496,
-                        "name": "Gazipur",
-
-                        "longitude": "90.47241000"
+                        "name": "Gazipur"
                     },
                     {
                         "id": 8497,
-                        "name": "Gopalganj",
-
-                        "longitude": "89.91667000"
+                        "name": "Gopalganj"
                     },
                     {
                         "id": 8508,
-                        "name": "Joymontop",
-
-                        "longitude": "90.16472000"
+                        "name": "Joymontop"
                     },
                     {
                         "id": 8513,
                         "name": "Khanbaniara"
 
-                       
                     },
                     {
                         "id": 8515,
-                        "name": "Kishoregonj",
-
-                        "longitude": "90.95000000"
+                        "name": "Kishoregonj"
                     },
                     {
                         "id": 8516,
-                        "name": "Kishorganj",
-
-                        "longitude": "90.78291000"
+                        "name": "Kishorganj"
                     },
                     {
                         "id": 8527,
-                        "name": "Madaripur",
-
-                        "longitude": "90.20000000"
+                        "name": "Madaripur"
                     },
                     {
                         "id": 8531,
-                        "name": "Manikganj",
-
-                        "longitude": "89.95000000"
+                        "name": "Manikganj"
                     },
                     {
                         "id": 8537,
-                        "name": "Mirzāpur",
-
-                        "longitude": "90.09841000"
+                        "name": "Mirzāpur"
                     },
                     {
                         "id": 8540,
-                        "name": "Munshiganj",
-
-                        "longitude": "90.36667000"
+                        "name": "Munshiganj"
                     },
                     {
                         "id": 8555,
@@ -384,21 +352,15 @@
                     },
                     {
                         "id": 8548,
-                        "name": "Narsingdi",
-
-                        "longitude": "90.71768000"
+                        "name": "Narsingdi"
                     },
                     {
                         "id": 8570,
-                        "name": "Pālang",
-
-                        "longitude": "90.35076000"
+                        "name": "Pālang"
                     },
                     {
                         "id": 8559,
-                        "name": "Paltan",
-
-                        "longitude": "90.41426000"
+                        "name": "Paltan"
                     },
                     {
                         "id": 8562,
@@ -408,15 +370,11 @@
                     },
                     {
                         "id": 8563,
-                        "name": "Parvez Ali Hossain",
-
-                        "longitude": "90.16487000"
+                        "name": "Parvez Ali Hossain"
                     },
                     {
                         "id": 8573,
-                        "name": "Rajbari",
-
-                        "longitude": "89.55000000"
+                        "name": "Rajbari"
                     },
                     {
                         "id": 8575,
@@ -426,33 +384,23 @@
                     },
                     {
                         "id": 8583,
-                        "name": "Sakhipur",
-
-                        "longitude": "90.16943000"
+                        "name": "Sakhipura"
                     },
                     {
                         "id": 8588,
-                        "name": "Sayani",
-
-                        "longitude": "90.16972000"
+                        "name": "Sayani"
                     },
                     {
                         "id": 8589,
-                        "name": "Shariatpur",
-
-                        "longitude": "90.36667000"
+                        "name": "Shariatpur"
                     },
                     {
                         "id": 8594,
-                        "name": "Sonārgaon",
-
-                        "longitude": "90.61667000"
+                        "name": "Sonārgaon"
                     },
                     {
                         "id": 8599,
-                        "name": "Tangail",
-
-                        "longitude": "89.98667000"
+                        "name": "Tangail"
                     },
                     {
                         "id": 8603,
@@ -468,11 +416,7 @@
                     }
                 ]
             },
-          
-         
-          
-           
-          
+      
         
             {
                 "id": 811,

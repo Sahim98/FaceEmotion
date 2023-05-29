@@ -19,9 +19,8 @@ final firestore = FirebaseFirestore.instance;
 class _HomeState extends State<Home> {
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
-// ---------------add user
-  Future<void> addToArrayField(
-      String id, String fieldName, List<dynamic> values) async {
+// -----------------add user
+  Future<void> addToArrayField(String id, String fieldName, List<dynamic> values) async {
     await firestore.collection("Post").doc(id).update({
       fieldName: FieldValue.arrayUnion(values),
     });
@@ -36,8 +35,7 @@ class _HomeState extends State<Home> {
   }
 
 // ---------------update user
-  Future<void> findInArrayField(
-      String fieldName, String id, List<dynamic> values) async {
+  Future<void> findInArrayField(String fieldName, String id, List<dynamic> values) async {
     DocumentSnapshot doc = await firestore.collection("Post").doc(id).get();
     List<dynamic> fieldValues = doc.get(fieldName);
     if (fieldValues.contains(_user)) {
@@ -55,6 +53,8 @@ class _HomeState extends State<Home> {
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +103,8 @@ class _HomeState extends State<Home> {
               Icons.add,
             ),
           ),
-          body: SafeArea(
+          body: SafeArea(//--------------------------------main section
               child: StreamBuilder<QuerySnapshot>(
-
                   stream:
                       FirebaseFirestore.instance.collection("Post").snapshots(),
                   builder: (context, snapshot) {
@@ -141,7 +140,7 @@ class _HomeState extends State<Home> {
                           Color likeColor =
                               like.contains(_user) ? Colors.blue : Colors.grey;
                           Color dislikeColor = dislike.contains(_user)
-                              ? Colors.redAccent
+                              ? Colors.red
                               : Colors.grey;
 
                           return Card(

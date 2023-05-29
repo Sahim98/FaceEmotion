@@ -2,14 +2,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:facecam/ui/auth/residual/SplashScreen.dart';
 import 'package:facecam/ui/auth/residual/design.dart';
 import 'package:facecam/ui/auth/SignUp/signup.dart';
-import 'package:facecam/ui/auth/residual/navigationbar.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
@@ -20,6 +16,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
   bool _rememberMe = false, verified = false, logged_in = false;
   final style =
       TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);

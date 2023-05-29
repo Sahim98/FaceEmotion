@@ -166,9 +166,8 @@ class _DropdownScreenState extends State<DropdownScreen> {
                         });
                       }),
                 ),
-              )
-            else
-              Container(),
+              ),
+       
 
             //=============================== City
             if (isStateSelected)
@@ -195,9 +194,8 @@ class _DropdownScreenState extends State<DropdownScreen> {
                         });
                       }),
                 ),
-              )
-            else
-              Container(),
+              ),
+           
             ElevatedButton(
                 onPressed: () async {
                   print("states "+ isStateSelected.toString());

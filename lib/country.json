@@ -118,13 +118,7 @@
                     }
                 ]
             },
-            {
-                "id": 807,
-                "name": "Barisal Division",
-             
-                "type": "division",
-                "cities": []
-            },
+           
           
         
           
@@ -287,20 +281,8 @@
                 ]
             },
           
-            {
-                "id": 763,
-                "name": "Comilla District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 751,
-                "name": "Cox's Bazar District",
-                
-                "type": "district",
-                "cities": []
-            },
+          
+           
             {
                 "id": 771,
                 "name": "Dhaka District",
@@ -656,77 +638,8 @@
                     }
                 ]
             },
-            {
-                "id": 775,
-                "name": "Khulna Division",
-        
-                "type": "division",
-                "cities": []
-            },
-            {
-                "id": 779,
-                "name": "Kishoreganj District",
-               
-            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 793,
-                "name": "Kurigram District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 774,
-                "name": "Kushtia District",
-               
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 819,
-                "name": "Lakshmipur District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 780,
-                "name": "Lalmonirhat District",
-               
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 817,
-                "name": "Madaripur District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 776,
-                "name": "Meherpur District",
-        
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 794,
-                "name": "Moulvibazar District",
-               
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 790,
-                "name": "Munshiganj District",
-               
-                "type": "district",
-                "cities": []
-            },
+          
+    
             {
                 "id": 766,
                 "name": "Mymensingh District",
@@ -777,97 +690,9 @@
                     }
                 ]
             },
-            {
-                "id": 758,
-                "name": "Mymensingh Division",
-              
-                "type": "division",
-                "cities": []
-            },
-            {
-                "id": 814,
-                "name": "Naogaon District",
-    
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 769,
-                "name": "Narail District",
-               
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 770,
-                "name": "Narayanganj District",
            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 787,
-                "name": "Natore District",
-             
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 764,
-                "name": "Netrokona District",
-             
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 772,
-                "name": "Nilphamari District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 815,
-                "name": "Noakhali District",
-               
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 754,
-                "name": "Pabna District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 800,
-                "name": "Panchagarh District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 777,
-                "name": "Patuakhali District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 791,
-                "name": "Pirojpur District",
-            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 773,
-                "name": "Rajbari District",
-               
-                "type": "district",
-                "cities": []
-            },
+           
+         
             {
                 "id": 813,
                 "name": "Rajshahi District",
@@ -1084,48 +909,8 @@
                     }
                 ]
             },
-            {
-                "id": 750,
-                "name": "Rangpur Division",
-              
-                "type": "division",
-                "cities": []
-            },
-            {
-                "id": 799,
-                "name": "Satkhira District",
-             
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 801,
-                "name": "Shariatpur District",
-           
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 755,
-                "name": "Sherpur District",
-             
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 781,
-                "name": "Sirajganj District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 812,
-                "name": "Sunamganj District",
-             
-                "type": "district",
-                "cities": []
-            },
+          
+         
             {
                 "id": 767,
                 "name": "Sylhet District",
@@ -1180,28 +965,8 @@
                         "longitude": "91.76667000"
                     }
                 ]
-            },
-            {
-                "id": 765,
-                "name": "Sylhet Division",
-              
-                "type": "division",
-                "cities": []
-            },
-            {
-                "id": 782,
-                "name": "Tangail District",
-               
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 804,
-                "name": "Thakurgaon District",
-               
-                "type": "district",
-                "cities": []
             }
+          
         ]
     }
  

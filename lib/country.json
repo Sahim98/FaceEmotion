@@ -140,15 +140,11 @@
                     },
                     {
                         "id": 8483,
-                        "name": "Comilla",
-
-                        "longitude": "91.00987000"
+                        "name": "Comilla"
                     },
                     {
                         "id": 8484,
-                        "name": "Cox's Bazar",
-
-                        "longitude": "92.01528000"
+                        "name": "Cox's Bazar"
                     },
                    
                     {
@@ -159,7 +155,7 @@
                     },
                     {
                         "id": 8499,
-                        "name": "Hājīganj",
+                        "name": "Hajīganj",
 
                         "longitude": "90.85508000"
                     },
@@ -189,7 +185,7 @@
                     },
                     {
                         "id": 8543,
-                        "name": "Nabīnagar",
+                        "name": "Nabinagar",
 
                         "longitude": "90.96792000"
                     },
@@ -220,36 +216,29 @@
                         "id": 8576,
                         "name": "Rangamati"
 
-                       
                     },
                     {
                         "id": 8578,
-                        "name": "Raojān",
-
-                        "longitude": "91.91919000"
+                        "name": "Raojan"
                     },
                     {
                         "id": 8584,
-                        "name": "Sandwīp"
+                        "name": "Sandwip"
 
-                       
                     },
                     {
                         "id": 8597,
-                        "name": "Sātkania"
-
+                        "name": "Satkania"
                     },
                     {
                         "id": 8600,
-                        "name": "Teknāf"
-
+                        "name": "Teknaf"
                       
                     }
                 ]
             },
           
-          
-           
+        
             {
                 "id": 771,
                 "name": "Dhaka District",
@@ -263,20 +252,18 @@
                     },
                     {
                         "id": 8472,
-                        "name": "Bājitpur"
+                        "name": "Bajitpur"
 
-                      
                     },
                     {
                         "id": 8463,
-                        "name": "Bhairab Bāzār"
+                        "name": "Bhairab Bazar"
 
                        
                     },
                     {
                         "id": 8476,
                         "name": "Char Bhadrasan"
-
                     },
                     {
                         "id": 8477,
@@ -286,12 +273,10 @@
                     {
                         "id": 8486,
                         "name": "Dhaka"
-
                     },
                     {
                         "id": 8489,
-                        "name": "Dohār"
-                        
+                        "name": "Dohar"
                     },
                     {
                         "id": 8490,
@@ -312,7 +297,6 @@
                     {
                         "id": 8513,
                         "name": "Khanbaniara"
-
                     },
                     {
                         "id": 8515,
@@ -340,15 +324,11 @@
                     },
                     {
                         "id": 8555,
-                        "name": "Nāgarpur",
-
-                        "longitude": "89.87696000"
+                        "name": "Nāgarpur"
                     },
                     {
                         "id": 8547,
-                        "name": "Narayanganj",
-
-                        "longitude": "90.58333000"
+                        "name": "Narayanganj"
                     },
                     {
                         "id": 8548,
@@ -356,7 +336,7 @@
                     },
                     {
                         "id": 8570,
-                        "name": "Pālang"
+                        "name": "Palang"
                     },
                     {
                         "id": 8559,
@@ -364,9 +344,7 @@
                     },
                     {
                         "id": 8562,
-                        "name": "Parvez Ali",
-
-                        "longitude": "90.11921000"
+                        "name": "Parvez Ali"
                     },
                     {
                         "id": 8563,
@@ -404,15 +382,11 @@
                     },
                     {
                         "id": 8603,
-                        "name": "Tungi",
-
-                        "longitude": "90.40232000"
+                        "name": "Tungi"
                     },
                     {
                         "id": 8604,
-                        "name": "Tungipāra",
-
-                        "longitude": "89.90326000"
+                        "name": "Tungipāra"
                     }
                 ]
             },
@@ -426,27 +400,19 @@
                 "cities": [
                     {
                         "id": 8456,
-                        "name": "Bagerhat",
-
-                        "longitude": "89.75000000"
+                        "name": "Bagerhat"
                     },
                     {
                         "id": 8467,
-                        "name": "Bhātpāra Abhaynagar",
-
-                        "longitude": "89.43936000"
+                        "name": "Bhātpāra Abhaynagar"
                     },
                     {
                         "id": 8464,
-                        "name": "Bherāmāra",
-
-                        "longitude": "88.99234000"
+                        "name": "Bherāmāra"
                     },
                     {
                         "id": 8482,
-                        "name": "Chuadanga",
-
-                        "longitude": "88.85000000"
+                        "name": "Chuadanga"
                     },
                     {
                         "id": 8504,
@@ -456,15 +422,11 @@
                     },
                     {
                         "id": 8506,
-                        "name": "Jhenaidah",
-
-                        "longitude": "89.16667000"
+                        "name": "Jhenaidah"
                     },
                     {
                         "id": 8507,
-                        "name": "Jhingergācha",
-
-                        "longitude": "89.09061000"
+                        "name": "Jhingergācha"
                     },
                     {
                         "id": 8519,
@@ -474,57 +436,40 @@
                     },
                     {
                         "id": 8520,
-                        "name": "Kālīganj",
-
-                        "longitude": "89.13801000"
+                        "name": "Kaliganj"
                     },
                     {
                         "id": 8511,
-                        "name": "Kesabpur",
-
-                        "longitude": "89.21954000"
+                        "name": "Kesabpur"
                     },
                     {
                         "id": 8514,
-                        "name": "Khulna",
-
-                        "longitude": "89.33333000"
+                        "name": "Khulna"
                     },
                     {
                         "id": 8518,
-                        "name": "Kushtia",
-
-                        "longitude": "88.91667000"
+                        "name": "Kushtia"
                     },
                     {
                         "id": 8528,
-                        "name": "Magura",
-
-                        "longitude": "89.43333000"
+                        "name": "Magura"
                     },
                     {
                         "id": 8536,
-                        "name": "Meherpur",
-
-                        "longitude": "88.70000000"
+                        "name": "Meherpur"
                     },
                     {
                         "id": 8538,
-                        "name": "Morrelgonj",
-
-                        "longitude": "89.85584000"
+                        "name": "Morrelgonj"
                     },
                     {
                         "id": 8546,
-                        "name": "Narail",
-
-                        "longitude": "89.60000000"
+                        "name": "Narail"
+                      
                     },
                     {
                         "id": 8554,
-                        "name": "Nowlamary",
-
-                        "longitude": "88.98885000"
+                        "name": "Nowlamary"
                     },
                     {
                         "id": 8566,
@@ -598,7 +543,7 @@
                     },
                     {
                         "id": 8586,
-                        "name": "Sarishābāri",
+                        "name": "Sarishabari",
 
                         "longitude": "89.83126000"
                     },
@@ -610,8 +555,6 @@
                     }
                 ]
             },
-           
-           
          
             {
                 "id": 813,
@@ -645,7 +588,7 @@
                     },
                     {
                         "id": 8509,
-                        "name": "Joypur Hāt",
+                        "name": "Joypur Hat",
 
                         "longitude": "89.02734000"
                     },
@@ -675,7 +618,7 @@
                     },
                     {
                         "id": 8550,
-                        "name": "Nawābganj",
+                        "name": "Nawabganj",
 
                         "longitude": "88.27444000"
                     },
@@ -687,7 +630,7 @@
                     },
                     {
                         "id": 8571,
-                        "name": "Pār Naogaon",
+                        "name": "Par Naogaon",
 
                         "longitude": "88.94875000"
                     },
@@ -743,7 +686,7 @@
                     },
                     {
                         "id": 8480,
-                        "name": "Chilmāri"
+                        "name": "Chilmari"
 
                         
                     },
@@ -798,7 +741,7 @@
                     },
                     {
                         "id": 8572,
-                        "name": "Pīrgaaj",
+                        "name": "Pirgaaj",
 
                         "longitude": "88.35943000"
                     },

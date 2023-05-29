@@ -125,50 +125,9 @@
                 "type": "division",
                 "cities": []
             },
-            {
-                "id": 756,
-                "name": "Bhola District",
-       
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 797,
-                "name": "Bogra District",
-           
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 810,
-                "name": "Brahmanbaria District",
-              
-            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 768,
-                "name": "Chandpur District",
-       
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 761,
-                "name": "Chapai Nawabganj District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 785,
-                "name": "Chittagong District",
-                
-                "type": "district",
-                "cities": []
-            },
+          
+        
+          
             {
                 "id": 803,
                 "name": "Chittagong Division",
@@ -327,13 +286,7 @@
                     }
                 ]
             },
-            {
-                "id": 788,
-                "name": "Chuadanga District",
           
-                "type": "district",
-                "cities": []
-            },
             {
                 "id": 763,
                 "name": "Comilla District",
@@ -557,105 +510,12 @@
                     }
                 ]
             },
-            {
-                "id": 760,
-                "name": "Dhaka Division",
-                
-                "type": "division",
-                "cities": []
-            },
-            {
-                "id": 783,
-                "name": "Dinajpur District",
-            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 762,
-                "name": "Faridpur District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 816,
-                "name": "Feni District",
-              
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 795,
-                "name": "Gaibandha District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 798,
-                "name": "Gazipur District",
-             
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 792,
-                "name": "Gopalganj District",
-      
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 805,
-                "name": "Habiganj District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 808,
-                "name": "Jamalpur District",
-              
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 757,
-                "name": "Jessore District",
-            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 778,
-                "name": "Jhalokati District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 789,
-                "name": "Jhenaidah District",
-                
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 806,
-                "name": "Joypurhat District",
-             
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 786,
-                "name": "Khagrachari District",
-              
-                "type": "district",
-                "cities": []
-            },
+          
+         
+          
+           
+          
+        
             {
                 "id": 811,
                 "name": "Khulna District",
@@ -1088,9 +948,9 @@
                     },
                     {
                         "id": 8568,
-                        "name": "Puthia",
+                        "name": "Puthia"
 
-                        "longitude": "88.83431000"
+                        
                     },
                     {
                         "id": 8574,
@@ -1106,9 +966,9 @@
                     },
                     {
                         "id": 8592,
-                        "name": "Shāhzādpur",
+                        "name": "Shāhzādpur"
 
-                        "longitude": "89.59880000"
+                       
                     },
                     {
                         "id": 8591,
@@ -1146,33 +1006,30 @@
                 "cities": [
                     {
                         "id": 8455,
-                        "name": "Badarganj",
+                        "name": "Badarganj"
 
-                        "longitude": "89.05377000"
                     },
                     {
                         "id": 8480,
-                        "name": "Chilmāri",
+                        "name": "Chilmāri"
 
-                        "longitude": "89.67097000"
+                        
                     },
                     {
                         "id": 8487,
-                        "name": "Dinajpur",
+                        "name": "Dinajpur"
 
-                        "longitude": "88.75000000"
+                    
                     },
                     {
                         "id": 8494,
-                        "name": "Gaibandha",
-
-                        "longitude": "89.50000000"
+                        "name": "Gaibandha"
+              
                     },
                     {
                         "id": 8517,
-                        "name": "Kurigram",
+                        "name": "Kurigram"
 
-                        "longitude": "89.66667000"
                     },
                     {
                         "id": 8523,
@@ -1182,15 +1039,14 @@
                     },
                     {
                         "id": 8524,
-                        "name": "Lalmonirhat District",
+                        "name": "Lalmonirhat District"
 
-                        "longitude": "89.25000000"
+                  
                     },
                     {
                         "id": 8544,
-                        "name": "Nageswari",
+                        "name": "Nageswari"
 
-                        "longitude": "89.69153000"
                     },
                     {
                         "id": 8552,
@@ -1200,15 +1056,13 @@
                     },
                     {
                         "id": 8560,
-                        "name": "Panchagarh",
-
-                        "longitude": "88.56667000"
+                        "name": "Panchagarh"
+                       
                     },
                     {
                         "id": 8561,
-                        "name": "Parbatipur",
+                        "name": "Parbatipur"
 
-                        "longitude": "88.93093000"
                     },
                     {
                         "id": 8572,
@@ -1292,9 +1146,8 @@
                     },
                     {
                         "id": 8498,
-                        "name": "Habiganj",
+                        "name": "Habiganj"
 
-                        "longitude": "91.41667000"
                     },
                     {
                         "id": 8501,

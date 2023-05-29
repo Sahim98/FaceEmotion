@@ -16,32 +16,8 @@
         "subregion": "Southern Asia",
   
         "states": [
-            {
-                "id": 796,
-                "name": "Bagerhat District",
+
            
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 802,
-                "name": "Bahadia",
-          
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 752,
-                "name": "Bandarban District",
-                "type": "district",
-                "cities": []
-            },
-            {
-                "id": 784,
-                "name": "Barguna District",
-                "type": "district",
-                "cities": []
-            },
             {
                 "id": 818,
                 "name": "Barisal District",
@@ -791,9 +767,9 @@
                     },
                     {
                         "id": 8592,
-                        "name": "Shāhzādpur"
+                        "name": "Shahzadpur"
 
-                       
+                    
                     },
                     {
                         "id": 8591,
@@ -809,20 +785,7 @@
                     }
                 ]
             },
-            {
-                "id": 753,
-                "name": "Rajshahi Division",
-             
-                "type": "division",
-                "cities": []
-            },
-            {
-                "id": 809,
-                "name": "Rangamati Hill District",
-              
-                "type": "district",
-                "cities": []
-            },
+          
             {
                 "id": 759,
                 "name": "Rangpur District",

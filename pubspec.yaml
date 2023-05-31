@@ -37,6 +37,7 @@ dependencies:
   geocoding: ^2.0.5
   get: ^4.6.5
   camera: ^0.10.5
+  number_paginator: ^0.2.3
  
 dev_dependencies:
   flutter_test:

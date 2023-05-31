@@ -77,7 +77,7 @@
                     },
                     {
                         "id": 8556,
-                        "name": "Nālchiti",
+                        "name": "Nalchiti",
                         "longitude": "90.27195000"
                     },
                     {
@@ -116,27 +116,19 @@
                     },
                     {
                         "id": 8470,
-                        "name": "Brahmanbaria",
-
-                        "longitude": "91.16667000"
+                        "name": "Brahmanbaria"
                     },
                     {
                         "id": 8474,
-                        "name": "Chandpur",
-
-                        "longitude": "90.83333000"
+                        "name": "Chandpur"
                     },
                     {
                         "id": 8478,
-                        "name": "Chhagalnaiya",
-
-                        "longitude": "91.51091000"
+                        "name": "Chhagalnaiya"
                     },
                     {
                         "id": 8481,
-                        "name": "Chittagong",
-
-                        "longitude": "91.96333000"
+                        "name": "Chittagong"
                     },
                     {
                         "id": 8483,
@@ -149,57 +141,39 @@
                    
                     {
                         "id": 8492,
-                        "name": "Feni",
-
-                        "longitude": "91.31667000"
+                        "name": "Feni"
                     },
                     {
                         "id": 8499,
-                        "name": "Hajīganj",
-
-                        "longitude": "90.85508000"
+                        "name": "Hajīganj"
                     },
                     {
                         "id": 8512,
-                        "name": "Khagrachhari",
-
-                        "longitude": "91.90000000"
+                        "name": "Khagrachhari"
                     },
                     {
                         "id": 8525,
-                        "name": "Laksham",
-
-                        "longitude": "91.12143000"
+                        "name": "Laksham"
                     },
                     {
                         "id": 8521,
-                        "name": "Lakshmipur",
-
-                        "longitude": "90.83333000"
+                        "name": "Lakshmipur"
                     },
                     {
                         "id": 8530,
-                        "name": "Manikchari",
-
-                        "longitude": "91.84128000"
+                        "name": "Manikchari"
                     },
                     {
                         "id": 8543,
-                        "name": "Nabinagar",
-
-                        "longitude": "90.96792000"
+                        "name": "Nabinagar"
                     },
                     {
                         "id": 8553,
-                        "name": "Noakhali",
-
-                        "longitude": "91.16667000"
+                        "name": "Noakhali"
                     },
                     {
                         "id": 8564,
-                        "name": "Patiya",
-
-                        "longitude": "91.97900000"
+                        "name": "Patiya"
                     },
                     {
                         "id": 8579,
@@ -356,9 +330,7 @@
                     },
                     {
                         "id": 8575,
-                        "name": "Ramnagar",
-
-                        "longitude": "90.17604000"
+                        "name": "Ramnagar"
                     },
                     {
                         "id": 8583,
@@ -416,9 +388,7 @@
                     },
                     {
                         "id": 8504,
-                        "name": "Jessore",
-
-                        "longitude": "89.16667000"
+                        "name": "Jessore"
                     },
                     {
                         "id": 8506,
@@ -430,9 +400,7 @@
                     },
                     {
                         "id": 8519,
-                        "name": "Kālia",
-
-                        "longitude": "89.63094000"
+                        "name": "Kalia"
                     },
                     {
                         "id": 8520,
@@ -473,33 +441,23 @@
                     },
                     {
                         "id": 8566,
-                        "name": "Phultala",
-
-                        "longitude": "89.51194000"
+                        "name": "Phultala"
                     },
                     {
                         "id": 8585,
-                        "name": "Sarankhola",
-
-                        "longitude": "89.79113000"
+                        "name": "Sarankhola"
                     },
                     {
                         "id": 8587,
-                        "name": "Satkhira",
-
-                        "longitude": "89.15000000"
+                        "name": "Satkhira"
                     },
                     {
                         "id": 8606,
-                        "name": "Ujalpur",
-
-                        "longitude": "88.62444000"
+                        "name": "Ujalpur"
                     },
                     {
                         "id": 8607,
-                        "name": "Uttar Char Fasson",
-
-                        "longitude": "90.71275000"
+                        "name": "Uttar Char Fasson"
                     }
                 ]
             },
@@ -513,45 +471,31 @@
                 "cities": [
                     {
                         "id": 8493,
-                        "name": "Gafargaon",
-
-                        "longitude": "90.55850000"
+                        "name": "Gafargaon"
                     },
                     {
                         "id": 8502,
-                        "name": "Jamalpur",
-
-                        "longitude": "89.83333000"
+                        "name": "Jamalpur"
                     },
                     {
                         "id": 8539,
-                        "name": "Muktāgācha",
-
-                        "longitude": "90.25698000"
+                        "name": "Muktagacha"
                     },
                     {
                         "id": 8541,
-                        "name": "Mymensingh",
-
-                        "longitude": "90.40000000"
+                        "name": "Mymensingh"
                     },
                     {
                         "id": 8551,
-                        "name": "Netrakona",
-
-                        "longitude": "90.86667000"
+                        "name": "Netrakona"
                     },
                     {
                         "id": 8586,
-                        "name": "Sarishabari",
-
-                        "longitude": "89.83126000"
+                        "name": "Sarishabari"
                     },
                     {
                         "id": 8590,
-                        "name": "Sherpur",
-
-                        "longitude": "90.08333000"
+                        "name": "Sherpur"
                     }
                 ]
             },
@@ -564,87 +508,60 @@
                 "cities": [
                     {
                         "id": 8462,
-                        "name": "Bera",
-
-                        "longitude": "89.63262000"
+                        "name": "Bera"
                     },
                     {
                         "id": 8469,
-                        "name": "Bogra",
-
-                        "longitude": "89.35000000"
+                        "name": "Bogra"
                     },
                     {
                         "id": 8475,
-                        "name": "Chapai Nababganj",
-
-                        "longitude": "88.25000000"
+                        "name": "Chapai Nababganj"
                     },
                     {
                         "id": 8500,
-                        "name": "Ishurdi",
-
-                        "longitude": "89.06573000"
+                        "name": "Ishurdi"
                     },
                     {
                         "id": 8509,
-                        "name": "Joypur Hat",
-
-                        "longitude": "89.02734000"
+                        "name": "Joypur Hat"
                     },
                     {
                         "id": 8510,
-                        "name": "Joypurhat",
-
-                        "longitude": "89.10000000"
+                        "name": "Joypurhat"
                     },
                     {
                         "id": 8529,
-                        "name": "Mahasthangarh",
-
-                        "longitude": "89.34278000"
+                        "name": "Mahasthangarh"
                     },
                     {
                         "id": 8545,
-                        "name": "Naogaon",
-
-                        "longitude": "88.94657000"
+                        "name": "Naogaon"
                     },
                     {
                         "id": 8549,
-                        "name": "Natore",
-
-                        "longitude": "89.08333000"
+                        "name": "Natore"
                     },
                     {
                         "id": 8550,
-                        "name": "Nawabganj",
-
-                        "longitude": "88.27444000"
+                        "name": "Nawabganj"
                     },
                     {
                         "id": 8558,
-                        "name": "Pabna",
-
-                        "longitude": "89.33533000"
+                        "name": "Pabna"
                     },
                     {
                         "id": 8571,
-                        "name": "Par Naogaon",
-
-                        "longitude": "88.94875000"
+                        "name": "Par Naogaon"
                     },
                     {
                         "id": 8568,
                         "name": "Puthia"
-
                         
                     },
                     {
                         "id": 8574,
-                        "name": "Rajshahi",
-
-                        "longitude": "88.60748000"
+                        "name": "Rajshahi"
                     },
                     {
                         "id": 8582,
@@ -660,15 +577,11 @@
                     },
                     {
                         "id": 8591,
-                        "name": "Shibganj",
-
-                        "longitude": "89.32266000"
+                        "name": "Shibganj"
                     },
                     {
                         "id": 8593,
-                        "name": "Sirajganj",
-
-                        "longitude": "89.61667000"
+                        "name": "Sirajganj"
                     }
                 ]
             },
@@ -708,9 +621,7 @@
                     },
                     {
                         "id": 8523,
-                        "name": "Lalmonirhat",
-
-                        "longitude": "89.44595000"
+                        "name": "Lalmonirhat"
                     },
                     {
                         "id": 8524,
@@ -725,9 +636,7 @@
                     },
                     {
                         "id": 8552,
-                        "name": "Nilphamari Zila",
-
-                        "longitude": "88.95000000"
+                        "name": "Nilphamari Zila"
                     },
                     {
                         "id": 8560,
@@ -741,21 +650,15 @@
                     },
                     {
                         "id": 8572,
-                        "name": "Pirgaaj",
-
-                        "longitude": "88.35943000"
+                        "name": "Pirgaaj"
                     },
                     {
                         "id": 8577,
-                        "name": "Rangpur",
-
-                        "longitude": "89.25000000"
+                        "name": "Rangpur"
                     },
                     {
                         "id": 8601,
-                        "name": "Thakurgaon",
-
-                        "longitude": "88.33333000"
+                        "name": "Thakurgaon"
                     }
                 ]
             },
@@ -769,50 +672,35 @@
                 "cities": [
                     {
                         "id": 8458,
-                        "name": "Baniachang",
-
-                        "longitude": "91.35787000"
+                        "name": "Baniachang"
                     },
                     {
                         "id": 8479,
-                        "name": "Chhātak",
-
-                        "longitude": "91.66958000"
+                        "name": "Chhātak"
                     },
                     {
                         "id": 8498,
                         "name": "Habiganj"
-
                     },
                     {
                         "id": 8501,
-                        "name": "Jahedpur",
-
-                        "longitude": "91.65000000"
+                        "name": "Jahedpur"
                     },
                     {
                         "id": 8533,
-                        "name": "Maulavi Bāzār",
-
-                        "longitude": "91.77075000"
+                        "name": "Maulavi Bāzār"
                     },
                     {
                         "id": 8534,
-                        "name": "Maulvibazar",
-
-                        "longitude": "91.83333000"
+                        "name": "Maulvibazar"
                     },
                     {
                         "id": 8595,
-                        "name": "Sunamganj",
-
-                        "longitude": "91.41667000"
+                        "name": "Sunamganj"
                     },
                     {
                         "id": 8596,
-                        "name": "Sylhet",
-
-                        "longitude": "91.76667000"
+                        "name": "Sylhet"
                     }
                 ]
             }

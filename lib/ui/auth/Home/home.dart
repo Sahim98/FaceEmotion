@@ -15,13 +15,15 @@ class Home extends StatefulWidget {
 final firestore = FirebaseFirestore.instance;
 
 class _HomeState extends State<Home> {
-  late Stream<QuerySnapshot> dataStream =   FirebaseFirestore.instance.collection('Post').limit(3).snapshots();
+  late Stream<QuerySnapshot> dataStream =
+      FirebaseFirestore.instance.collection('Post').limit(3).snapshots();
 
-   @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
 // -----------------add user
@@ -60,15 +62,10 @@ class _HomeState extends State<Home> {
       });
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    void _loadMoreData(QueryDocumentSnapshot lastDocument) {
-    
+     _loadMoreData(QueryDocumentSnapshot lastDocument) {
       setState(() {
         dataStream = FirebaseFirestore.instance
             .collection('Post')
@@ -78,9 +75,14 @@ class _HomeState extends State<Home> {
       });
     }
 
-    void _loadPrevData(QueryDocumentSnapshot lastDocument)
-    {
-
+     _loadPrevData(QueryDocumentSnapshot lastDocument) {
+      setState(() {
+        dataStream = FirebaseFirestore.instance
+            .collection('Post')
+            .endBeforeDocument(lastDocument)
+            .limitToLast(3)
+            .snapshots();
+      });
     }
 
     return MaterialApp(
@@ -172,13 +174,24 @@ class _HomeState extends State<Home> {
                           print("index: " + index.toString());
 
                           if (index == documents.length) {
-                            return TextButton(
-                              child: Text('Next page'),
-                              onPressed: () {
-                                final lastDoc = documents[index - 1];
-                                print(lastDoc);
-                                if (lastDoc != null) _loadMoreData(lastDoc);
-                              },
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  child: Text('Prev page'),
+                                  onPressed: () {
+                                    final lastDoc = documents[0];
+                                    if (lastDoc != null) _loadPrevData(lastDoc);
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Next page'),
+                                  onPressed: () {
+                                    final lastDoc = documents[index - 1];
+                                    if (lastDoc != null) _loadMoreData(lastDoc);
+                                  },
+                                ),
+                              ],
                             );
                           }
 

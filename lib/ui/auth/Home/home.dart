@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/Home/addPost.dart';
 import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,10 +15,18 @@ class Home extends StatefulWidget {
 final firestore = FirebaseFirestore.instance;
 
 class _HomeState extends State<Home> {
+  late Stream<QuerySnapshot> dataStream =   FirebaseFirestore.instance.collection('Post').limit(3).snapshots();
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
 // -----------------add user
-  Future<void> addToArrayField(String id, String fieldName, List<dynamic> values) async {
+  Future<void> addToArrayField(
+      String id, String fieldName, List<dynamic> values) async {
     await firestore.collection("Post").doc(id).update({
       fieldName: FieldValue.arrayUnion(values),
     });
@@ -35,7 +41,8 @@ class _HomeState extends State<Home> {
   }
 
 // ---------------update user
-  Future<void> findInArrayField(String fieldName, String id, List<dynamic> values) async {
+  Future<void> findInArrayField(
+      String fieldName, String id, List<dynamic> values) async {
     DocumentSnapshot doc = await firestore.collection("Post").doc(id).get();
     List<dynamic> fieldValues = doc.get(fieldName);
     if (fieldValues.contains(_user)) {
@@ -53,60 +60,82 @@ class _HomeState extends State<Home> {
       });
     }
   }
-
-
+  
 
   @override
   Widget build(BuildContext context) {
+
+
+
+    void _loadMoreData(QueryDocumentSnapshot lastDocument) {
+    
+      setState(() {
+        dataStream = FirebaseFirestore.instance
+            .collection('Post')
+            .startAfterDocument(lastDocument)
+            .limit(3)
+            .snapshots();
+      });
+    }
+
+    void _loadPrevData(QueryDocumentSnapshot lastDocument)
+    {
+
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar:  AppBar(
-        elevation: 0,
-        leading: Icon(
-          Icons.flutter_dash,
-          color: Colors.amber,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Emotion Detection',
-          style: TextStyle(
-              color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut().then((value) {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return Login();
-                    },
-                  ));
-                }).onError((error, stackTrace) {
-                  Utils().toastMessage("Failed to logout.");
-                });
-              },
-              icon: Icon(
-                Icons.logout,
-                color: Colors.black54,
-              ))
-        ],
-      ),
+          appBar: AppBar(
+            elevation: 0,
+            leading: Icon(
+              Icons.flutter_dash,
+              color: Colors.amber,
+            ),
+            backgroundColor: Colors.white,
+            title: Text(
+              'Emotion Detection',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 23),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut().then((value) {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return Login();
+                        },
+                      ));
+                    }).onError((error, stackTrace) {
+                      Utils().toastMessage("Failed to logout.");
+                    });
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.black54,
+                  ))
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => AddPost(),
-              ));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddPost(),
+                  ));
             },
             backgroundColor: Colors.amber,
             child: Icon(
               Icons.add,
             ),
           ),
-          body: SafeArea(//--------------------------------main section
+          body: SafeArea(
+              //--------------------------------main section
               child: StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection("Post").snapshots(),
+                  stream: dataStream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return SizedBox(
@@ -128,13 +157,33 @@ class _HomeState extends State<Home> {
                         ),
                       ));
                     }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text('Loading...');
+                    }
+
+                    // Process the data here
+                    final documents = snapshot.data!.docs;
+
                     return SizedBox(
                       child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
+                        itemCount: documents.length + 1,
                         itemBuilder: (context, index) {
+                          print("index: " + index.toString());
+
+                          if (index == documents.length) {
+                            return TextButton(
+                              child: Text('Next page'),
+                              onPressed: () {
+                                final lastDoc = documents[index - 1];
+                                print(lastDoc);
+                                if (lastDoc != null) _loadMoreData(lastDoc);
+                              },
+                            );
+                          }
+
                           DocumentSnapshot docum = snapshot.data!.docs[index];
                           String img = docum['image'];
-
                           var like = docum['like'];
                           var dislike = docum['dislike'];
                           Color likeColor =
@@ -160,9 +209,7 @@ class _HomeState extends State<Home> {
                                               fontFamily: 'OpenSans'),
                                         ),
                                       ),
-                                   Image.network(img)
-
-                                  
+                                      Image.network(img)
                                     ]),
                                 subtitle: Row(children: [
                                   Row(

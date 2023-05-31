@@ -190,6 +190,27 @@ class _userState extends State<user> {
                               style: TextStyle(
                                   color: Colors.grey, letterSpacing: 2),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height: 30,
+                                width: 110,
+                                child: ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orangeAccent,
+                                    primary: Colors.blue,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DropdownScreen()));
+                                  },
+                                  icon: Icon(Icons.update),
+                                  label: Text('Update'),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         Padding(
@@ -201,19 +222,7 @@ class _userState extends State<user> {
                                 fontSize: 18,
                                 letterSpacing: 1),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 100.0, right: 100.0, bottom: 8.0, top: 8.0),
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => DropdownScreen()));
-                            },
-                            icon: Icon(Icons.update),
-                            label: Text('Update'),
-                          ),
-                        ),
+                        )
                       ],
                     );
                   }),

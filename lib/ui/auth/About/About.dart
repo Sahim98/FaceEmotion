@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/ui/auth/Profile/User.dart';
-import 'package:facecam/ui/auth/SignUp/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 // Initialize the Realtime Database
@@ -32,15 +29,34 @@ class CommentDialog extends StatefulWidget {
 class _CommentDialogState extends State<CommentDialog> {
   final _formKey = GlobalKey<FormState>();
   final cont = TextEditingController();
-  double rate = 1.0, average = 0.0;
+  double rate = 0.0, average = 0.0;
 
-  Future<void> calculateAverageRating(double extra) async {
+  @override
+  void initState() {
+    calculateAverageRating();
+    getRating();
+    super.initState();
+  }
+
+  getRating() async {
+    final db = FirebaseFirestore.instance.collection('Rate');
+    final snapshot = await db
+        .where('name',
+            isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        rate = snapshot.docs.first.data()['rating'] as double;
+      });
+    }
+  }
+
+  calculateAverageRating() async {
     double totalRating = 0;
     int totalDocuments = 0;
-
     QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('Ratings').get();
-
+        await FirebaseFirestore.instance.collection('Rate').get();
     snapshot.docs.forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
       if (doc.exists && doc.data().containsKey('rating')) {
         totalRating += doc.data()['rating'] as double;
@@ -49,12 +65,42 @@ class _CommentDialogState extends State<CommentDialog> {
     });
 
     if (totalDocuments > 0) {
-      totalRating += extra;
-      totalDocuments++;
-      average = totalRating / totalDocuments;
+      setState(() {
+        average = totalRating / totalDocuments;
+      });
     } else {
-      average = 0.0;
+      setState(() {
+        average = 0.0;
+      });
     }
+    // print("Documents: " + totalDocuments.toString());
+    // print("TotalRting: " + totalRating.toString());
+    print("Average: " + average.toString());
+  }
+
+  addOrUpdateRating(double rating) async {
+    final db = FirebaseFirestore.instance.collection('Rate');
+
+    final snapshot = await db
+        .where('name',
+            isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+        .get();
+
+    if (snapshot.docs.isEmpty) {
+      await db.add({
+        'name': FirebaseAuth.instance.currentUser!.email.toString(),
+        'rating': rating
+      });
+    } else {
+      final docId = snapshot.docs.first.id;
+      await db.doc(docId).update({'rating': rating});
+    }
+    setState(() {
+      rate = rating;
+    });
+    setState(() async {
+      await calculateAverageRating();
+    });
   }
 
   @override
@@ -73,7 +119,7 @@ class _CommentDialogState extends State<CommentDialog> {
                   color: Colors.grey),
             ),
             RatingBar.builder(
-              initialRating: 0,
+              initialRating: rate,
               minRating: 0,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -84,11 +130,11 @@ class _CommentDialogState extends State<CommentDialog> {
                 color: Colors.amber,
               ),
               onRatingUpdate: (rating) async {
-                setState(() {
-                  rate = rating;
+                setState(() async {
+                  await addOrUpdateRating(rating);
                 });
                 setState(() async {
-                  await calculateAverageRating(rate);
+                  await calculateAverageRating();
                 });
               },
               updateOnDrag: true,
@@ -98,13 +144,11 @@ class _CommentDialogState extends State<CommentDialog> {
             ),
             Form(
               child: TextFormField(
-                
                 controller: cont,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                         onPressed: () async {
                           submitRating(rate, Current_User, cont.text);
-
                           cont.clear();
                         },
                         icon: Icon(Icons.send)),

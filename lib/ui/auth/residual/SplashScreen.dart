@@ -1,9 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:facecam/firebase%20services/splash%20services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class flashScreen extends StatefulWidget {

@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/ui/auth/Profile/address.dart';
+import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -21,6 +24,45 @@ class _userState extends State<user> {
   File? _image;
   final picker = ImagePicker();
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
+
+  String Address = 'none';
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    Placemark place = placemarks[0];
+
+    Address =
+        await '${placemarks[3].name.toString()},${place.administrativeArea}, ${place.country}';
+  }
 
   @override
   void initState() {
@@ -190,11 +232,26 @@ class _userState extends State<user> {
                               style: TextStyle(
                                   color: Colors.grey, letterSpacing: 2),
                             ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            address,
+                            style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 18,
+                                letterSpacing: 1),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
                                 height: 30,
-                                width: 110,
+                                width: 105,
                                 child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.orangeAccent,
@@ -211,17 +268,45 @@ class _userState extends State<user> {
                                 ),
                               ),
                             ),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.black54),
+                                onPressed: () async {
+                                  Position position =
+                                      await _getGeoLocationPosition();
+
+                                  setState(() async {
+                                    await GetAddressFromLatLong(position);
+                                  });
+                                  print(Address);
+
+                                  // QuerySnapshot<Map<String, dynamic>> snapshot =
+                                  //     await FirebaseFirestore.instance
+                                  //         .collection('Users')
+                                  //         .where('email',
+                                  //             isEqualTo: FirebaseAuth
+                                  //                 .instance.currentUser!.email
+                                  //                 .toString())
+                                  //         .get();
+
+                                  // if (snapshot.docs.isNotEmpty) {
+                                  //   String documentId = snapshot.docs[0].id;
+                                  //   await FirebaseFirestore.instance
+                                  //       .collection('Users')
+                                  //       .doc(documentId)
+                                  //       .update({'address': Address});
+                                  //   print(Address);
+                                  //   Utils().toastMessage(
+                                  //       'Address updated successfully!');
+                                  // } else {
+                                  //   Utils().toastMessage('Failed to update.');
+                                  // }
+                                },
+                                child: Icon(
+                                  Icons.location_on,
+                                  color: Colors.green[300],
+                                ))
                           ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            address,
-                            style: TextStyle(
-                                color: Colors.grey[400],
-                                fontSize: 18,
-                                letterSpacing: 1),
-                          ),
                         )
                       ],
                     );

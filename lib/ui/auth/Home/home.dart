@@ -5,6 +5,8 @@ import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,13 +17,23 @@ class Home extends StatefulWidget {
 final firestore = FirebaseFirestore.instance;
 
 class _HomeState extends State<Home> {
-  late Stream<QuerySnapshot> dataStream =
+  int page = 1;
+  Stream<QuerySnapshot> dataStream =
       FirebaseFirestore.instance.collection('Post').limit(3).snapshots();
 
   @override
   void initState() {
+    page = 1;
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    page = 1;
+
+    // TODO: implement dispose
+    super.dispose();
   }
 
   String _user = FirebaseAuth.instance.currentUser!.email.toString();
@@ -63,28 +75,34 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void _loadMoreData(QueryDocumentSnapshot lastDocument) async {
+    setState(() {
+      dataStream = FirebaseFirestore.instance
+          .collection('Post')
+          .startAfterDocument(lastDocument)
+          .limit(3)
+          .snapshots();
+    });
+    setState(() {
+      page++;
+    });
+  }
+
+  void _loadPrevData(QueryDocumentSnapshot lastDocument) async {
+    setState(() {
+      dataStream =  FirebaseFirestore.instance
+          .collection('Post')
+          .endBeforeDocument(lastDocument)
+          .limit(3)
+          .snapshots();
+    });
+    setState(() {
+      page--;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-     _loadMoreData(QueryDocumentSnapshot lastDocument) {
-      setState(() {
-        dataStream = FirebaseFirestore.instance
-            .collection('Post')
-            .startAfterDocument(lastDocument)
-            .limit(3)
-            .snapshots();
-      });
-    }
-
-     _loadPrevData(QueryDocumentSnapshot lastDocument) {
-      setState(() {
-        dataStream = FirebaseFirestore.instance
-            .collection('Post')
-            .endBeforeDocument(lastDocument)
-            .limitToLast(3)
-            .snapshots();
-      });
-    }
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -171,26 +189,60 @@ class _HomeState extends State<Home> {
                       child: ListView.builder(
                         itemCount: documents.length + 1,
                         itemBuilder: (context, index) {
-                          print("index: " + index.toString());
+                          //  print("index: " + index.toString());
 
                           if (index == documents.length) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextButton(
-                                  child: Text('Prev page'),
-                                  onPressed: () {
-                                    final lastDoc = documents[0];
-                                    if (lastDoc != null) _loadPrevData(lastDoc);
-                                  },
-                                ),
+                                    onPressed: () async {
+                                      QuerySnapshot<Map<String, dynamic>> snap =
+                                          await FirebaseFirestore.instance
+                                              .collection('Post')
+                                              .endBeforeDocument(
+                                                  documents.first)
+                                              .limit(3)
+                                              .get();
+                                      if (snap.docs.length > 0) {
+                                        _loadPrevData(documents.first);
+                                      }
+                                    },
+                                    child: Text('Prev',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                                Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                    ),
+                                    alignment: Alignment.center,
+                                    height: 25,
+                                    width: 50,
+                                    child: Text(
+                                      page.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )),
                                 TextButton(
-                                  child: Text('Next page'),
-                                  onPressed: () {
-                                    final lastDoc = documents[index - 1];
-                                    if (lastDoc != null) _loadMoreData(lastDoc);
-                                  },
-                                ),
+                                    onPressed: () async {
+                                      QuerySnapshot<Map<String, dynamic>> snap =
+                                          await FirebaseFirestore.instance
+                                              .collection('Post')
+                                              .startAfterDocument(
+                                                  documents.last)
+                                              .limit(3)
+                                              .get();
+                                      if (snap.docs.length > 0) {
+                                        _loadMoreData(documents.last);
+                                      }
+                                    },
+                                    child: Text(
+                                      'Next',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )),
                               ],
                             );
                           }

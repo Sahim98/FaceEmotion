@@ -5,8 +5,7 @@ import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:number_paginator/number_paginator.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,21 +17,25 @@ final firestore = FirebaseFirestore.instance;
 
 class _HomeState extends State<Home> {
   int page = 1;
-  Stream<QuerySnapshot> dataStream =
-      FirebaseFirestore.instance.collection('Post').limit(3).snapshots();
+  Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance
+      .collection('Post')
+      .orderBy('username')
+      .limit(3)
+      .snapshots();
+
+  
+
+  
 
   @override
   void initState() {
     page = 1;
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
     page = 1;
-
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -79,24 +82,22 @@ class _HomeState extends State<Home> {
     setState(() {
       dataStream = FirebaseFirestore.instance
           .collection('Post')
+          .orderBy('username')
           .startAfterDocument(lastDocument)
           .limit(3)
           .snapshots();
-    });
-    setState(() {
       page++;
     });
   }
 
   void _loadPrevData(QueryDocumentSnapshot lastDocument) async {
     setState(() {
-      dataStream =  FirebaseFirestore.instance
+      dataStream = FirebaseFirestore.instance
           .collection('Post')
+          .orderBy('username')
           .endBeforeDocument(lastDocument)
-          .limit(3)
+          .limitToLast(3)
           .snapshots();
-    });
-    setState(() {
       page--;
     });
   }
@@ -181,7 +182,6 @@ class _HomeState extends State<Home> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Text('Loading...');
                     }
-
                     // Process the data here
                     final documents = snapshot.data!.docs;
 
@@ -200,9 +200,10 @@ class _HomeState extends State<Home> {
                                       QuerySnapshot<Map<String, dynamic>> snap =
                                           await FirebaseFirestore.instance
                                               .collection('Post')
+                                              .orderBy('username')
                                               .endBeforeDocument(
                                                   documents.first)
-                                              .limit(3)
+                                              .limitToLast(3)
                                               .get();
                                       if (snap.docs.length > 0) {
                                         _loadPrevData(documents.first);
@@ -230,6 +231,7 @@ class _HomeState extends State<Home> {
                                       QuerySnapshot<Map<String, dynamic>> snap =
                                           await FirebaseFirestore.instance
                                               .collection('Post')
+                                              .orderBy('username')
                                               .startAfterDocument(
                                                   documents.last)
                                               .limit(3)

@@ -28,11 +28,14 @@ class _VerifyScreenState extends State<VerifyScreen> {
     user = auth.currentUser;
     user?.sendEmailVerification();
     message = "An email has been sent to ${user!.email} Please verify.";
+    Utils().toastMessage("Verify email to login");
 
-    timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      Utils().toastMessage("Verify email to login");
-      checkEmailVerified();
+    Timer(Duration(seconds: 2), () {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Login()
+      ));
     });
+    checkEmailVerified();
     super.initState();
   }
 
@@ -63,11 +66,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
     await user?.reload();
     if (user!.emailVerified) {
       timer!.cancel();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login(),
-          ));
     }
   }
 }

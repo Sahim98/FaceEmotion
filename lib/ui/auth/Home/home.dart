@@ -1,11 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/ui/auth/About/About.dart';
 import 'package:facecam/ui/auth/Home/addPost.dart';
 import 'package:facecam/ui/auth/SignUp/login.dart';
 import 'package:facecam/ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -22,10 +23,6 @@ class _HomeState extends State<Home> {
       .orderBy('username')
       .limit(3)
       .snapshots();
-
-  
-
-  
 
   @override
   void initState() {
@@ -123,7 +120,8 @@ class _HomeState extends State<Home> {
             ),
             actions: [
               IconButton(
-                  onPressed: () {
+                  onPressed: () async {
+                   
                     FirebaseAuth.instance.signOut().then((value) {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
@@ -182,15 +180,11 @@ class _HomeState extends State<Home> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Text('Loading...');
                     }
-                    // Process the data here
                     final documents = snapshot.data!.docs;
-
                     return SizedBox(
                       child: ListView.builder(
                         itemCount: documents.length + 1,
                         itemBuilder: (context, index) {
-                          //  print("index: " + index.toString());
-
                           if (index == documents.length) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -248,9 +242,9 @@ class _HomeState extends State<Home> {
                               ],
                             );
                           }
-
                           DocumentSnapshot docum = snapshot.data!.docs[index];
                           String img = docum['image'];
+
                           var like = docum['like'];
                           var dislike = docum['dislike'];
                           Color likeColor =
@@ -276,7 +270,9 @@ class _HomeState extends State<Home> {
                                               fontFamily: 'OpenSans'),
                                         ),
                                       ),
-                                      Image.network(img)
+                                      img != null
+                                          ? Image.network(img)
+                                          : Placeholder()
                                     ]),
                                 subtitle: Row(children: [
                                   Row(

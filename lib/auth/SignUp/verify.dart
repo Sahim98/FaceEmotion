@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:facecam/ui/auth/SignUp/login.dart';
-import 'package:facecam/ui/auth/SignUp/signup.dart';
-import 'package:facecam/ui/auth/residual/SplashScreen.dart';
-import 'package:facecam/ui/utils/utils.dart';
+import 'package:facecam/auth/SignUp/login.dart';
+import 'package:facecam/auth/SignUp/signup.dart';
+import 'package:facecam/auth/residual/SplashScreen.dart';
+import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

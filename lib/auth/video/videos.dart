@@ -1,4 +1,4 @@
-import 'package:facecam/ui/auth/video/video.dart';
+import 'package:facecam/auth/video/video.dart';
 import 'package:flutter/material.dart';
 
 class Videos extends StatefulWidget {

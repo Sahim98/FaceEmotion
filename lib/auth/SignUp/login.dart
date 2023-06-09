@@ -1,12 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:facecam/ui/auth/residual/SplashScreen.dart';
-import 'package:facecam/ui/auth/residual/design.dart';
-import 'package:facecam/ui/auth/SignUp/signup.dart';
-import 'package:facecam/ui/utils/utils.dart';
+import 'package:facecam/auth/residual/SplashScreen.dart';
+import 'package:facecam/auth/residual/design.dart';
+import 'package:facecam/auth/SignUp/signup.dart';
+import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,35 +19,31 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   bool _rememberMe = false, verified = false, logged_in = false;
-  final style =
-      TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
+  final style = const TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
 
   User? user = FirebaseAuth.instance.currentUser;
 
-  void login() {
+  Future<void> login() async {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
             email: emailController.text,
             password: passController.text.toString())
         .then((value) {
-      if (FirebaseAuth.instance.currentUser!.emailVerified)
-      {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => flashScreen()));
-      }
-      else 
-      {
-         Utils().toastMessage('Verify email');
+      if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => flashScreen()));
+      } else {
+        Utils().toastMessage('Verify email');
       }
     }).onError((error, stackTrace) {
       Utils().toastMessage(error.toString());
     });
   }
- 
 
   @override
   void dispose() {
@@ -68,7 +67,7 @@ class _LoginState extends State<Login> {
             body: Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -106,7 +105,7 @@ class _LoginState extends State<Login> {
                         child: Text('Sign In',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.aladin(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontSize: 30.0,
@@ -120,13 +119,14 @@ class _LoginState extends State<Login> {
                           children: [
                             TextFormField(
                               validator: (value) {
-                                if (value!.isEmpty)
+                                if (value!.isEmpty) {
                                   return 'E-mail is required';
-                                else if (!FirebaseAuth
-                                    .instance.currentUser!.emailVerified)
+                                } else if (!FirebaseAuth
+                                    .instance.currentUser!.emailVerified) {
                                   return "email isn't varified!!";
-                                else
+                                } else {
                                   return null;
+                                }
                               },
                               controller: emailController,
                               decoration: const InputDecoration(
@@ -146,20 +146,22 @@ class _LoginState extends State<Login> {
                               maxLength: 30,
                               autocorrect: true,
                             ),
+                            // ignore: prefer_const_constructors
                             SizedBox(
                               height: 20,
                             ),
                             TextFormField(
                               validator: (value) {
-                                if (value!.isEmpty)
+                                if (value!.isEmpty) {
                                   return 'Password is required';
-                                else
+                                } else {
                                   return null;
+                                }
                               },
                               obscureText: true,
                               obscuringCharacter: '*',
                               controller: passController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 prefixIcon: Icon(
                                   Icons.security,
                                   color: Colors.white,
@@ -179,6 +181,7 @@ class _LoginState extends State<Login> {
                           ],
                         ),
                       ),
+                      // ignore: sized_box_for_whitespace
                       Container(
                         height: 20.0,
                         child: Row(
@@ -212,6 +215,7 @@ class _LoginState extends State<Login> {
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                            // ignore: deprecated_member_use
                             primary: Colors.orange[700],
                             elevation: 6,
                             padding: EdgeInsets.all(15),
@@ -219,33 +223,27 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(30)),
                           ),
                           onPressed: () async {
-                            setState(() {
-                              logged_in = true;
-                            });
-                            login();
-                            setState(() {
-                              logged_in = false;
-                            });
+                            final SharedPreferences sharedPref =
+                                await SharedPreferences.getInstance();
+                            if(_rememberMe)
+                            {
+                              sharedPref.setString('email', emailController.text.toString());
+                            }
+                            await login();
                           },
-                          child: logged_in
-                              ? SizedBox(
-                                  height: 12,
-                                  width: 12,
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Text(
-                                  'Login',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    letterSpacing: 1.5,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans',
-                                  ),
-                                ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                              letterSpacing: 1.5,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'OpenSans',
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ElevatedButton.icon(
@@ -262,7 +260,7 @@ class _LoginState extends State<Login> {
                           },
                           icon: Icon(Icons.mail),
                           label: verified
-                              ? SizedBox(
+                              ? const SizedBox(
                                   height: 12,
                                   width: 12,
                                   child: CircularProgressIndicator())
@@ -285,8 +283,8 @@ class _LoginState extends State<Login> {
                                 },
                               ));
                             },
-                            child:
-                                Text('Sign up', style: TextStyle(fontSize: 20)),
+                            child: const Text('Sign up',
+                                style: TextStyle(fontSize: 20)),
                           )
                         ],
                       ),

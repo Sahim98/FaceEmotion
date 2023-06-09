@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert' as convert;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/ui/auth/Profile/User.dart';
-import 'package:facecam/ui/utils/utils.dart';
+import 'package:facecam/auth/Profile/User.dart';
+import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

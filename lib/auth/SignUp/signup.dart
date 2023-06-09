@@ -1,8 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:facecam/ui/auth/SignUp/verify.dart';
-import 'package:facecam/ui/auth/residual/design.dart';
-import 'package:facecam/ui/auth/SignUp/login.dart';
-import 'package:facecam/ui/utils/utils.dart';
+import 'package:facecam/auth/SignUp/verify.dart';
+import 'package:facecam/auth/residual/design.dart';
+import 'package:facecam/auth/SignUp/login.dart';
+import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

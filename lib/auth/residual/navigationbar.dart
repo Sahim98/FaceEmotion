@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:facecam/ui/auth/About/About.dart';
-import 'package:facecam/ui/auth/Profile/User.dart';
-import 'package:facecam/ui/auth/Home/home.dart';
-import 'package:facecam/ui/auth/Predict/tensorflow.dart';
-import 'package:facecam/ui/auth/video/videos.dart';
+import 'package:facecam/auth/About/About.dart';
+import 'package:facecam/auth/Profile/User.dart';
+import 'package:facecam/auth/Home/home.dart';
+import 'package:facecam/auth/Predict/tensorflow.dart';
+import 'package:facecam/auth/SignUp/login.dart';
+import 'package:facecam/auth/video/videos.dart';
+import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -26,6 +29,30 @@ class _MyAppState extends State<MyApp> {
   final _auth = FirebaseAuth.instance;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  isLoggedout() async {
+    final SharedPreferences sharedPref = await SharedPreferences.getInstance();
+
+    String email = _auth.currentUser!.email.toString();
+
+    if (!sharedPref.containsKey(email)) {
+      FirebaseAuth.instance.signOut().then((value) {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            // ignore: prefer_const_constructors
+            return Login();
+          },
+        ));
+      }).onError((error, stackTrace) {
+        Utils().toastMessage("Failed to logout.");
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/ui/auth/Home/addPost.dart';
-import 'package:facecam/ui/auth/SignUp/login.dart';
-import 'package:facecam/ui/utils/utils.dart';
+import 'package:facecam/auth/Home/addPost.dart';
+import 'package:facecam/auth/SignUp/login.dart';
+import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,9 +32,11 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  
+
   @override
   void dispose() {
-    page = 1;
+    
     super.dispose();
   }
 
@@ -106,6 +110,7 @@ class _HomeState extends State<Home> {
       home: Scaffold(
           appBar: AppBar(
             elevation: 0,
+            // ignore: prefer_const_constructors
             leading: Icon(
               Icons.flutter_dash,
               color: Colors.amber,
@@ -121,7 +126,11 @@ class _HomeState extends State<Home> {
             actions: [
               IconButton(
                   onPressed: () async {
-                   
+                    final SharedPreferences sharedPref =
+                        await SharedPreferences.getInstance();
+
+                    sharedPref.remove(
+                        FirebaseAuth.instance.currentUser!.email.toString());
                     FirebaseAuth.instance.signOut().then((value) {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {

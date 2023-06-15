@@ -5,7 +5,9 @@ import 'package:facecam/auth/residual/navigationbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class flashScreen extends StatefulWidget {
   const flashScreen({super.key});
 
@@ -15,8 +17,8 @@ class flashScreen extends StatefulWidget {
 
 class _flashScreenState extends State<flashScreen> {
   final style =
+      // ignore: prefer_const_constructors
       TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 36);
- 
 
   @override
   void initState() {
@@ -24,11 +26,16 @@ class _flashScreenState extends State<flashScreen> {
     super.initState();
   }
 
-  void isLogin() {
+  void isLogin() async {
     final _auth = FirebaseAuth.instance;
     final user = _auth.currentUser;
+    SharedPreferences localData = await SharedPreferences.getInstance();
 
-    if (user != null) {
+    // ignore: prefer_interpolation_to_compose_strings
+    print('remember value in flashscreen: ' +
+        localData.getBool('remember').toString());
+
+    if (user != null && localData.containsKey('remember') == true) {
       Timer(
         const Duration(seconds: 2),
         () {
@@ -36,6 +43,7 @@ class _flashScreenState extends State<flashScreen> {
             builder: (context) {
               return FirebaseAuth.instance.currentUser!.emailVerified
                   ? MyApp()
+                  // ignore: prefer_const_constructors
                   : Login();
             },
           ));
@@ -79,5 +87,3 @@ class _flashScreenState extends State<flashScreen> {
     );
   }
 }
-
-

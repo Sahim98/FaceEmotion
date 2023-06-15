@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/auth/SignUp/signup.dart';
-import 'package:facecam/auth/residual/SplashScreen.dart';
+import 'package:facecam/auth/residual/flashScreen.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +31,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
     Utils().toastMessage("Verify email to login");
 
     Timer(Duration(seconds: 2), () {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Login()
-      ));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => Login()));
     });
     checkEmailVerified();
     super.initState();

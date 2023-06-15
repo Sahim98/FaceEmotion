@@ -26,17 +26,25 @@ class _HomeState extends State<Home> {
       .limit(3)
       .snapshots();
 
+  void handleRemember() async {
+    SharedPreferences localData = await SharedPreferences.getInstance();
+    bool? reset = localData.getBool('remember');
+
+    print('remember value in home: ' + reset.toString());
+
+    if (reset == false) {
+      localData.clear();
+    }
+  }
+
   @override
   void initState() {
     page = 1;
     super.initState();
   }
 
-  
-
   @override
   void dispose() {
-    
     super.dispose();
   }
 
@@ -105,6 +113,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    handleRemember();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -126,11 +135,9 @@ class _HomeState extends State<Home> {
             actions: [
               IconButton(
                   onPressed: () async {
-                    final SharedPreferences sharedPref =
+                    SharedPreferences localData =
                         await SharedPreferences.getInstance();
-
-                    sharedPref.remove(
-                        FirebaseAuth.instance.currentUser!.email.toString());
+                    localData.clear();
                     FirebaseAuth.instance.signOut().then((value) {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {

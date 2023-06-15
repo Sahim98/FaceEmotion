@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:facecam/auth/residual/SplashScreen.dart';
+import 'package:facecam/auth/residual/flashScreen.dart';
 import 'package:facecam/auth/residual/design.dart';
 import 'package:facecam/auth/SignUp/signup.dart';
 import 'package:facecam/utils/utils.dart';
@@ -225,10 +225,12 @@ class _LoginState extends State<Login> {
                           onPressed: () async {
                             final SharedPreferences sharedPref =
                                 await SharedPreferences.getInstance();
-                            if(_rememberMe)
-                            {
-                              sharedPref.setString('email', emailController.text.toString());
-                            }
+                            sharedPref.setBool('remember', _rememberMe);
+                            bool? reset = sharedPref.getBool('remember');
+
+                            print(
+                                'remember value in login: ' + reset.toString());
+
                             await login();
                           },
                           child: Text(

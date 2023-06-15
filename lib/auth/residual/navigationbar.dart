@@ -30,25 +30,6 @@ class _MyAppState extends State<MyApp> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  isLoggedout() async {
-    final SharedPreferences sharedPref = await SharedPreferences.getInstance();
-
-    String email = _auth.currentUser!.email.toString();
-
-    if (!sharedPref.containsKey(email)) {
-      FirebaseAuth.instance.signOut().then((value) {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            // ignore: prefer_const_constructors
-            return Login();
-          },
-        ));
-      }).onError((error, stackTrace) {
-        Utils().toastMessage("Failed to logout.");
-      });
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();

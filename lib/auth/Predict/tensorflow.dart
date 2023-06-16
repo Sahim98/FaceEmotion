@@ -3,13 +3,9 @@ import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
+
 
 class Tensorflow extends StatefulWidget {
   @override
@@ -82,12 +78,12 @@ class _TensorflowState extends State<Tensorflow> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: Icon(
+        leading: const Icon(
           Icons.flutter_dash,
           color: Colors.amber,
         ),
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           'Emotion Detection',
           style: TextStyle(
               color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
@@ -180,7 +176,7 @@ class _TensorflowState extends State<Tensorflow> {
                                                   emoji[int.parse(
                                                       _outputs![0]["label"]
                                                           [0])],
-                                              style: TextStyle(
+                                              style:const  TextStyle(
                                                   color: Colors.grey,
                                                   fontSize: 15,
                                                   fontWeight:
@@ -197,7 +193,7 @@ class _TensorflowState extends State<Tensorflow> {
                                     style: ElevatedButton.styleFrom(
                                         primary: Colors.amber),
                                     onPressed: pickimage,
-                                    child: Icon(
+                                    child:const Icon(
                                       Icons.add_a_photo,
                                       size: 20,
                                       color: Colors.white,

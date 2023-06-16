@@ -106,20 +106,20 @@ class _AddPostState extends State<AddPost> {
                       Navigator.pop(context);
                     },
                     child: isLoading
-                        ? SizedBox(
+                        ? const SizedBox(
+                            height: 17.0,
+                            width: 17.0,
                             child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
-                            height: 17.0,
-                            width: 17.0,
                           )
-                        : Text("Upload"),
+                        : const Text("Upload"),
                   ),
-                  if(isLoading)Text('Uploading...', style: TextStyle(
+                  if(isLoading)const Text('Uploading...', style: TextStyle(
                         fontFamily: 'OpenSans',
                         color: Colors.grey,
                         fontWeight: FontWeight.bold)),
-                  if(isLoading)Text('Please keep patience.', style: TextStyle(
+                  if(isLoading)const Text('Please keep patience.', style: TextStyle(
                         fontFamily: 'OpenSans',
                         color: Colors.grey,
                         fontWeight: FontWeight.bold)),

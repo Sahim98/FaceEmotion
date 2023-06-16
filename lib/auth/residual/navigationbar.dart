@@ -1,19 +1,17 @@
 import 'dart:io';
-
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:facecam/auth/About/About.dart';
 import 'package:facecam/auth/Profile/User.dart';
 import 'package:facecam/auth/Home/home.dart';
 import 'package:facecam/auth/Predict/tensorflow.dart';
-import 'package:facecam/auth/SignUp/login.dart';
-import 'package:facecam/auth/video/videos.dart';
-import 'package:facecam/utils/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:facecam/auth/video/YouTubeVideoScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _MyAppState createState() => _MyAppState();
 }
 
@@ -21,12 +19,12 @@ class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
   List ls = [
     const Home(),
-    const user(),
+    user(),
     Tensorflow(),
-    const Videos(),
+    YouTubeVideoScreen(),
     CommentDialog()
   ];
-  final _auth = FirebaseAuth.instance;
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -42,7 +40,7 @@ class _MyAppState extends State<MyApp> {
             context: context,
             builder: (context) => AlertDialog(
               title: const Text('Are you sure?'),
-              content: const Text('Do you want to exit an App'),
+              content: const Text('Do you want to exit the App'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),

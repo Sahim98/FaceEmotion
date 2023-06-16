@@ -173,23 +173,20 @@ class _HomeState extends State<Home> {
                   stream: dataStream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return SizedBox(
-                          child: Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 20),
-                            Text(
-                              "Loading...",
-                              style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                      return Container(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 20),
+                          Text(
+                            "Loading...",
+                            style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ));
                     }
 

@@ -30,16 +30,24 @@ class _CommentDialogState extends State<CommentDialog> {
   final _formKey = GlobalKey<FormState>();
   final cont = TextEditingController();
   double rate = 0.0, average = 0.0;
+  int totalUsers = 0;
+  bool Loading = true;
 
   @override
   void initState() {
     calculateAverageRating();
     getRating();
+
     super.initState();
   }
 
   getRating() async {
     final db = FirebaseFirestore.instance.collection('Rate');
+    final snapshotSz = await db.get();
+
+    setState(() {
+      totalUsers = snapshotSz.size;
+    });
     final snapshot = await db
         .where('name',
             isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
@@ -50,6 +58,9 @@ class _CommentDialogState extends State<CommentDialog> {
         rate = snapshot.docs.first.data()['rating'] as double;
       });
     }
+    setState(() {
+      Loading = false;
+    });
   }
 
   calculateAverageRating() async {
@@ -108,150 +119,178 @@ class _CommentDialogState extends State<CommentDialog> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: SafeArea(
-        child: Column(
-          children: [
-            Text(
-              "Our rating: " + average.toStringAsFixed(1),
-              style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey),
-            ),
-            RatingBar.builder(
-              initialRating: rate,
-              minRating: 0,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: (rating) async {
-                setState(() async {
-                  await addOrUpdateRating(rating);
-                });
-                setState(() async {
-                  await calculateAverageRating();
-                });
-              },
-              updateOnDrag: true,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Form(
-              child: TextFormField(
-                controller: cont,
-                decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                        onPressed: () async {
-                          submitRating(rate, Current_User, cont.text);
-                          cont.clear();
-                        },
-                        icon: Icon(Icons.send)),
-                    labelText: 'Leave a comment...',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5))),
-              ),
-            ),
-            SizedBox(
-              height: 22,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Comments:',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey),
+        child: Loading
+            ? Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text(
+                      'Loading..',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'OpenSans',
+                          color: Colors.grey),
+                    )
+                  ],
                 ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: data.snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Container(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 20),
-                            Text(
-                              "Loading...",
-                              style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ));
-                      }
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot document =
-                              snapshot.data!.docs[index];
-                          double rating = document['rating'];
-                          String name = document['name'];
-                          String comment = document['comment'],
-                              time = document['time'].toString();
+              )
+            : Column(
+                children: [
+                  Text(
+                    "${totalUsers} users rated: " + average.toStringAsFixed(1),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                  ),
+                  RatingBar.builder(
+                    initialRating: rate,
+                    minRating: 0,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) async {
+                      setState(() async {
+                        await addOrUpdateRating(rating);
+                      });
+                      setState(() async {
+                        await calculateAverageRating();
+                      });
+                    },
+                    updateOnDrag: true,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Form(
+                    child: TextFormField(
+                      maxLines: 5, // <-- SEE HERE
+                      minLines: 1,
+                      controller: cont,
+                      decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              onPressed: () async {
+                                submitRating(rate, Current_User, cont.text);
+                                cont.clear();
+                              },
+                              icon: Icon(Icons.send)),
+                          contentPadding: EdgeInsets.symmetric(vertical: 40),
+                          labelText: '    Leave a comment...',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(7))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 22,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Comments:',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'OpenSans',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: data.snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Container(
+                                  child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    "Loading...",
+                                    style: TextStyle(
+                                        fontFamily: 'OpenSans',
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ));
+                            }
+                            return ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot document =
+                                    snapshot.data!.docs[index];
+                                double rating = document['rating'];
+                                String name = document['name'];
+                                String comment = document['comment'],
+                                    time = document['time'].toString();
 
-                          return Card(
-                            elevation: 2,
-                            child: ListTile(
-                                title: Row(
-                                  children: [
-                                    Text(
-                                      name,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'OpenSans',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueGrey),
-                                    ),
-                                    RatingBarIndicator(
-                                      rating: rating,
-                                      itemBuilder: (context, index) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      itemCount: 5,
-                                      itemSize: 12.0,
-                                      direction: Axis.horizontal,
-                                    ),
-                                  ],
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      comment,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'OpenSans',
-                                          color: Colors.blueGrey),
-                                    ),
-                                    Text(
-                                      'at ' + time,
-                                      style: TextStyle(fontSize: 10),
-                                    ),
-                                  ],
-                                )),
-                          );
-                        },
-                      );
-                    })),
-          ],
-        ),
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: ListTile(
+                                        title: Row(
+                                          children: [
+                                            Text(
+                                              name,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontFamily: 'OpenSans',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blueGrey),
+                                            ),
+                                            RatingBarIndicator(
+                                              rating: rating,
+                                              itemBuilder: (context, index) =>
+                                                  Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              itemCount: 5,
+                                              itemSize: 12.0,
+                                              direction: Axis.horizontal,
+                                            ),
+                                          ],
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              comment,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'OpenSans',
+                                                  color: Colors.blueGrey),
+                                            ),
+                                            Text(
+                                              'at ' + time,
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                          ],
+                                        )),
+                                  ),
+                                );
+                              },
+                            );
+                          })),
+                ],
+              ),
       ),
     );
   }

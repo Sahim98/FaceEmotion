@@ -200,7 +200,7 @@ class _CommentDialogState extends State<CommentDialog> {
                             fontSize: 20,
                             fontFamily: 'OpenSans',
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey),
+                            color: Colors.black87),
                       ),
                     ],
                   ),
@@ -252,7 +252,7 @@ class _CommentDialogState extends State<CommentDialog> {
                                                   fontSize: 18,
                                                   fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.blueGrey),
+                                                  color: Colors.black87),
                                             ),
                                             RatingBarIndicator(
                                               rating: rating,

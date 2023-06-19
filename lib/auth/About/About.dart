@@ -1,18 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/auth/Profile/User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 // Initialize the Realtime Database
-final data = FirebaseFirestore.instance.collection('Ratings');
-
-String User = Current_User;
+final data = FirebaseFirestore.instance.collection('Ratings').orderBy('time');
 
 void submitRating(double rating, String name, String comment) {
   DateTime now = DateTime.now();
-  String formattedDate = DateFormat('yyyy-MM-dd - kk:mm').format(now);
+  String formattedDate = DateFormat('yyyy-MM-dd  kk:mm').format(now);
   FirebaseFirestore.instance.collection('Ratings').add({
     'rating': rating,
     'name': name,
@@ -31,14 +28,37 @@ class _CommentDialogState extends State<CommentDialog> {
   final cont = TextEditingController();
   double rate = 0.0, average = 0.0;
   int totalUsers = 0;
+  // ignore: non_constant_identifier_names
   bool Loading = true;
+  String email = FirebaseAuth.instance.currentUser!.email.toString(),
+      // ignore: non_constant_identifier_names
+      Current_User = "Anynomus";
 
   @override
   void initState() {
     calculateAverageRating();
     getRating();
+    FindUserName();
 
     super.initState();
+  }
+
+  // ignore: non_constant_identifier_names
+  FindUserName() async {
+    final QuerySnapshot<Map<String, dynamic>> db = await FirebaseFirestore
+        .instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    final document = db.docs[0];
+    final name = document.data();
+    final data = name['name'];
+
+    setState(() {
+      Current_User = data;
+    });
   }
 
   getRating() async {
@@ -86,7 +106,7 @@ class _CommentDialogState extends State<CommentDialog> {
     }
     // print("Documents: " + totalDocuments.toString());
     // print("TotalRting: " + totalRating.toString());
-    print("Average: " + average.toString());
+    print("Average: $average");
   }
 
   addOrUpdateRating(double rating) async {
@@ -124,7 +144,7 @@ class _CommentDialogState extends State<CommentDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     CircularProgressIndicator(),
                     Text(
                       'Loading..',
@@ -139,8 +159,9 @@ class _CommentDialogState extends State<CommentDialog> {
             : Column(
                 children: [
                   Text(
+                    // ignore: prefer_interpolation_to_compose_strings, unnecessary_brace_in_string_interps
                     "${totalUsers} users rated: " + average.toStringAsFixed(1),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 20,
                         fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold,
@@ -152,8 +173,8 @@ class _CommentDialogState extends State<CommentDialog> {
                     direction: Axis.horizontal,
                     allowHalfRating: true,
                     itemCount: 5,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => Icon(
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
                       Icons.star,
                       color: Colors.amber,
                     ),
@@ -167,7 +188,7 @@ class _CommentDialogState extends State<CommentDialog> {
                     },
                     updateOnDrag: true,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Form(
@@ -181,19 +202,20 @@ class _CommentDialogState extends State<CommentDialog> {
                                 submitRating(rate, Current_User, cont.text);
                                 cont.clear();
                               },
-                              icon: Icon(Icons.send)),
+                              icon: const Icon(Icons.send)),
+                          // ignore: prefer_const_constructors
                           contentPadding: EdgeInsets.symmetric(vertical: 40),
                           labelText: '    Leave a comment...',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(7))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 22,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         'Comments:',
                         style: TextStyle(
@@ -204,7 +226,7 @@ class _CommentDialogState extends State<CommentDialog> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Expanded(
                       child: StreamBuilder<QuerySnapshot>(
                           stream: data.snapshots(),
@@ -213,7 +235,7 @@ class _CommentDialogState extends State<CommentDialog> {
                               return Container(
                                   child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: const [
                                   CircularProgressIndicator(),
                                   SizedBox(height: 20),
                                   Text(
@@ -248,7 +270,7 @@ class _CommentDialogState extends State<CommentDialog> {
                                           children: [
                                             Text(
                                               name,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
@@ -257,7 +279,7 @@ class _CommentDialogState extends State<CommentDialog> {
                                             RatingBarIndicator(
                                               rating: rating,
                                               itemBuilder: (context, index) =>
-                                                  Icon(
+                                                  const Icon(
                                                 Icons.star,
                                                 color: Colors.amber,
                                               ),
@@ -273,14 +295,15 @@ class _CommentDialogState extends State<CommentDialog> {
                                           children: [
                                             Text(
                                               comment,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 15,
                                                   fontFamily: 'OpenSans',
                                                   color: Colors.blueGrey),
                                             ),
                                             Text(
-                                              'at ' + time,
-                                              style: TextStyle(fontSize: 10),
+                                              'at $time',
+                                              style:
+                                                  const TextStyle(fontSize: 10),
                                             ),
                                           ],
                                         )),

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/auth/Profile/User.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,10 +13,17 @@ class AddPost extends StatefulWidget {
 }
 
 class _AddPostState extends State<AddPost> {
+  @override
+  void initState() {
+    FindUserName();
+
+    super.initState();
+  }
+
 //----------variable
   bool isLoading = false;
   ImagePicker imagePicker = ImagePicker();
-  String? imageUrl;
+  String? imageUrl, Current_User;
   File? _image;
   final imgPicker = ImagePicker();
   firebase_storage.FirebaseStorage storage =
@@ -30,6 +37,24 @@ class _AddPostState extends State<AddPost> {
     });
   }
 
+  FindUserName() async {
+    final QuerySnapshot<Map<String, dynamic>> db = await FirebaseFirestore
+        .instance
+        .collection('Users')
+        .where('email',
+            isEqualTo: FirebaseAuth.instance.currentUser!.email.toString())
+        .limit(1)
+        .get();
+
+    final document = db.docs[0];
+    final name = document.data();
+    final data = name['name'];
+
+    setState(() {
+      Current_User = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,7 +62,7 @@ class _AddPostState extends State<AddPost> {
       home: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               "Add post",
               style: TextStyle(color: Colors.grey),
             ),
@@ -45,7 +70,7 @@ class _AddPostState extends State<AddPost> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               color: Colors.grey,
             ),
           ),
@@ -53,8 +78,8 @@ class _AddPostState extends State<AddPost> {
             child: Column(
               children: [
                 if (_image == null)
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
+                  const Padding(
+                    padding: EdgeInsets.all(20.0),
                     child: Text(
                       'Upload image',
                       style: TextStyle(
@@ -77,17 +102,16 @@ class _AddPostState extends State<AddPost> {
                       onPressed: () {
                         pickimage();
                       },
-                      child: Text("Select"))
+                      child: const Text("Select"))
                 else
                   ElevatedButton(
                     onPressed: () async {
                       setState(() {
                         isLoading = true;
                       });
-                      firebase_storage.Reference ref = firebase_storage
-                          .FirebaseStorage.instance
-                          .ref('/foldername' +
-                              DateTime.now().millisecondsSinceEpoch.toString());
+                      firebase_storage.Reference ref =
+                          firebase_storage.FirebaseStorage.instance.ref(
+                              '/foldername${DateTime.now().millisecondsSinceEpoch}');
                       firebase_storage.UploadTask uploadTask =
                           ref.putFile(_image!);
 
@@ -103,6 +127,7 @@ class _AddPostState extends State<AddPost> {
                       setState(() {
                         isLoading = false;
                       });
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     },
                     child: isLoading
@@ -115,14 +140,18 @@ class _AddPostState extends State<AddPost> {
                           )
                         : const Text("Upload"),
                   ),
-                  if(isLoading)const Text('Uploading...', style: TextStyle(
-                        fontFamily: 'OpenSans',
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold)),
-                  if(isLoading)const Text('Please keep patience.', style: TextStyle(
-                        fontFamily: 'OpenSans',
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold)),
+                if (isLoading)
+                  const Text('Uploading...',
+                      style: TextStyle(
+                          fontFamily: 'OpenSans',
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold)),
+                if (isLoading)
+                  const Text('Please keep patience.',
+                      style: TextStyle(
+                          fontFamily: 'OpenSans',
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold)),
               ],
             ),
           )),

@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/auth/Home/addPost.dart';
@@ -29,9 +28,6 @@ class _HomeState extends State<Home> {
   void handleRemember() async {
     SharedPreferences localData = await SharedPreferences.getInstance();
     bool? reset = localData.getBool('remember');
-
-    print('remember value in home: ' + reset.toString());
-
     if (reset == false) {
       localData.clear();
     }
@@ -59,7 +55,8 @@ class _HomeState extends State<Home> {
   }
 
   // ---------------remove user
-  Future<void> RemoveArrVal(
+ // ignore: non_constant_identifier_names
+ RemoveArrVal(
       String fieldName, String id, List<dynamic> values) async {
     await firestore.collection("Post").doc(id).update({
       fieldName: FieldValue.arrayRemove(values),
@@ -110,6 +107,8 @@ class _HomeState extends State<Home> {
       page--;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +176,7 @@ class _HomeState extends State<Home> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             CircularProgressIndicator(),
                             Text(
                               'Loading..',

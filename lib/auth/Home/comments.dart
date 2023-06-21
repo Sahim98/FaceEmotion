@@ -53,8 +53,7 @@ class _CommentsState extends State<Comments> {
               .where('pid', isEqualTo: widget.id.toString())
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting ||
-                !snapshot.hasData) {
+            if (!snapshot.hasData) {
               return Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

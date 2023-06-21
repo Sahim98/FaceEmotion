@@ -77,225 +77,218 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              child: Container(
-                child: Center(
-                  child: ListView(
-                    padding: EdgeInsets.all(25),
-                    children: [
-                      Container(
-                        height: 53,
-                        child: DefaultTextStyle(
+              child: Center(
+                child: ListView(
+                  padding: EdgeInsets.all(25),
+                  children: [
+                    SizedBox(
+                      height: 53,
+                      child: DefaultTextStyle(
+                        style: GoogleFonts.aladin(
+                          textStyle:
+                              TextStyle(fontSize: 35, color: Colors.purple),
+                        ),
+                        child: Center(
+                          child: AnimatedTextKit(
+                            repeatForever: true,
+                            animatedTexts: [
+                              TyperAnimatedText('Emotion detection'),
+                              ScaleAnimatedText('😡😃😥😮')
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('Sign In',
+                          textAlign: TextAlign.center,
                           style: GoogleFonts.aladin(
-                            textStyle:
-                                TextStyle(fontSize: 35, color: Colors.purple),
-                          ),
-                          child: Center(
-                            child: AnimatedTextKit(
-                              repeatForever: true,
-                              animatedTexts: [
-                                TyperAnimatedText('Emotion detection'),
-                                ScaleAnimatedText('😡😃😥😮')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text('Sign In',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.aladin(
-                              textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'OpenSans',
-                                fontSize: 30.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )),
-                      ),
-                      Form(
-                        key: _formfield,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'E-mail is required';
-                                } else if (!FirebaseAuth
-                                    .instance.currentUser!.emailVerified) {
-                                  return "email isn't varified!!";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              controller: emailController,
-                              decoration: const InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.email,
-                                  color: Colors.white,
-                                ),
-                                labelText: 'E-mail',
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                ),
-                                filled: true,
-                                fillColor: Color.fromARGB(255, 246, 191, 135),
-                              ),
-                              keyboardType: TextInputType.text,
-                              maxLength: 30,
-                              autocorrect: true,
-                            ),
-                            // ignore: prefer_const_constructors
-                            SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Password is required';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              obscureText: true,
-                              obscuringCharacter: '*',
-                              controller: passController,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.security,
-                                  color: Colors.white,
-                                ),
-                                labelText: 'Password',
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
-                                filled: true,
-                                fillColor: Color.fromARGB(255, 246, 191, 135),
-                              ),
-                              keyboardType: TextInputType.text,
-                              maxLength: 10,
-                              autocorrect: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                      // ignore: sized_box_for_whitespace
-                      Container(
-                        height: 20.0,
-                        child: Row(
-                          children: <Widget>[
-                            Theme(
-                              data: ThemeData(
-                                  unselectedWidgetColor: Colors.white),
-                              child: Checkbox(
-                                value: _rememberMe,
-                                checkColor: Colors.white,
-                                activeColor: Colors.green,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _rememberMe = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                            Text(
-                              'Remember me',
-                              style: kLabelStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 25.0),
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            // ignore: deprecated_member_use
-                            primary: Colors.orange[700],
-                            elevation: 6,
-                            padding: EdgeInsets.all(15),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                          onPressed: () async {
-                            final SharedPreferences sharedPref =
-                                await SharedPreferences.getInstance();
-                            sharedPref.setBool('remember', _rememberMe);
-                            bool? reset = sharedPref.getBool('remember');
-
-                            print(
-                                'remember value in login: ' + reset.toString());
-
-                            await login();
-                          },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.white,
-                              letterSpacing: 1.5,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
                               fontFamily: 'OpenSans',
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ElevatedButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              verified = true;
-                            });
-                            FirebaseAuth.instance.currentUser!
-                                .sendEmailVerification();
-                            Utils().toastMessage('Email has been sent');
-                            setState(() {
-                              verified = false;
-                            });
-                          },
-                          icon: Icon(Icons.mail),
-                          label: verified
-                              ? const SizedBox(
-                                  height: 12,
-                                  width: 12,
-                                  child: CircularProgressIndicator())
-                              : Text('Resend verification?')),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                          )),
+                    ),
+                    Form(
+                      key: _formfield,
+                      child: Column(
                         children: [
-                          Text(
-                            "Don't have an account?",
-                            style: style,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return SignUp();
-                                },
-                              ));
+                          TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'E-mail is required';
+                              } else if (!FirebaseAuth
+                                  .instance.currentUser!.emailVerified) {
+                                return "email isn't varified!!";
+                              } else {
+                                return null;
+                              }
                             },
-                            child: const Text('Sign up',
-                                style: TextStyle(fontSize: 20)),
-                          )
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: Colors.white,
+                              ),
+                              labelText: 'E-mail',
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                              filled: true,
+                              fillColor: Color.fromARGB(255, 246, 191, 135),
+                            ),
+                            keyboardType: TextInputType.text,
+                            maxLength: 30,
+                            autocorrect: true,
+                          ),
+                       
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Password is required';
+                              } else {
+                                return null;
+                              }
+                            },
+                            obscureText: true,
+                            obscuringCharacter: '*',
+                            controller: passController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.security,
+                                color: Colors.white,
+                              ),
+                              labelText: 'Password',
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              filled: true,
+                              fillColor: Color.fromARGB(255, 246, 191, 135),
+                            ),
+                            keyboardType: TextInputType.text,
+                            maxLength: 10,
+                            autocorrect: true,
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                        width: MediaQuery.of(context).size.width,
-                      )
-                    ],
-                  ),
+                    ),
+                    // ignore: sized_box_for_whitespace
+                    Container(
+                      height: 20.0,
+                      child: Row(
+                        children: <Widget>[
+                          Theme(
+                            data: ThemeData(
+                                unselectedWidgetColor: Colors.white),
+                            child: Checkbox(
+                              value: _rememberMe,
+                              checkColor: Colors.white,
+                              activeColor: Colors.green,
+                              onChanged: (value) {
+                                setState(() {
+                                  _rememberMe = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          Text(
+                            'Remember me',
+                            style: kLabelStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 25.0),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          // ignore: deprecated_member_use
+                          primary: Colors.orange[700],
+                          elevation: 6,
+                          padding: EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        onPressed: () async {
+                          final SharedPreferences sharedPref =
+                              await SharedPreferences.getInstance();
+                          sharedPref.setBool('remember', _rememberMe);
+                          await login();
+                        },
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            color: Colors.white,
+                            letterSpacing: 1.5,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'OpenSans',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            verified = true;
+                          });
+                          FirebaseAuth.instance.currentUser!
+                              .sendEmailVerification();
+                          Utils().toastMessage('Email has been sent');
+                          setState(() {
+                            verified = false;
+                          });
+                        },
+                        icon: Icon(Icons.mail),
+                        label: verified
+                            ? const SizedBox(
+                                height: 12,
+                                width: 12,
+                                child: CircularProgressIndicator())
+                            : Text('Resend verification?')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: style,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return SignUp();
+                              },
+                            ));
+                          },
+                          child: const Text('Sign up',
+                              style: TextStyle(fontSize: 20)),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                      width: MediaQuery.of(context).size.width,
+                    )
+                  ],
                 ),
               ),
             ),

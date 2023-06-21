@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,7 @@ class _AddPostState extends State<AddPost> {
 //----------variable
   bool isLoading = false;
   ImagePicker imagePicker = ImagePicker();
+  // ignore: non_constant_identifier_names
   String? imageUrl, Current_User;
   File? _image;
   final imgPicker = ImagePicker();
@@ -31,12 +33,14 @@ class _AddPostState extends State<AddPost> {
 
 //---------------->Image picker
   void pickimage() async {
+    // ignore: deprecated_member_use
     var imgGallery = await imgPicker.getImage(source: ImageSource.gallery);
     setState(() {
       _image = File(imgGallery!.path);
     });
   }
 
+  // ignore: non_constant_identifier_names
   FindUserName() async {
     final QuerySnapshot<Map<String, dynamic>> db = await FirebaseFirestore
         .instance

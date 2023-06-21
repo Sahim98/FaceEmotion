@@ -27,13 +27,11 @@ class _flashScreenState extends State<flashScreen> {
   }
 
   void isLogin() async {
-    final _auth = FirebaseAuth.instance;
-    final user = _auth.currentUser;
+    final auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
     SharedPreferences localData = await SharedPreferences.getInstance();
 
     // ignore: prefer_interpolation_to_compose_strings
-    print('remember value in flashscreen: ' +
-        localData.getBool('remember').toString());
 
     if (user != null && localData.containsKey('remember') == true) {
       Timer(
@@ -42,7 +40,7 @@ class _flashScreenState extends State<flashScreen> {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
               return FirebaseAuth.instance.currentUser!.emailVerified
-                  ? MyApp()
+                  ? const MyApp()
                   // ignore: prefer_const_constructors
                   : Login();
             },
@@ -55,7 +53,7 @@ class _flashScreenState extends State<flashScreen> {
         () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return Login();
+              return const Login();
             },
           ));
         },
@@ -72,16 +70,15 @@ class _flashScreenState extends State<flashScreen> {
           body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-              child: Center(
+          Center(
             child: AnimatedTextKit(
-              animatedTexts: [
-                WavyAnimatedText('Loading...',
-                    textStyle: GoogleFonts.dancingScript(textStyle: style)),
-              ],
-              isRepeatingAnimation: true,
+          animatedTexts: [
+            WavyAnimatedText('Loading...',
+                textStyle: GoogleFonts.dancingScript(textStyle: style)),
+          ],
+          isRepeatingAnimation: true,
             ),
-          )),
+          ),
         ],
       )),
     );

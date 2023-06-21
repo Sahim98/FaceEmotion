@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:facecam/auth/SignUp/login.dart';
-import 'package:facecam/auth/SignUp/signup.dart';
-import 'package:facecam/auth/residual/flashScreen.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +28,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
     message = "An email has been sent to ${user!.email} Please verify.";
     Utils().toastMessage("Verify email to login");
 
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => Login()));
+          .push(MaterialPageRoute(builder: (context) => const Login()));
     });
     checkEmailVerified();
     super.initState();
@@ -52,7 +50,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
           padding: const EdgeInsets.all(10.0),
           child: Text(
             message!,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'OpenSans', fontSize: 20, color: Colors.grey),
           ),
         ),

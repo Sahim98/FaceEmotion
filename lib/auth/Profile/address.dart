@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert' as convert;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/auth/Profile/User.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:profile/profile.dart';
 
 class DropdownScreen extends StatefulWidget {
+  const DropdownScreen({super.key});
+
   @override
   State<DropdownScreen> createState() => _DropdownScreenState();
 }
@@ -56,7 +55,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Update",
           style: TextStyle(color: Colors.grey),
         ),
@@ -65,7 +64,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
             onPressed: () async {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -110,7 +109,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
                   padding: const EdgeInsets.all(15.0),
                   child: DropdownButton<String>(
                       underline: Container(),
-                      hint: Text("Select Country"),
+                      hint: const Text("Select Country"),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       isDense: true,
                       isExpanded: true,
@@ -174,14 +173,14 @@ class _DropdownScreenState extends State<DropdownScreen> {
             //=============================== City
             if (isStateSelected)
               Card(
-                color: Color.fromARGB(255, 192, 182, 194).withOpacity(0.5),
+                color: const Color.fromARGB(255, 192, 182, 194).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: DropdownButton<String>(
                       underline: Container(),
-                      hint: Text("Select City"),
+                      hint: const Text("Select City"),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       isDense: true,
                       isExpanded: true,
@@ -221,18 +220,19 @@ class _DropdownScreenState extends State<DropdownScreen> {
                         .update({'address': currentAddr});
                     Utils().toastMessage('Address updated successfully!');
 
-                    if (country != null || state != null)
+                    if (country != null || state != null) {
                       Timer(
                         const Duration(seconds: 2),
                         () {
                           Navigator.pop(context);
                         },
                       );
+                    }
                   } else {
                     Utils().toastMessage('Failed to update.');
                   }
                 },
-                child: Text("Update"))
+                child: const Text("Update"))
           ],
         ),
       ),

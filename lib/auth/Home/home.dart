@@ -1,12 +1,13 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, duplicate_ignore
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/auth/Home/addPost.dart';
+import 'package:facecam/auth/Home/comments.dart';
 import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:number_paginator/number_paginator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -44,7 +45,7 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  String _user = FirebaseAuth.instance.currentUser!.email.toString();
+  final String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
 // -----------------add user
   Future<void> addToArrayField(
@@ -55,9 +56,8 @@ class _HomeState extends State<Home> {
   }
 
   // ---------------remove user
- // ignore: non_constant_identifier_names
- RemoveArrVal(
-      String fieldName, String id, List<dynamic> values) async {
+  // ignore: non_constant_identifier_names
+  RemoveArrVal(String fieldName, String id, List<dynamic> values) async {
     await firestore.collection("Post").doc(id).update({
       fieldName: FieldValue.arrayRemove(values),
     });
@@ -73,10 +73,11 @@ class _HomeState extends State<Home> {
         fieldName: FieldValue.arrayRemove(values),
       });
     } else {
-      if (fieldName == 'like')
+      if (fieldName == 'like') {
         RemoveArrVal('dislike', id, values);
-      else
+      } else {
         RemoveArrVal('like', id, values);
+      }
 
       await firestore.collection("Post").doc(id).update({
         fieldName: FieldValue.arrayUnion(values),
@@ -84,7 +85,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void _loadMoreData(QueryDocumentSnapshot lastDocument) async {
+  void _loadMoreData(QueryDocumentSnapshot lastDocument) {
     setState(() {
       dataStream = FirebaseFirestore.instance
           .collection('Post')
@@ -96,7 +97,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void _loadPrevData(QueryDocumentSnapshot lastDocument) async {
+  void _loadPrevData(QueryDocumentSnapshot lastDocument) {
     setState(() {
       dataStream = FirebaseFirestore.instance
           .collection('Post')
@@ -108,17 +109,15 @@ class _HomeState extends State<Home> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     handleRemember();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+          // ignore: duplicate_ignore
           appBar: AppBar(
             elevation: 0,
-            // ignore: prefer_const_constructors
             leading: Icon(
               Icons.flutter_dash,
               color: Colors.amber,
@@ -132,7 +131,7 @@ class _HomeState extends State<Home> {
                   fontSize: 23),
             ),
             actions: [
-              IconButton(
+              TextButton(
                   onPressed: () async {
                     SharedPreferences localData =
                         await SharedPreferences.getInstance();
@@ -147,7 +146,7 @@ class _HomeState extends State<Home> {
                       Utils().toastMessage("Failed to logout.");
                     });
                   },
-                  icon: Icon(
+                  child: Icon(
                     Icons.logout,
                     color: Colors.black54,
                   ))
@@ -190,9 +189,6 @@ class _HomeState extends State<Home> {
                       );
                     }
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text('Loading...');
-                    }
                     final documents = snapshot.data!.docs;
                     return SizedBox(
                       child: ListView.builder(
@@ -202,7 +198,7 @@ class _HomeState extends State<Home> {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                TextButton(
+                                IconButton(
                                     onPressed: () async {
                                       QuerySnapshot<Map<String, dynamic>> snap =
                                           await FirebaseFirestore.instance
@@ -212,22 +208,23 @@ class _HomeState extends State<Home> {
                                                   documents.first)
                                               .limitToLast(3)
                                               .get();
-                                      if (snap.docs.length > 0) {
+                                      if (snap.docs.isNotEmpty) {
                                         _loadPrevData(documents.first);
                                       }
                                     },
-                                    child: Text('Prev',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold))),
+                                    icon: Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.blue,
+                                    )),
                                 Container(
                                     decoration: BoxDecoration(
                                       color: Colors.grey[300],
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
                                     ),
                                     alignment: Alignment.center,
-                                    height: 25,
-                                    width: 50,
+                                    height: 45,
+                                    width: 45,
                                     child: Text(
                                       page.toString(),
                                       style: TextStyle(
@@ -243,14 +240,13 @@ class _HomeState extends State<Home> {
                                                   documents.last)
                                               .limit(3)
                                               .get();
-                                      if (snap.docs.length > 0) {
+                                      if (snap.docs.isNotEmpty) {
                                         _loadMoreData(documents.last);
                                       }
                                     },
-                                    child: Text(
-                                      'Next',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.blue,
                                     )),
                               ],
                             );
@@ -283,36 +279,59 @@ class _HomeState extends State<Home> {
                                               fontFamily: 'OpenSans'),
                                         ),
                                       ),
-                                      img != null
-                                          ? Image.network(img)
-                                          : Placeholder()
+                                      Image.network(img)
                                     ]),
-                                subtitle: Row(children: [
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () async {
-                                            await findInArrayField(
-                                                'like', docum.id, [_user]);
-                                          },
-                                          icon: Icon(Icons.thumb_up,
-                                              color: likeColor)),
-                                      Text('${like.length}')
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () async {
-                                            await findInArrayField(
-                                                'dislike', docum.id, [_user]);
-                                          },
-                                          icon: Icon(Icons.thumb_down,
-                                              color: dislikeColor)),
-                                      Text('${dislike.length}')
-                                    ],
-                                  ),
-                                ])),
+                                subtitle: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () async {
+                                                await findInArrayField(
+                                                    'like', docum.id, [_user]);
+                                              },
+                                              icon: Icon(Icons.thumb_up,
+                                                  color: likeColor)),
+                                          Text('${like.length}')
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () async {
+                                                await findInArrayField(
+                                                    'dislike',
+                                                    docum.id,
+                                                    [_user]);
+                                              },
+                                              icon: Icon(Icons.thumb_down,
+                                                  color: dislikeColor)),
+                                          Text('${dislike.length}')
+                                        ],
+                                      )
+                                    ]),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Comments(
+                                                            id: docum.id
+                                                                .toString()),
+                                                  ));
+                                            },
+                                            icon: Icon(Icons.comment,
+                                                color: Colors.grey)),
+                                      ],
+                                    )
+                                  ],
+                                )),
                           );
                         },
                       ),

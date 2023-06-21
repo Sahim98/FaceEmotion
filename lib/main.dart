@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(fb());
+  runApp(const fb());
 }
 
 class fb extends StatefulWidget {

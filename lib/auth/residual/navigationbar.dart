@@ -19,14 +19,12 @@ class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
   List ls = [
     const Home(),
-    user(),
-    Tensorflow(),
-    YouTubeVideoScreen(),
-    CommentDialog()
+    const User(),
+    const Tensorflow(),
+    const YouTubeVideoScreen(),
+    const CommentDialog()
   ];
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   void dispose() {
@@ -35,7 +33,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    Future<bool> _onWillPop() async {
+    Future<bool> onWillPop() async {
       return (await showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -57,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     return WillPopScope(
-        onWillPop: _onWillPop,
+        onWillPop: onWillPop,
         child: Scaffold(
           body: ls[_selectedIndex],
           bottomNavigationBar: BottomNavyBar(

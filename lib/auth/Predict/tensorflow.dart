@@ -8,7 +8,10 @@ import 'package:tflite/tflite.dart';
 
 
 class Tensorflow extends StatefulWidget {
+  const Tensorflow({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _TensorflowState createState() => _TensorflowState();
 }
 
@@ -60,6 +63,7 @@ class _TensorflowState extends State<Tensorflow> {
   }
 
   void pickimage() async {
+    // ignore: deprecated_member_use
     var imgGallery = await imgPicker.getImage(source: ImageSource.camera);
     setState(() {
       _image = File(imgGallery!.path);
@@ -94,7 +98,7 @@ class _TensorflowState extends State<Tensorflow> {
                 _auth.signOut().then((value) {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
-                      return Login();
+                      return const Login();
                     },
                   ));
                 }).onError((error, stackTrace) {
@@ -118,7 +122,7 @@ class _TensorflowState extends State<Tensorflow> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _loading
-                    ? Container(
+                    ? SizedBox(
                         height: MediaQuery.of(context).size.height,
                         child: Center(
                           child: Text(
@@ -131,7 +135,7 @@ class _TensorflowState extends State<Tensorflow> {
                         ),
                       )
                     : Center(
-                        child: Container(
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.height * .8,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,20 +154,18 @@ class _TensorflowState extends State<Tensorflow> {
                                           colorBlendMode:
                                               BlendMode.colorBurn),
                                     ),
-                              SizedBox(height: 10),
+                               const SizedBox(height: 10),
                               _image == null
-                                  ? Container(
-                                      child: Text(
-                                        'No image selected',
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey[500]),
-                                      ),
-                                    )
+                                  ? Text(
+                                    'No image selected',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[500]),
+                                  )
                                   : _outputs != null
                                       ? Card(
-                                          margin: EdgeInsets.all(8),
+                                          margin: const EdgeInsets.all(8),
                                           elevation: 10,
                                           child: Padding(
                                             padding:
@@ -191,7 +193,7 @@ class _TensorflowState extends State<Tensorflow> {
                                 children: [
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        primary: Colors.amber),
+                                        backgroundColor: Colors.amber),
                                     onPressed: pickimage,
                                     child:const Icon(
                                       Icons.add_a_photo,

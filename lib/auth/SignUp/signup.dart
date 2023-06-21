@@ -18,11 +18,11 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   //----------------------variable declaration
+  // ignore: non_constant_identifier_names
   bool loading = false, auth = false, unique_user = false, showPass = true;
-  final style = TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
+  final style = const TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   String name = '';
 
-  DateTime _date = DateTime.now();
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
@@ -36,7 +36,7 @@ class _SignUpState extends State<SignUp> {
       )
       .snapshots();
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> addUsers() async {
     FirebaseFirestore.instance
@@ -62,7 +62,7 @@ class _SignUpState extends State<SignUp> {
         .get();
 
     setState(() {
-      unique_user = !(querySnapshot.docs.isEmpty);
+      unique_user = querySnapshot.docs.isNotEmpty;
     });
 
     setState(() {
@@ -102,7 +102,7 @@ class _SignUpState extends State<SignUp> {
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -114,14 +114,14 @@ class _SignUpState extends State<SignUp> {
             ),
             child: Center(
               child: ListView(
-                padding: EdgeInsets.all(25),
+                padding: const EdgeInsets.all(25),
                 children: [
-                  Container(
+                  SizedBox(
                     height: 53,
                     child: DefaultTextStyle(
                       style: GoogleFonts.aladin(
                         textStyle:
-                            TextStyle(fontSize: 35, color: Colors.purple),
+                            const TextStyle(fontSize: 35, color: Colors.purple),
                       ),
                       child: Center(
                         child: AnimatedTextKit(
@@ -139,7 +139,7 @@ class _SignUpState extends State<SignUp> {
                     child: Text('Sign Up',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.aladin(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'OpenSans',
                             fontSize: 30.0,
@@ -150,10 +150,10 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: 35,
                     width: MediaQuery.of(context).size.width,
-                    child: Text('Hi ' + name + '!!',
+                    child: Text('Hi $name!!',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.aladin(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             color: Colors.purple,
                             fontFamily: 'OpenSans',
                             fontSize: 20.0,
@@ -178,14 +178,15 @@ class _SignUpState extends State<SignUp> {
                             });
                           },
                           validator: (value) {
-                            if (value!.isEmpty)
+                            if (value!.isEmpty) {
                               return 'UserName shouldn\'t be empty';
-                            else if (unique_user)
+                            } else if (unique_user) {
                               return 'UserName should be unique';
-                            else if (value.length < 4)
+                            } else if (value.length < 4) {
                               return 'Username must be at least 4 characters';
-                            else
+                            } else {
                               return null;
+                            }
                           },
                           controller: _usrcontroller,
                           decoration: const InputDecoration(
@@ -205,41 +206,42 @@ class _SignUpState extends State<SignUp> {
                           maxLength: 30,
                           autocorrect: true,
                         ),
-                        (name.length == 0)
-                            ? CircularProgressIndicator(
+                        (name.isEmpty)
+                            ? const CircularProgressIndicator(
                                 color: Colors.deepOrange,
                                 strokeWidth: 5,
                               )
                             : (unique_user
                                 ? SizedBox(
+                                    height: 20,
                                     child: Text(
-                                      '*@' + name + ' already exists.',
-                                      style: TextStyle(
+                                      '*@$name already exists.',
+                                      style: const TextStyle(
                                           color: Colors.red,
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    height: 20,
                                   )
                                 : SizedBox(
                                     height: 20,
                                     child: Text(
-                                      '@' + name + ' is available.',
-                                      style: TextStyle(
+                                      '@$name is available.',
+                                      style: const TextStyle(
                                           color: Colors.green,
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value!.isEmpty)
+                            if (value!.isEmpty) {
                               return 'E-mail is required';
-                            else
+                            } else {
                               return null;
+                            }
                           },
                           controller: emailController,
                           decoration: const InputDecoration(
@@ -259,15 +261,16 @@ class _SignUpState extends State<SignUp> {
                           maxLength: 40,
                           autocorrect: true,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value!.isEmpty)
+                            if (value!.isEmpty) {
                               return 'Password is required';
-                            else
+                            } else {
                               return null;
+                            }
                           },
                           obscureText: !showPass,
                           obscuringCharacter: '*',
@@ -289,15 +292,16 @@ class _SignUpState extends State<SignUp> {
                           maxLength: 10,
                           autocorrect: true,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value!.isEmpty)
+                            if (value!.isEmpty) {
                               return 'Birthdate is required';
-                            else
+                            } else {
                               return null;
+                            }
                           },
                           controller: _agecontroller,
                           decoration: const InputDecoration(
@@ -320,7 +324,7 @@ class _SignUpState extends State<SignUp> {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 20.0,
                     child: Row(
                       children: <Widget>[
@@ -337,24 +341,24 @@ class _SignUpState extends State<SignUp> {
                             },
                           ),
                         ),
-                        Text(
+                        const Text(
                           'show password',
                           style: kLabelStyle,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 25.0),
+                    padding: const EdgeInsets.symmetric(vertical: 25.0),
                     width: double.infinity,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange[700],
+                          backgroundColor: Colors.orange[700],
                           elevation: 6,
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
                         ),
@@ -378,7 +382,7 @@ class _SignUpState extends State<SignUp> {
                               });
                               Navigator.of(context) //new screen
                                   .pushReplacement(MaterialPageRoute(
-                                      builder: (context) => VerifyScreen()));
+                                      builder: (context) => const VerifyScreen()));
                             }).onError((error, stackTrace) {
                               Utils().toastMessage("SignUP failed");
                               setState(() {
@@ -394,7 +398,7 @@ class _SignUpState extends State<SignUp> {
                           }
                         },
                         child: loading
-                            ? CircularProgressIndicator(
+                            ? const CircularProgressIndicator(
                                 backgroundColor: Colors.white,
                                 strokeWidth: 5,
                               )
@@ -403,7 +407,7 @@ class _SignUpState extends State<SignUp> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
+                                    children: const [
                                       Icon(
                                         Icons.done,
                                         size: 40,
@@ -412,7 +416,7 @@ class _SignUpState extends State<SignUp> {
                                       Text('  Signed Up!!'),
                                     ],
                                   )
-                                : Text(
+                                : const Text(
                                     'Sign Up',
                                     style: TextStyle(
                                       color: Colors.white,
@@ -423,7 +427,7 @@ class _SignUpState extends State<SignUp> {
                                     ),
                                   )),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
@@ -437,11 +441,11 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
-                              return Login();
+                              return const Login();
                             },
                           ));
                         },
-                        child: Text(
+                        child: const Text(
                           'Login',
                           style: TextStyle(fontSize: 20),
                         ),

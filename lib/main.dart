@@ -1,4 +1,4 @@
-import 'package:facecam/auth/residual/flashScreen.dart';
+import 'package:facecam/auth/residual/FlashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: flashScreen()),
+      home: Scaffold(body: FlashScreen()),
     );
   }
 }

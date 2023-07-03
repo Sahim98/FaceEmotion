@@ -8,14 +8,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
-class flashScreen extends StatefulWidget {
-  const flashScreen({super.key});
+class FlashScreen extends StatefulWidget {
+  const FlashScreen({super.key});
 
   @override
-  State<flashScreen> createState() => _flashScreenState();
+  State<FlashScreen> createState() => _FlashScreenState();
 }
 
-class _flashScreenState extends State<flashScreen> {
+class _FlashScreenState extends State<FlashScreen> {
   final style =
       // ignore: prefer_const_constructors
       TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 36);

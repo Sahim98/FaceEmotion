@@ -20,7 +20,8 @@ class _SignUpState extends State<SignUp> {
   //----------------------variable declaration
   // ignore: non_constant_identifier_names
   bool loading = false, auth = false, unique_user = false, showPass = true;
-  final style = const TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
+  final style =
+      const TextStyle(fontWeight: FontWeight.bold, color: Colors.white);
   String name = '';
 
   final _formfield = GlobalKey<FormState>();
@@ -75,8 +76,8 @@ class _SignUpState extends State<SignUp> {
     showDatePicker(
             context: context,
             initialDate: DateTime.now(),
-            firstDate: DateTime(2000),
-            lastDate: DateTime(2030))
+            firstDate: DateTime(1950),
+            lastDate: DateTime(2040))
         .then((value) {
       DateTime now = value!;
       String formattedDate = DateFormat('yyyy-MM-dd').format(now);
@@ -382,7 +383,8 @@ class _SignUpState extends State<SignUp> {
                               });
                               Navigator.of(context) //new screen
                                   .pushReplacement(MaterialPageRoute(
-                                      builder: (context) => const VerifyScreen()));
+                                      builder: (context) =>
+                                          const VerifyScreen()));
                             }).onError((error, stackTrace) {
                               Utils().toastMessage("SignUP failed");
                               setState(() {

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -313,8 +311,9 @@ class _CommentDialogState extends State<CommentDialog>
                                 borderRadius: transform_animate.value),
                             child: InAppWebView(
                               initialUrlRequest: URLRequest(
-                                  url:
-                                      Uri.parse('https://www.google.com/maps')),
+                                url: Uri.parse(
+                                    'https://www.google.com/maps/place/IT+Building/@22.4707201,91.7851549,20.52z/data=!4m6!3m5!1s0x30acd6fcf93fffff:0x12b289338778d80f!8m2!3d22.4705628!4d91.7853893!16s%2Fg%2F11bzq3hr48?entry=ttu'),
+                              ),
                               androidOnGeolocationPermissionsShowPrompt:
                                   (InAppWebViewController controller,
                                       String origin) async {

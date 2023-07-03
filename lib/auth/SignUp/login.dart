@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:facecam/auth/residual/flashScreen.dart';
+import 'package:facecam/auth/residual/FlashScreen.dart';
 import 'package:facecam/auth/residual/design.dart';
 import 'package:facecam/auth/SignUp/signup.dart';
 import 'package:facecam/utils/utils.dart';
@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
         .then((value) {
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => flashScreen()));
+            context, MaterialPageRoute(builder: (context) => FlashScreen()));
       } else {
         Utils().toastMessage('Verify email');
       }

@@ -102,7 +102,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
             else
               Card(
                 color:
-                    const Color.fromARGB(255, 180, 165, 183).withOpacity(0.5),
+                    const Color.fromARGB(255, 145, 145, 146).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Padding(
@@ -137,7 +137,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
             if (isCountrySelected)
               Card(
                 color:
-                    const Color.fromARGB(255, 167, 161, 168).withOpacity(0.5),
+                    const Color.fromARGB(255, 145, 145, 146).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Container(
@@ -178,7 +178,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
             if (isStateSelected && _cities.isNotEmpty)
               Card(
                 color:
-                    const Color.fromARGB(255, 192, 182, 194).withOpacity(0.5),
+                    const Color.fromARGB(255, 145, 145, 146).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Container(

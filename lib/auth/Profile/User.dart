@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/auth/Profile/address.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // ignore: non_constant_identifier_names
 String? Current_User;
@@ -177,6 +176,7 @@ class _UserState extends State<User> {
                         height: 20,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(
                             Icons.location_city,
@@ -186,6 +186,24 @@ class _UserState extends State<User> {
                             ' Address',
                             style:
                                 TextStyle(color: Colors.grey, letterSpacing: 2),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.amber,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DropdownScreen(),
+                                  ));
+                            },
+                            icon: const Icon(Icons.update),
+                            label: const Text('Update'),
                           ),
                         ],
                       ),
@@ -199,51 +217,6 @@ class _UserState extends State<User> {
                               letterSpacing: 1),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              height: 30,
-                              width: 105,
-                              child: ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orangeAccent,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DropdownScreen(),
-                                      ));
-                                },
-                                icon: const Icon(Icons.update),
-                                label: const Text('Update'),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        color: Colors.grey,
-                        height:
-                            400, // Provide a fixed height or adjust it according to your layout
-                        child: InAppWebView(
-                          initialUrlRequest: URLRequest(
-                              url: Uri.parse('https://maps.google.com')),
-                          androidOnGeolocationPermissionsShowPrompt:
-                              (InAppWebViewController controller,
-                                  String origin) async {
-                            return GeolocationPermissionShowPromptResponse(
-                              origin: origin,
-                              allow: true,
-                              retain: true,
-                            );
-                          },
-                        ),
-                      )
                     ],
                   );
                 }),

@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const fb());
+  runApp(const MyApp());
 }
 
-class fb extends StatefulWidget {
-  const fb({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
   @override
-  State<fb> createState() => _fbState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _fbState extends State<fb> {
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(

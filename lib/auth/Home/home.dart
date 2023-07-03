@@ -1,13 +1,11 @@
-// ignore_for_file: prefer_const_constructors, duplicate_ignore
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecam/auth/Home/addPost.dart';
+import 'package:facecam/auth/Home/AddPost.dart';
 import 'package:facecam/auth/Home/comments.dart';
 import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:number_paginator/number_paginator.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -37,6 +35,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     page = 1;
+    
     super.initState();
   }
 
@@ -44,6 +43,24 @@ class _HomeState extends State<Home> {
   void dispose() {
     super.dispose();
   }
+
+// Future<String> uploadImageToImageBB(String imagePath) async {
+//   final apiUrl = Uri.parse('https://api.imgbb.com/1/upload');
+//   final apiKey = 'YOUR_API_KEY'; // Replace with your ImageBB API key
+
+//   final response = await http.post(apiUrl, body: {
+//     'key': apiKey,
+//     'image': base64Encode(await imagePath.readAsBytes()),
+//   });
+
+//   if (response.statusCode == 200) {
+//     final data = jsonDecode(response.body);
+//     final imageUrl = data['data']['url'];
+//     return imageUrl;
+//   } else {
+//     throw Exception('Image upload failed');
+//   }
+// }
 
   final String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
@@ -112,231 +129,222 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     handleRemember();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          // ignore: duplicate_ignore
-          appBar: AppBar(
-            elevation: 0,
-            leading: Icon(
-              Icons.flutter_dash,
-              color: Colors.amber,
-            ),
-            backgroundColor: Colors.white,
-            title: Text(
-              'Emotion Detection',
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    SharedPreferences localData =
-                        await SharedPreferences.getInstance();
-                    localData.clear();
-                    FirebaseAuth.instance.signOut().then((value) {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return Login();
-                        },
-                      ));
-                    }).onError((error, stackTrace) {
-                      Utils().toastMessage("Failed to logout.");
-                    });
-                  },
-                  child: Icon(
-                    Icons.logout,
-                    color: Colors.black54,
-                  ))
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddPost(),
+    return Scaffold(
+      // ignore: duplicate_ignore
+      appBar: AppBar(
+        elevation: 0,
+        leading: const Icon(
+          Icons.flutter_dash,
+          color: Colors.amber,
+        ),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Emotion Detection',
+          style: TextStyle(
+              color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                SharedPreferences localData =
+                    await SharedPreferences.getInstance();
+                localData.clear();
+                FirebaseAuth.instance.signOut().then((value) {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const Login();
+                    },
                   ));
-            },
-            backgroundColor: Colors.amber,
-            child: Icon(
-              Icons.add,
-            ),
-          ),
-          body: SafeArea(
-              //--------------------------------main section
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: dataStream,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                }).onError((error, stackTrace) {
+                  Utils().toastMessage("Failed to logout.");
+                });
+              },
+              child: const Icon(
+                Icons.logout,
+                color: Colors.black54,
+              ))
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddPost(),
+              ));
+        },
+        backgroundColor: Colors.amber,
+        child: const Icon(
+          Icons.add,
+        ),
+      ),
+      body: SafeArea(
+          //--------------------------------main section
+          child: StreamBuilder<QuerySnapshot>(
+              stream: dataStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircularProgressIndicator(),
+                        Text(
+                          'Loading..',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'OpenSans',
+                              color: Colors.grey),
+                        )
+                      ],
+                    ),
+                  );
+                }
+
+                final documents = snapshot.data!.docs;
+                return SizedBox(
+                  child: ListView.builder(
+                    itemCount: documents.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == documents.length) {
+                        return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CircularProgressIndicator(),
-                            Text(
-                              'Loading..',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'OpenSans',
-                                  color: Colors.grey),
-                            )
+                          children: [
+                            IconButton(
+                                onPressed: () async {
+                                  QuerySnapshot<Map<String, dynamic>> snap =
+                                      await FirebaseFirestore.instance
+                                          .collection('Post')
+                                          .orderBy('username')
+                                          .endBeforeDocument(documents.first)
+                                          .limitToLast(3)
+                                          .get();
+                                  if (snap.docs.isNotEmpty) {
+                                    _loadPrevData(documents.first);
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: Colors.blue,
+                                )),
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.circular(100)),
+                                ),
+                                alignment: Alignment.center,
+                                height: 45,
+                                width: 45,
+                                child: Text(
+                                  page.toString(),
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                            TextButton(
+                                onPressed: () async {
+                                  QuerySnapshot<Map<String, dynamic>> snap =
+                                      await FirebaseFirestore.instance
+                                          .collection('Post')
+                                          .orderBy('username')
+                                          .startAfterDocument(documents.last)
+                                          .limit(3)
+                                          .get();
+                                  if (snap.docs.isNotEmpty) {
+                                    _loadMoreData(documents.last);
+                                  }
+                                },
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.blue,
+                                )),
                           ],
-                        ),
-                      );
-                    }
+                        );
+                      }
+                      DocumentSnapshot docum = snapshot.data!.docs[index];
+                      String img = docum['image'];
+                      var like = docum['like'];
+                      var dislike = docum['dislike'];
 
-                    final documents = snapshot.data!.docs;
-                    return SizedBox(
-                      child: ListView.builder(
-                        itemCount: documents.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == documents.length) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                    onPressed: () async {
-                                      QuerySnapshot<Map<String, dynamic>> snap =
-                                          await FirebaseFirestore.instance
-                                              .collection('Post')
-                                              .orderBy('username')
-                                              .endBeforeDocument(
-                                                  documents.first)
-                                              .limitToLast(3)
-                                              .get();
-                                      if (snap.docs.isNotEmpty) {
-                                        _loadPrevData(documents.first);
-                                      }
-                                    },
-                                    icon: Icon(
-                                      Icons.arrow_back_ios,
-                                      color: Colors.blue,
-                                    )),
-                                Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100)),
-                                    ),
-                                    alignment: Alignment.center,
-                                    height: 45,
-                                    width: 45,
-                                    child: Text(
-                                      page.toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                TextButton(
-                                    onPressed: () async {
-                                      QuerySnapshot<Map<String, dynamic>> snap =
-                                          await FirebaseFirestore.instance
-                                              .collection('Post')
-                                              .orderBy('username')
-                                              .startAfterDocument(
-                                                  documents.last)
-                                              .limit(3)
-                                              .get();
-                                      if (snap.docs.isNotEmpty) {
-                                        _loadMoreData(documents.last);
-                                      }
-                                    },
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.blue,
-                                    )),
-                              ],
-                            );
-                          }
-                          DocumentSnapshot docum = snapshot.data!.docs[index];
-                          String img = docum['image'];
+                      Color likeColor =
+                          like.contains(_user) ? Colors.blue : Colors.grey;
+                      Color dislikeColor =
+                          dislike.contains(_user) ? Colors.red : Colors.grey;
 
-                          var like = docum['like'];
-                          var dislike = docum['dislike'];
-                          Color likeColor =
-                              like.contains(_user) ? Colors.blue : Colors.grey;
-                          Color dislikeColor = dislike.contains(_user)
-                              ? Colors.red
-                              : Colors.grey;
-
-                          return Card(
-                            elevation: 20,
-                            margin: EdgeInsets.all(15),
-                            child: ListTile(
-                                title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                      return Card(
+                        elevation: 20,
+                        margin: const EdgeInsets.all(20),
+                        child: ListTile(
+                            title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextButton(
+                                        onPressed: () {},
                                         child: Text(
-                                          docum['username'],
-                                          style: TextStyle(
+                                          "@${docum['username']}",
+                                          style: const TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.orange,
                                               fontWeight: FontWeight.bold,
                                               fontFamily: 'OpenSans'),
-                                        ),
-                                      ),
-                                      Image.network(img)
-                                    ]),
-                                subtitle: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                        )),
+                                  ),
+                                  Image.network(img)
+                                ]),
+                            subtitle: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(children: [
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () async {
+                                            await findInArrayField(
+                                                'like', docum.id, [_user]);
+                                          },
+                                          icon: Icon(Icons.thumb_up,
+                                              color: likeColor)),
+                                      Text('${like.length}')
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () async {
+                                            await findInArrayField(
+                                                'dislike', docum.id, [_user]);
+                                          },
+                                          icon: Icon(Icons.thumb_down,
+                                              color: dislikeColor)),
+                                      Text('${dislike.length}')
+                                    ],
+                                  )
+                                ]),
+                                Row(
                                   children: [
-                                    Row(children: [
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                              onPressed: () async {
-                                                await findInArrayField(
-                                                    'like', docum.id, [_user]);
-                                              },
-                                              icon: Icon(Icons.thumb_up,
-                                                  color: likeColor)),
-                                          Text('${like.length}')
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                              onPressed: () async {
-                                                await findInArrayField(
-                                                    'dislike',
-                                                    docum.id,
-                                                    [_user]);
-                                              },
-                                              icon: Icon(Icons.thumb_down,
-                                                  color: dislikeColor)),
-                                          Text('${dislike.length}')
-                                        ],
-                                      )
-                                    ]),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Comments(
-                                                            id: docum.id
-                                                                .toString()),
-                                                  ));
-                                            },
-                                            icon: Icon(Icons.comment,
-                                                color: Colors.grey)),
-                                      ],
-                                    )
+                                    IconButton(
+                                        onPressed: () async {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => Comments(
+                                                  id: docum.id.toString(),
+                                                ),
+                                              ));
+                                        },
+                                        icon: const Icon(Icons.comment,
+                                            color: Colors.grey)),
                                   ],
-                                )),
-                          );
-                        },
-                      ),
-                    );
-                  }))),
+                                )
+                              ],
+                            )),
+                      );
+                    },
+                  ),
+                );
+              })),
     );
   }
 }

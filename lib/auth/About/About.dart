@@ -1,16 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart' ;
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // Initialize the Realtime Database
-final data = FirebaseFirestore.instance.collection('Ratings').orderBy('time');
+final data = FirebaseFirestore.instance.collection('FeedBack').orderBy('time');
 
 void submitRating(double rating, String name, String comment) {
   DateTime now = DateTime.now();
-  String formattedDate = DateFormat('yyyy-MM-dd  kk:mm').format(now);
-  FirebaseFirestore.instance.collection('Ratings').add({
+  String formattedDate = DateFormat('MMM d, h:mm a').format(now);
+  FirebaseFirestore.instance.collection('FeedBack').add({
     'rating': rating,
     'name': name,
     'comment': comment,
@@ -26,40 +29,73 @@ class CommentDialog extends StatefulWidget {
   _CommentDialogState createState() => _CommentDialogState();
 }
 
-class _CommentDialogState extends State<CommentDialog> {
+class _CommentDialogState extends State<CommentDialog>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation _animation,
+      _delay,
+      _delay2,
+      _delay3,
+      transform_animate,
+      animation;
+
   final cont = TextEditingController();
   double rate = 0.0, average = 0.0;
   int totalUsers = 0;
 
-  String email = FirebaseAuth.instance.currentUser!.email.toString(),
-      // ignore: non_constant_identifier_names
-      Current_User = "Anynomus";
+  String email = FirebaseAuth.instance.currentUser!.email.toString();
 
   @override
   void initState() {
-    calculateAverageRating();
     getRating();
-    FindUserName();
+    calculateAverageRating();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1170),
+    );
+    double initial = -500, ending = 0;
+
+    _animation = Tween<double>(
+      begin: initial,
+      end: ending,
+    ).animate(
+        CurvedAnimation(parent: _animationController, curve: Curves.bounceIn));
+
+    _delay = Tween<double>(
+      begin: initial,
+      end: ending,
+    ).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(.5, 1, curve: Curves.bounceIn)));
+
+    _delay2 = Tween<double>(
+      begin: initial,
+      end: ending,
+    ).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(.7, 1, curve: Curves.bounceIn)));
+
+    _delay3 = Tween<double>(
+      begin: initial,
+      end: ending,
+    ).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(.9, 1, curve: Curves.easeIn)));
+
+    animation = Tween(begin: 20.0, end: 100.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.ease),
+    );
+
+    transform_animate = BorderRadiusTween(
+            begin: BorderRadius.circular(300.0),
+            end: BorderRadius.circular(10.0))
+        .animate(
+            CurvedAnimation(parent: _animationController, curve: Curves.ease));
+
+    _animationController.forward();
 
     super.initState();
-  }
-
-  // ignore: non_constant_identifier_names
-  FindUserName() async {
-    final QuerySnapshot<Map<String, dynamic>> db = await FirebaseFirestore
-        .instance
-        .collection('Users')
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
-
-    final document = db.docs[0];
-    final name = document.data();
-    final data = name['name'];
-
-    setState(() {
-      Current_User = data;
-    });
   }
 
   getRating() async {
@@ -134,160 +170,170 @@ class _CommentDialogState extends State<CommentDialog> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: SafeArea(
-        child: Column(
-          children: [
-            Text(
-              // ignore: prefer_interpolation_to_compose_strings, unnecessary_brace_in_string_interps
-              "${totalUsers} users rated: " + average.toStringAsFixed(1),
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey),
-            ),
-            RatingBar.builder(
-              initialRating: rate,
-              minRating: 0,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: (rating) async {
-                setState(() async {
-                  await addOrUpdateRating(rating);
-                });
-                setState(() async {
-                  await calculateAverageRating();
-                });
-              },
-              updateOnDrag: true,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Form(
-              child: TextFormField(
-                maxLines: 5, // <-- SEE HERE
-                minLines: 1,
-                controller: cont,
-                decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                        onPressed: () async {
-                          submitRating(rate, Current_User, cont.text);
-                          cont.clear();
-                        },
-                        icon: const Icon(Icons.send)),
-                    // ignore: prefer_const_constructors
-                    contentPadding: EdgeInsets.all(40),
-                    labelText: '    Leave a comment...',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(7))),
-              ),
-            ),
-            const SizedBox(
-              height: 22,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Comments:',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                AnimatedBuilder(
+                  animation: _animation,
+                  builder: (BuildContext context, Widget? child) {
+                    return Transform.translate(
+                      offset: Offset(_animation.value, 0.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .70,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40),
+                              bottomLeft: Radius.circular(40)),
+                          color: Colors.purple,
+                        ),
+                        child: const Text(
+                          "Give us your Rating",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'OpenSans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
                 ),
+                AnimatedBuilder(
+                  animation: _animation,
+                  builder: (BuildContext context, Widget? child) {
+                    return Transform.translate(
+                      offset: Offset(_delay.value, 0.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RatingBar.builder(
+                          initialRating: rate,
+                          minRating: 0,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) async {
+                            setState(() async {
+                              await addOrUpdateRating(rating);
+                            });
+                            setState(() async {
+                              await calculateAverageRating();
+                            });
+                          },
+                          updateOnDrag: true,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AnimatedBuilder(
+                  animation: _delay,
+                  builder: (BuildContext context, Widget? child) {
+                    return Transform.translate(
+                      offset: Offset(_delay2.value, 0.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .60,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          color: Color.fromARGB(255, 249, 192, 106),
+                        ),
+                        child: Text(
+                          "$totalUsers users rated ${average.toStringAsFixed(1)}",
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'OpenSans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const SizedBox(
+                  height: 22,
+                ),
+                AnimatedBuilder(
+                  animation: _delay2,
+                  builder: (BuildContext context, Widget? child) {
+                    return Transform.translate(
+                        offset: Offset(_delay3.value, 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width * .45,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  color: Colors.purple,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: const Text(
+                                'Our location',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'OpenSans',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ));
+                  },
+                ),
+                const SizedBox(height: 15),
+                AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            height: animation.value * 4.5,
+                            width: animation.value * 3.3,
+                            alignment: Alignment.bottomCenter,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: transform_animate.value),
+                            child: InAppWebView(
+                              initialUrlRequest: URLRequest(
+                                  url:
+                                      Uri.parse('https://www.google.com/maps')),
+                              androidOnGeolocationPermissionsShowPrompt:
+                                  (InAppWebViewController controller,
+                                      String origin) async {
+                                return GeolocationPermissionShowPromptResponse(
+                                  origin: origin,
+                                  allow: true,
+                                  retain: true,
+                                );
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                )
               ],
             ),
-            const SizedBox(height: 15),
-            Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: data.snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 20),
-                            Text(
-                              "Loading...",
-                              style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        );
-                      }
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot document =
-                              snapshot.data!.docs[index];
-                          double rating = document['rating'];
-                          String name = document['name'];
-                          String comment = document['comment'],
-                              time = document['time'].toString();
-
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: ListTile(
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        name,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'OpenSans',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black87),
-                                      ),
-                                      RatingBarIndicator(
-                                        rating: rating,
-                                        itemBuilder: (context, index) =>
-                                            const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        itemCount: 5,
-                                        itemSize: 12.0,
-                                        direction: Axis.horizontal,
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        comment,
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: 'OpenSans',
-                                            color: Colors.blueGrey),
-                                      ),
-                                      Text(
-                                        'at $time',
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          );
-                        },
-                      );
-                    })),
-          ],
+          ),
         ),
       ),
     );

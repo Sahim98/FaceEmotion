@@ -37,7 +37,7 @@ class _TensorflowState extends State<Tensorflow> {
   loadModel() async {
     await Tflite.loadModel(
       labels: "assets/labels.txt",
-      model: "assets/grayscale_quantized.tflite",
+      model: "assets/model_unquant.tflite",
       numThreads: 1,
     );
   }
@@ -78,7 +78,7 @@ class _TensorflowState extends State<Tensorflow> {
 
   @override
   Widget build(BuildContext context) {
-    List emoji = ["...😡", "...😀", "...😥", "...😯"];
+    List emoji = ["....😀", "...😡", "...😥"];
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -105,7 +105,7 @@ class _TensorflowState extends State<Tensorflow> {
                   Utils().toastMessage(error.toString());
                 });
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.logout,
                 color: Colors.black54,
               ))

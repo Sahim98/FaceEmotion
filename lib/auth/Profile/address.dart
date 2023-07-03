@@ -154,9 +154,10 @@ class _DropdownScreenState extends State<DropdownScreen> {
                       }).toList(),
                       value: state,
                       onChanged: (value) {
-                     
                         setState(() {
-                          isStateSelected = true;
+                          isStateSelected = false;
+                        });
+                        setState(() {
                           _cities = [];
                           state = value!;
                           for (int i = 0; i < _states.length; i++) {
@@ -165,15 +166,19 @@ class _DropdownScreenState extends State<DropdownScreen> {
                             }
                           }
                         });
-                        
+
+                        setState(() {
+                          isStateSelected = true;
+                        });
                       }),
                 ),
               ),
 
             //=============================== City
-            if (isStateSelected)
+            if (isStateSelected && _cities.isNotEmpty)
               Card(
-                color: const Color.fromARGB(255, 192, 182, 194).withOpacity(0.5),
+                color:
+                    const Color.fromARGB(255, 192, 182, 194).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Container(
@@ -190,10 +195,10 @@ class _DropdownScreenState extends State<DropdownScreen> {
                       }).toList(),
                       value: city,
                       onChanged: (value) {
+                        city = null;
                         setState(() {
                           city = value!;
                         });
-                     
                       }),
                 ),
               ),
@@ -220,14 +225,12 @@ class _DropdownScreenState extends State<DropdownScreen> {
                         .update({'address': currentAddr});
                     Utils().toastMessage('Address updated successfully!');
 
-                    if (country != null || state != null) {
-                      Timer(
-                        const Duration(seconds: 2),
-                        () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    }
+                    Timer(
+                      const Duration(seconds: 1),
+                      () {
+                        Navigator.pop(context);
+                      },
+                    );
                   } else {
                     Utils().toastMessage('Failed to update.');
                   }

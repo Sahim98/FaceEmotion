@@ -32,9 +32,11 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   get: ^4.6.5
   camera: ^0.10.5
-  number_paginator: ^0.2.3
   shared_preferences: ^2.1.1
   flutter_inappwebview: ^5.7.2+3
+  graphql_flutter: ^5.1.2
+
+
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +50,7 @@ flutter:
   
   assets:
     - assets/labels.txt
-    - assets/grayscale_quantized.tflite
+    - assets/model_unquant.tflite
   fonts:
     - family: OpenSans
       fonts:

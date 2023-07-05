@@ -87,6 +87,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
+
   @override
   void dispose() {
     super.dispose();
@@ -208,9 +209,8 @@ class _SignUpState extends State<SignUp> {
                           autocorrect: true,
                         ),
                         (name.isEmpty)
-                            ? const CircularProgressIndicator(
-                                color: Colors.deepOrange,
-                                strokeWidth: 5,
+                            ? const SizedBox(
+                                height: 20,
                               )
                             : (unique_user
                                 ? SizedBox(

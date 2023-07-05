@@ -19,7 +19,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _rememberMe = false, verified = false, logged_in = false;
+  bool _rememberMe = false, verified = false, loading = false;
   final style = const TextStyle(
       fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white);
   final _formfield = GlobalKey<FormState>();
@@ -29,12 +29,18 @@ class _LoginState extends State<Login> {
   User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> login() async {
+    setState(() {
+      loading = true;
+    });
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
             email: emailController.text,
             password: passController.text.toString())
         .then((value) {
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        setState(() {
+          loading = false;
+        });
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => FlashScreen()));
       } else {
@@ -145,7 +151,6 @@ class _LoginState extends State<Login> {
                             maxLength: 30,
                             autocorrect: true,
                           ),
-                       
                           SizedBox(
                             height: 20,
                           ),
@@ -186,8 +191,8 @@ class _LoginState extends State<Login> {
                       child: Row(
                         children: <Widget>[
                           Theme(
-                            data: ThemeData(
-                                unselectedWidgetColor: Colors.white),
+                            data:
+                                ThemeData(unselectedWidgetColor: Colors.white),
                             child: Checkbox(
                               value: _rememberMe,
                               checkColor: Colors.white,
@@ -225,9 +230,12 @@ class _LoginState extends State<Login> {
                           final SharedPreferences sharedPref =
                               await SharedPreferences.getInstance();
                           sharedPref.setBool('remember', _rememberMe);
+
                           await login();
                         },
-                        child: Text(
+                        child:loading?CircularProgressIndicator(
+                          strokeWidth: 5,
+                        ): Text(
                           'Login',
                           style: TextStyle(
                             color: Colors.white,
@@ -242,25 +250,27 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 10,
                     ),
-                    ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            verified = true;
-                          });
-                          FirebaseAuth.instance.currentUser!
-                              .sendEmailVerification();
-                          Utils().toastMessage('Email has been sent');
-                          setState(() {
-                            verified = false;
-                          });
-                        },
-                        icon: Icon(Icons.mail),
-                        label: verified
-                            ? const SizedBox(
-                                height: 12,
-                                width: 12,
-                                child: CircularProgressIndicator())
-                            : Text('Resend verification?')),
+
+                    if (FirebaseAuth.instance.currentUser != null)
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              verified = true;
+                            });
+                            FirebaseAuth.instance.currentUser!
+                                .sendEmailVerification();
+                            Utils().toastMessage('Email has been sent');
+                            setState(() {
+                              verified = false;
+                            });
+                          },
+                          icon: Icon(Icons.mail),
+                          label: verified
+                              ? const SizedBox(
+                                  height: 12,
+                                  width: 12,
+                                  child: CircularProgressIndicator())
+                              : Text('Resend verification?')),
                     SizedBox(
                       height: 10,
                     ),

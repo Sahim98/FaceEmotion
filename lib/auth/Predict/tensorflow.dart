@@ -1,11 +1,7 @@
 import 'dart:io';
-import 'package:facecam/auth/SignUp/login.dart';
-import 'package:facecam/utils/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
-
 
 class Tensorflow extends StatefulWidget {
   const Tensorflow({super.key});
@@ -20,7 +16,6 @@ class _TensorflowState extends State<Tensorflow> {
   File? _image;
   bool _loading = false, visible = false;
   final imgPicker = ImagePicker();
-  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -39,6 +34,7 @@ class _TensorflowState extends State<Tensorflow> {
       labels: "assets/labels.txt",
       model: "assets/model_unquant.tflite",
       numThreads: 1,
+      
     );
   }
 
@@ -72,16 +68,12 @@ class _TensorflowState extends State<Tensorflow> {
     classifyImage(_image);
   }
 
- 
-
- 
-
   @override
   Widget build(BuildContext context) {
     List emoji = ["....😀", "...😡", "...😥"];
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        elevation: 3,
         leading: const Icon(
           Icons.flutter_dash,
           color: Colors.amber,
@@ -92,126 +84,108 @@ class _TensorflowState extends State<Tensorflow> {
           style: TextStyle(
               color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _auth.signOut().then((value) {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const Login();
-                    },
-                  ));
-                }).onError((error, stackTrace) {
-                  Utils().toastMessage(error.toString());
-                });
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.black54,
-              ))
-        ],
+        titleSpacing: 50,
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Container(
-          color: Colors.white,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _loading
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: Center(
-                          child: Text(
-                            'Select an image...',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[500]),
-                          ),
-                        ),
-                      )
-                    : Center(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * .8,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              _image == null
-                                  ? Container()
-                                  : Card(
-                                      elevation: 45,
-                                      child: Image.file(_image!,
-                                          fit: BoxFit.cover,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _loading
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Text(
+                        'Select an image...',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[500]),
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          _image == null
+                              ? Container()
+                              : Card(
+                                  elevation: 45,
+                                  child: Image.file(_image!,
+                                      fit: BoxFit.cover,
+                                      height:
+                                          MediaQuery.of(context).size.height *
                                               .5,
-                                          colorBlendMode:
-                                              BlendMode.colorBurn),
-                                    ),
-                               const SizedBox(height: 10),
-                              _image == null
-                                  ? Text(
-                                    'No image selected',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey[500]),
-                                  )
-                                  : _outputs != null
-                                      ? Card(
-                                          margin: const EdgeInsets.all(8),
-                                          elevation: 10,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              _outputs![0]["label"]
-                                                      .substring(
+                                      colorBlendMode: BlendMode.colorBurn),
+                                ),
+                          const SizedBox(height: 10),
+                          _image == null
+                              ? Text(
+                                  'No image selected',
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[500]),
+                                )
+                              : _outputs != null
+                                  ? Card(
+                                      margin: const EdgeInsets.all(8),
+                                      // elevation: 10,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              _outputs![0]["label"].substring(
                                                     1,
                                                   ) +
-                                                  emoji[int.parse(
-                                                      _outputs![0]["label"]
-                                                          [0])],
-                                              style:const  TextStyle(
+                                                  emoji[int.parse(_outputs![0]
+                                                      ["label"][0])],
+                                              style: const TextStyle(
                                                   color: Colors.grey,
                                                   fontSize: 15,
-                                                  fontWeight:
-                                                      FontWeight.bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                          ),
-                                        )
-                                      : Container(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.amber),
-                                    onPressed: pickimage,
-                                    child:const Icon(
-                                      Icons.add_a_photo,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  
-                                      ],
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              ' Accuracy: ${(_outputs![0]["confidence"] * 100).toStringAsFixed(2)}%',
+                                              style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     )
-                                 
+                                  : Container(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.amber),
+                                onPressed: pickimage,
+                                child: const Icon(
+                                  Icons.add_a_photo,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
+                          )
+                        ],
                       ),
-              ],
-            ),
-          ),
+                    ),
+                  ),
+          ],
         ),
       ),
     );

@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     page = 1;
-    
+
     super.initState();
   }
 
@@ -132,6 +132,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       // ignore: duplicate_ignore
       appBar: AppBar(
+        titleSpacing: 50,
         elevation: 0,
         leading: const Icon(
           Icons.flutter_dash,
@@ -139,7 +140,7 @@ class _HomeState extends State<Home> {
         ),
         backgroundColor: Colors.white,
         title: const Text(
-          'Emotion Detection',
+          'Home',
           style: TextStyle(
               color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 23),
         ),
@@ -231,15 +232,16 @@ class _HomeState extends State<Home> {
                             Container(
                                 decoration: BoxDecoration(
                                   color: Colors.grey[300],
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(100)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(100)),
                                 ),
                                 alignment: Alignment.center,
                                 height: 45,
                                 width: 45,
                                 child: Text(
                                   page.toString(),
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 )),
                             TextButton(
                                 onPressed: () async {
@@ -273,7 +275,7 @@ class _HomeState extends State<Home> {
 
                       return Card(
                         elevation: 20,
-                        margin: const EdgeInsets.all(20),
+                        margin: const EdgeInsets.all(15),
                         child: ListTile(
                             title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

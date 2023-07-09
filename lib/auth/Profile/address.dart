@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert' as convert;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecam/auth/Profile/api.dart';
+import 'package:facecam/auth/Profile/model.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,83 @@ class DropdownScreen extends StatefulWidget {
 }
 
 class _DropdownScreenState extends State<DropdownScreen> {
+  Widget countryDetailsWidget(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    if (snapshot.hasError) {
+      return const Center(
+        child: Text("Unable to fetch country data"),
+      );
+    }
+    Country country = snapshot.data;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            "Country Info",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Card(
+          elevation: 5,
+          color: Colors.grey.shade50,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("Name"),
+                    Text("Capital"),
+                    Text("Country code"),
+                    Text("Native"),
+                    Text("Currency"),
+                    Text("Phone Code"),
+                    Text("Flag: "),
+                  ],
+                ),
+                const Spacer(flex: 3),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(": ${country.name}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(": ${country.capital}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(": ${country.code}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(": ${country.native}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(": ${country.currency}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(": ${country.phone!}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(": ${country.emoji}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   String url =
       "https://raw.githubusercontent.com/Sahim98/FaceEmotion/main/lib/country.json";
 
@@ -101,6 +180,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
               ))
             else
               Card(
+                elevation: 10,
                 color:
                     const Color.fromARGB(255, 145, 145, 146).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
@@ -135,48 +215,63 @@ class _DropdownScreenState extends State<DropdownScreen> {
 
             //======================================= State
             if (isCountrySelected)
-              Card(
-                color:
-                    const Color.fromARGB(255, 145, 145, 146).withOpacity(0.5),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                child: Container(
-                  padding: const EdgeInsets.all(15.0),
-                  child: DropdownButton<String>(
-                      underline: Container(),
-                      hint: const Text("Select State"),
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      isDense: true,
-                      isExpanded: true,
-                      items: _states.map((st) {
-                        return DropdownMenuItem<String>(
-                            value: st["name"], child: Text(st["name"]));
-                      }).toList(),
-                      value: state,
-                      onChanged: (value) {
-                        setState(() {
-                          isStateSelected = false;
-                        });
-                        setState(() {
-                          _cities = [];
-                          state = value!;
-                          for (int i = 0; i < _states.length; i++) {
-                            if (_states[i]["name"] == value) {
-                              _cities = _states[i]["cities"];
-                            }
-                          }
-                        });
+              Column(
+                children: [
+                  FutureBuilder<Country>(
+                    future: getCountry("BD"),
+                    builder: (context, snapshot) {
+                      return countryDetailsWidget(context, snapshot);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Card(
+                    elevation: 10,
+                    color: const Color.fromARGB(255, 145, 145, 146)
+                        .withOpacity(0.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Container(
+                      padding: const EdgeInsets.all(15.0),
+                      child: DropdownButton<String>(
+                          underline: Container(),
+                          hint: const Text("Select State"),
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          isDense: true,
+                          isExpanded: true,
+                          items: _states.map((st) {
+                            return DropdownMenuItem<String>(
+                                value: st["name"], child: Text(st["name"]));
+                          }).toList(),
+                          value: state,
+                          onChanged: (value) {
+                            setState(() {
+                              isStateSelected = false;
+                            });
+                            setState(() {
+                              _cities = [];
+                              state = value!;
+                              for (int i = 0; i < _states.length; i++) {
+                                if (_states[i]["name"] == value) {
+                                  _cities = _states[i]["cities"];
+                                }
+                              }
+                            });
 
-                        setState(() {
-                          isStateSelected = true;
-                        });
-                      }),
-                ),
+                            setState(() {
+                              isStateSelected = true;
+                            });
+                          }),
+                    ),
+                  ),
+                ],
               ),
 
             //=============================== City
             if (isStateSelected && _cities.isNotEmpty)
               Card(
+                elevation: 10,
                 color:
                     const Color.fromARGB(255, 145, 145, 146).withOpacity(0.5),
                 shape: RoundedRectangleBorder(

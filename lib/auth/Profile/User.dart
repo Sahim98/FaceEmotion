@@ -18,7 +18,7 @@ class _UserState extends State<User> {
 
   final String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
-  // ignore: non_constant_identifier_names
+
   String Address = 'none';
 
   @override

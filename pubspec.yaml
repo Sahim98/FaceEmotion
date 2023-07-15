@@ -28,15 +28,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   fluttertoast: ^8.1.1
   bottom_navy_bar: ^6.0.0
-  profile: ^0.0.1
   flutter_rating_bar: ^4.0.1
   get: ^4.6.5
   camera: ^0.10.5
   shared_preferences: ^2.1.1
   flutter_inappwebview: ^5.7.2+3
   graphql_flutter: ^5.1.2
+  sass: ^1.60.0
  
-
 
 
 dev_dependencies:

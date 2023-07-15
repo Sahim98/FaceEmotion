@@ -67,6 +67,7 @@ class _FlashScreenState extends State<FlashScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        
           body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

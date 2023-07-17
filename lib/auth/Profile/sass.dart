@@ -4,15 +4,15 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class SassCodeHighlight extends StatelessWidget {
   final String sassCode = '''
-      <!-- SASS code example -->
       <html>
       <head>
         <style>
           ${compileSassToCss('''
             \$primaryColor: #800080;
+            \$sz:40px;
         
             .container {
-              font-size: 40px;
+              font-size: \$sz;
               background-color: \$primaryColor;
               color: #ffffff;
               padding: 16px;
@@ -53,7 +53,7 @@ class SassCodeHighlight extends StatelessWidget {
     ''';
 
   static String compileSassToCss(String sassCode) {
-    // ignore: deprecated_member_use
+    
     final cssCode = sass.compileString(sassCode);
     return cssCode.trim();
   }

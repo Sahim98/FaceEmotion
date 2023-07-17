@@ -267,7 +267,6 @@ class _UserState extends State<User> {
                                       ? Colors.red
                                       : Colors.grey;
                                   return Card(
-                                    elevation: 20,
                                     margin: const EdgeInsets.all(8),
                                     child: ListTile(
                                         title: Column(

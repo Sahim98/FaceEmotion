@@ -274,7 +274,7 @@ class _HomeState extends State<Home> {
                           dislike.contains(_user) ? Colors.red : Colors.grey;
 
                       return Card(
-                        elevation: 20,
+                        elevation: 8,
                         margin: const EdgeInsets.all(15),
                         child: ListTile(
                             title: Column(

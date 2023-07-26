@@ -82,16 +82,20 @@ class _AddPostState extends State<AddPost> {
             child: Column(
               children: [
                 if (_image == null)
-                  const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text(
-                      'Upload image',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontFamily: 'OpenSans',
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold),
-                    ),
+                  Column(
+                    children: [
+                      Container(
+                        height: 300,
+                        child: Lottie.network(
+                            'https://lottie.host/6a8385c6-0248-42e6-9182-83df55a189a2/gZb8pRhFw2.json'),
+                      ),
+                      const Text('Upload image',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'OpenSans',
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold)),
+                    ],
                   )
                 else
                   Card(
@@ -150,10 +154,8 @@ class _AddPostState extends State<AddPost> {
                     height: 100,
                     width: 100,
                     child: Lottie.network(
-                      
-                        'https://lottie.host/4ac94ca4-ba10-459e-a02e-840e4b732adb/YVTNIo6i6o.json',repeat: false),
-                      
-                      
+                        'https://lottie.host/4ac94ca4-ba10-459e-a02e-840e4b732adb/YVTNIo6i6o.json',
+                        repeat: false),
                   ),
                 if (isLoading)
                   const Text('Please keep patience.',

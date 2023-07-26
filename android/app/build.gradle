@@ -72,6 +72,7 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-gpu:+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0"
     implementation platform('com.google.firebase:firebase-bom:31.1.0')
+    
 }
 
 apply plugin: 'com.android.application'

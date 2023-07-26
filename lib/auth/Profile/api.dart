@@ -1,4 +1,5 @@
 import 'package:facecam/auth/Profile/model.dart';
+// ignore: depend_on_referenced_packages
 import 'package:graphql/client.dart';
 
 

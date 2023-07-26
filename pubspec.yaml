@@ -35,6 +35,13 @@ dependencies:
   flutter_inappwebview: ^5.7.2+3
   graphql_flutter: ^5.1.2
   sass: ^1.60.0
+  syncfusion_flutter_pdf: ^21.2.4
+  open_file: ^3.3.2
+  path_provider: ^2.0.15
+  google_maps_flutter: ^2.3.0
+  lottie: ^2.3.2
+  internet_connection_checker: ^1.0.0+1
+  connectivity_plus: ^3.0.6
  
 
 

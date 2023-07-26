@@ -54,6 +54,7 @@ class SassCodeHighlight extends StatelessWidget {
 
   static String compileSassToCss(String sassCode) {
     
+    // ignore: deprecated_member_use
     final cssCode = sass.compileString(sassCode);
     return cssCode.trim();
   }

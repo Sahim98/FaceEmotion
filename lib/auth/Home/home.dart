@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:facecam/auth/Home/AddPost.dart';
 import 'package:facecam/auth/Home/comments.dart';
 import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,15 +37,30 @@ class _HomeState extends State<Home> {
     }
   }
 
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+
   @override
   void initState() {
     page = 1;
-
+    getConnectivity();
     super.initState();
   }
 
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
   @override
   void dispose() {
+    subscription.cancel();
     super.dispose();
   }
 
@@ -174,9 +194,9 @@ class _HomeState extends State<Home> {
                 builder: (context) => const AddPost(),
               ));
         },
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.orange,
         child: const Icon(
-          Icons.add,
+          Icons.file_upload_rounded,
         ),
       ),
       body: SafeArea(
@@ -189,15 +209,13 @@ class _HomeState extends State<Home> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        CircularProgressIndicator(),
-                        Text(
-                          'Loading..',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'OpenSans',
-                              color: Colors.grey),
-                        )
+                      children: [
+                        Container(
+                          height: 500,
+                          child: Lottie.network(
+                              'https://lottie.host/122dddd4-c4d5-46a5-9115-1fdcf5523ce6/18erSau2cW.json',
+                              repeat: true),
+                        ),
                       ],
                     ),
                   );
@@ -275,7 +293,7 @@ class _HomeState extends State<Home> {
 
                       return Card(
                         elevation: 8,
-                        margin: const EdgeInsets.all(15),
+                        margin: const EdgeInsets.all(8),
                         child: ListTile(
                             title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +311,61 @@ class _HomeState extends State<Home> {
                                               fontFamily: 'OpenSans'),
                                         )),
                                   ),
-                                  Image.network(img)
+
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: 280,
+                                    child: Image.network(
+                                      img,
+                                      filterQuality: FilterQuality.medium,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          // The image has been loaded successfully.
+                                          return child;
+                                        } else if (loadingProgress
+                                                .cumulativeBytesLoaded ==
+                                            loadingProgress
+                                                .expectedTotalBytes) {
+                                          // The image failed to load.
+                                          return Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.grey[300],
+                                            ),
+                                            height: 30,
+                                            width: 150,
+                                            child:
+                                                const Text('Failed to load!!'),
+                                          );
+                                        } else {
+                                          // The image is still loading.
+                                          return Container(
+                                              child: Lottie.network(
+                                                  'https://lottie.host/a2c7b6fe-1363-4562-95e7-1375d3568f92/zmqqT186Ei.json'));
+                                        }
+                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        // Error occurred while loading the image.
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[300],
+                                          ),
+                                          height: 30,
+                                          width: 150,
+                                          child: const Text('Failed to load!!'),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                  // else
+                                  // Lottie.network('https://lottie.host/a2c7b6fe-1363-4562-95e7-1375d3568f92/zmqqT186Ei.json'),
                                 ]),
                             subtitle: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -336,7 +408,8 @@ class _HomeState extends State<Home> {
                                                 ),
                                               ));
                                         },
-                                        icon: const Icon(Icons.comment,
+                                        icon: const Icon(
+                                            Icons.mode_comment_outlined,
                                             color: Colors.grey)),
                                   ],
                                 )

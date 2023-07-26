@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 
 class AddPost extends StatefulWidget {
   const AddPost({super.key});
@@ -144,11 +145,16 @@ class _AddPostState extends State<AddPost> {
                         : const Text("Upload"),
                   ),
                 if (isLoading)
-                  const Text('Uploading...',
-                      style: TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold)),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    width: 100,
+                    child: Lottie.network(
+                      
+                        'https://lottie.host/4ac94ca4-ba10-459e-a02e-840e4b732adb/YVTNIo6i6o.json',repeat: false),
+                      
+                      
+                  ),
                 if (isLoading)
                   const Text('Please keep patience.',
                       style: TextStyle(

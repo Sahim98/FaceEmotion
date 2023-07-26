@@ -1,19 +1,83 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/auth/Profile/address.dart';
 import 'package:facecam/auth/Profile/sass.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 // ignore: non_constant_identifier_names
 String? Current_User;
-var age = "null";
+var age = "null", post_number = 0;
 
 class User extends StatefulWidget {
   const User({super.key});
   @override
   State<User> createState() => _UserState();
+}
+
+// Future<void> _createPDF() async {
+//   final pdf = pw.Document();
+
+//   pdf.addPage(
+//     pw.Page(
+//       build: (pw.Context context) {
+//         return pw.Center(
+//           child: pw.Text('Welcome to PDF Succinctly!', style: pw.TextStyle(fontSize: 30)),
+//         );
+//       },
+//     ),
+//   );
+
+//   final output = await getTemporaryDirectory();
+//   final file = File('${output.path}/output.pdf');
+//   await file.writeAsBytes(await pdf.save());
+
+//   OpenFile.open(file.path);
+// }
+
+_createPDF() async {
+  PdfDocument document = PdfDocument();
+  final page = document.pages.add();
+
+  PdfGrid grid = PdfGrid();
+  grid.style = PdfGridStyle(
+      font: PdfStandardFont(PdfFontFamily.helvetica, 30),
+      cellPadding: PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
+
+  grid.columns.add(count: 4);
+  grid.headers.add(1);
+
+  PdfGridRow header = grid.headers[0];
+  header.cells[0].value = 'Name';
+  header.cells[1].value = 'email';
+  header.cells[2].value = 'Date of Birth';
+  header.cells[3].value = 'Number of Post';
+
+  PdfGridRow row = grid.rows.add();
+
+  row.cells[0].value = Current_User;
+  row.cells[1].value = FirebaseAuth.instance.currentUser!.email.toString();
+  row.cells[2].value = age;
+  row.cells[3].value = "  $post_number";
+
+  grid.draw(page: page, bounds: const Rect.fromLTWH(0, 0, 0, 0));
+
+  List<int> bytes = document.saveSync();
+  document.dispose();
+  saveAndLaunchFile(bytes, 'Output.pdf');
+}
+
+Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
+  final path = (await getExternalStorageDirectory())?.path;
+  final file = File('$path/$fileName');
+  await file.writeAsBytes(bytes, flush: true);
+  OpenFile.open('$path/$fileName');
 }
 
 class _UserState extends State<User> {
@@ -27,6 +91,11 @@ class _UserState extends State<User> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _createPDF();
+          },
+          child: const Icon(Icons.picture_as_pdf)),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -39,24 +108,11 @@ class _UserState extends State<User> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError || (!snapshot.hasData)) {
-                    return SizedBox(
-                        child: Container(
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 30),
-                          Text(
-                            "Loading...",
-                            style: TextStyle(
-                                fontFamily: 'OpenSans',
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ));
+                    return Center(
+                      child: Container(
+                          child: Lottie.network(
+                              'https://lottie.host/9ec06ac0-25b4-4c55-9a71-c096d83f6921/55Ki6lm5sB.json')),
+                    );
                   }
                   Current_User = snapshot.data!.docs[0]['name'];
                   age = snapshot.data!.docs[0]['age'];
@@ -95,7 +151,7 @@ class _UserState extends State<User> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        '8',
+                        post_number.toString(),
                         style: TextStyle(
                             color: Colors.amberAccent[200],
                             letterSpacing: 2,
@@ -136,13 +192,10 @@ class _UserState extends State<User> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       Row(
                         children: [
                           Icon(
-                            Icons.email,
+                            Icons.date_range,
                             color: Colors.grey[400],
                           ),
                           const Text(
@@ -250,6 +303,9 @@ class _UserState extends State<User> {
                               );
                             }
                             final documents = snapshot.data!.docs;
+
+                            post_number = documents.length;
+
                             return SizedBox(
                               child: ListView.builder(
                                 itemCount: documents.length,
@@ -312,7 +368,8 @@ class _UserState extends State<User> {
                                                                               .toastMessage('Failed to delete POST'));
                                                             },
                                                             icon: const Icon(
-                                                              Icons.delete,
+                                                              Icons
+                                                                  .delete_outline,
                                                               color: Colors.red,
                                                             ))
                                                       ],

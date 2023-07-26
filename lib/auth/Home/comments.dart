@@ -47,11 +47,17 @@ class _CommentsState extends State<Comments> {
       home: Scaffold(
           // resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            backgroundColor: Colors.amber,
-            title: const Text('Comments'),
+            backgroundColor: Colors.white,
+            title: const Text(
+              'Comments',
+              style: TextStyle(color: Colors.grey),
+            ),
             leading: IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios)),
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.orange,
+                )),
           ),
           body: SafeArea(
             child: StreamBuilder<QuerySnapshot>(

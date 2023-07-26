@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/auth/residual/navigationbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
@@ -35,7 +34,7 @@ class _FlashScreenState extends State<FlashScreen> {
 
     if (user != null && localData.containsKey('remember') == true) {
       Timer(
-        const Duration(seconds: 2),
+        const Duration(seconds: 5),
         () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
@@ -49,7 +48,7 @@ class _FlashScreenState extends State<FlashScreen> {
       );
     } else {
       Timer(
-        const Duration(seconds: 2),
+        const Duration(seconds: 5),
         () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
@@ -67,20 +66,33 @@ class _FlashScreenState extends State<FlashScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: AnimatedTextKit(
-          animatedTexts: [
-            WavyAnimatedText('Loading...',
-                textStyle: GoogleFonts.dancingScript(textStyle: style)),
-          ],
-          isRepeatingAnimation: true,
-            ),
+          body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: 300,
+                width: 300,
+                child: Lottie.network(
+                  'https://lottie.host/cf705ad5-184e-4afe-acf1-0ff28c40ebc7/TcC65RZaUt.json',
+                  repeat: true,
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: 200,
+                width: 300,
+                child: Lottie.network(
+                  'https://lottie.host/fb5e9c6c-88fa-49c9-8a39-1940b667419b/8dtdGB8AC0.json',
+                  repeat: true,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       )),
     );
   }

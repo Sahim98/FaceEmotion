@@ -5,7 +5,9 @@ import 'package:facecam/auth/Profile/address.dart';
 import 'package:facecam/auth/Profile/sass.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -82,11 +84,56 @@ Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
 
 class _UserState extends State<User> {
   bool show = true;
-
   final String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
   // ignore: non_constant_identifier_names
   String Address = 'none';
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Future<void> _getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> _saveImageToFirestore() async {
+    if (_image == null) return;
+
+    try {
+      // Upload the image to Firebase Storage
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images/${DateTime.now()}.png');
+      await storageRef.putFile(_image!);
+
+      // Get the download URL of the uploaded image
+      final imageUrl = await storageRef.getDownloadURL();
+
+      // Save the download URL to Firestore
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'image': imageUrl,
+        }, SetOptions(merge: true));
+      }
+    } catch (e) {
+      print('Error saving image: $e');
+    }
+  }
+
+  postUpd(int x) {
+    setState(() {
+      post_number = x;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -304,8 +351,6 @@ class _UserState extends State<User> {
                             }
                             final documents = snapshot.data!.docs;
 
-                            post_number = documents.length;
-
                             return SizedBox(
                               child: ListView.builder(
                                 itemCount: documents.length,
@@ -315,6 +360,8 @@ class _UserState extends State<User> {
                                   String img = docum['image'];
                                   var like = docum['like'];
                                   var dislike = docum['dislike'];
+
+                                  post_number = documents.length;
 
                                   Color likeColor = like.contains(_user)
                                       ? Colors.blue
@@ -375,7 +422,79 @@ class _UserState extends State<User> {
                                                       ],
                                                     )),
                                               ),
-                                              Image.network(img)
+                                              Container(
+                                                alignment: Alignment.center,
+                                                height: 200,
+                                                child: Image.network(
+                                                  img,
+                                                  filterQuality:
+                                                      FilterQuality.medium,
+                                                  loadingBuilder: (context,
+                                                      child, loadingProgress) {
+                                                    if (loadingProgress ==
+                                                        null) {
+                                                      // The image has been loaded successfully.
+                                                      return child;
+                                                    } else if (loadingProgress
+                                                            .cumulativeBytesLoaded ==
+                                                        loadingProgress
+                                                            .expectedTotalBytes) {
+                                                      // The image failed to load.
+                                                      return Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color:
+                                                              Colors.grey[300],
+                                                        ),
+                                                        height: 30,
+                                                        width: 150,
+                                                        child: const Text(
+                                                            'Failed to load!!'),
+                                                      );
+                                                    } else {
+                                                      // The image is still loading.
+                                                      return Column(
+                                                        children: [
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Lottie.asset(
+                                                                  'assets/progressBar.json',
+                                                                  reverse:
+                                                                      true)),
+                                                          Expanded(
+                                                              flex: 3,
+                                                              child: Lottie.network(
+                                                                  'https://lottie.host/a2c7b6fe-1363-4562-95e7-1375d3568f92/zmqqT186Ei.json')),
+                                                        ],
+                                                      );
+                                                      ;
+                                                    }
+                                                  },
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    // Error occurred while loading the image.
+                                                    return Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        color: Colors.grey[300],
+                                                      ),
+                                                      height: 30,
+                                                      width: 150,
+                                                      child: const Text(
+                                                          'Failed to load!!'),
+                                                    );
+                                                  },
+                                                ),
+                                              )
                                             ]),
                                         subtitle: Row(
                                           mainAxisAlignment:

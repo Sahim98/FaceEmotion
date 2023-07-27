@@ -1,16 +1,15 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+
 import 'package:facecam/auth/Home/AddPost.dart';
 import 'package:facecam/auth/Home/comments.dart';
 import 'package:facecam/auth/SignUp/login.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:lottie/lottie.dart';
 
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -37,30 +36,15 @@ class _HomeState extends State<Home> {
     }
   }
 
-  late StreamSubscription subscription;
-  bool isDeviceConnected = false;
-  bool isAlertSet = false;
-
   @override
   void initState() {
     page = 1;
-    getConnectivity();
+
     super.initState();
   }
 
-  getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-        (ConnectivityResult result) async {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-          if (!isDeviceConnected && isAlertSet == false) {
-            setState(() => isAlertSet = true);
-          }
-        },
-      );
-
   @override
   void dispose() {
-    subscription.cancel();
     super.dispose();
   }
 
@@ -211,9 +195,8 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          height: 500,
-                          child: Lottie.network(
-                              'https://lottie.host/122dddd4-c4d5-46a5-9115-1fdcf5523ce6/18erSau2cW.json',
+                          height: 450,
+                          child: Lottie.asset('assets/skeliton.json',
                               repeat: true),
                         ),
                       ],
@@ -311,7 +294,6 @@ class _HomeState extends State<Home> {
                                               fontFamily: 'OpenSans'),
                                         )),
                                   ),
-
                                   Container(
                                     alignment: Alignment.center,
                                     height: 280,
@@ -342,9 +324,19 @@ class _HomeState extends State<Home> {
                                           );
                                         } else {
                                           // The image is still loading.
-                                          return Container(
-                                              child: Lottie.network(
-                                                  'https://lottie.host/a2c7b6fe-1363-4562-95e7-1375d3568f92/zmqqT186Ei.json'));
+                                          return Column(
+                                            children: [
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: Lottie.asset(
+                                                      'assets/progressBar.json',
+                                                      reverse: true)),
+                                              Expanded(
+                                                  flex: 3,
+                                                  child: Lottie.network(
+                                                      'https://lottie.host/a2c7b6fe-1363-4562-95e7-1375d3568f92/zmqqT186Ei.json')),
+                                            ],
+                                          );
                                         }
                                       },
                                       errorBuilder:
@@ -364,8 +356,6 @@ class _HomeState extends State<Home> {
                                       },
                                     ),
                                   )
-                                  // else
-                                  // Lottie.network('https://lottie.host/a2c7b6fe-1363-4562-95e7-1375d3568f92/zmqqT186Ei.json'),
                                 ]),
                             subtitle: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

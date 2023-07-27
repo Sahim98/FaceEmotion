@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -166,11 +163,8 @@ class _CommentDialogState extends State<CommentDialog>
     });
   }
 
-  static const LatLng _kMapCenter =
-      LatLng(19.018255973653343, 72.84793849278007);
 
-  static const CameraPosition _kInitialPosition =
-      CameraPosition(target: _kMapCenter, zoom: 11.0, tilt: 0, bearing: 0);
+
 
   @override
   Widget build(BuildContext context) {

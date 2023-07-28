@@ -194,8 +194,7 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 450,
+                        Expanded(
                           child: Lottie.asset('assets/skeliton.json',
                               repeat: true),
                         ),

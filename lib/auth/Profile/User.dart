@@ -1,17 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecam/auth/Profile/address.dart';
+import 'package:facecam/auth/Profile/imagebb.dart';
 import 'package:facecam/auth/Profile/sass.dart';
 import 'package:facecam/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:dio/dio.dart';
 
 // ignore: non_constant_identifier_names
 String? Current_User;
@@ -22,26 +24,6 @@ class User extends StatefulWidget {
   @override
   State<User> createState() => _UserState();
 }
-
-// Future<void> _createPDF() async {
-//   final pdf = pw.Document();
-
-//   pdf.addPage(
-//     pw.Page(
-//       build: (pw.Context context) {
-//         return pw.Center(
-//           child: pw.Text('Welcome to PDF Succinctly!', style: pw.TextStyle(fontSize: 30)),
-//         );
-//       },
-//     ),
-//   );
-
-//   final output = await getTemporaryDirectory();
-//   final file = File('${output.path}/output.pdf');
-//   await file.writeAsBytes(await pdf.save());
-
-//   OpenFile.open(file.path);
-// }
 
 _createPDF() async {
   PdfDocument document = PdfDocument();
@@ -86,53 +68,57 @@ class _UserState extends State<User> {
   bool show = true;
   final String _user = FirebaseAuth.instance.currentUser!.email.toString();
 
-  // ignore: non_constant_identifier_names
   String Address = 'none';
 
-  File? _image;
+  bool delay = true;
+  bool loading = false;
+  String txt = 'Choose Image';
+  Dio dio = Dio();
+  late ImgbbResponseModel imgbbResponse;
+
+  late File img;
   final picker = ImagePicker();
 
-  Future<void> _getImage() async {
+  getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
+      img = File(pickedFile!.path);
     });
-  }
-
-  Future<void> _saveImageToFirestore() async {
-    if (_image == null) return;
-
-    try {
-      // Upload the image to Firebase Storage
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images/${DateTime.now()}.png');
-      await storageRef.putFile(_image!);
-
-      // Get the download URL of the uploaded image
-      final imageUrl = await storageRef.getDownloadURL();
-
-      // Save the download URL to Firestore
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'image': imageUrl,
-        }, SetOptions(merge: true));
-      }
-    } catch (e) {
-      print('Error saving image: $e');
-    }
-  }
-
-  postUpd(int x) {
     setState(() {
-      post_number = x;
+      uploadImageFile(img);
     });
+  }
+
+  void uploadImageFile(File img) async {
+    setState(() {
+      loading = true;
+    });
+    ByteData bytes = await rootBundle.load(img.path);
+    var buffer = bytes.buffer;
+    var m = base64.encode(Uint8List.view(buffer));
+
+    FormData formData = FormData.fromMap({"key": "imageBBkey", "image": m});
+
+    Response response = await dio.post(
+      "https://api.imgbb.com/1/upload",
+      data: formData,
+    );
+
+    if (response.statusCode != 400) {
+      imgbbResponse = ImgbbResponseModel.fromJson(response.data);
+      Utils()
+          .toastMessage("ImgbbResponse data${imgbbResponse.data.displayUrl}");
+      setState(() {
+        delay = false;
+        loading = false;
+      });
+    } else {
+      txt = 'Error Upload';
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   @override
@@ -167,11 +153,16 @@ class _UserState extends State<User> {
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Center(
-                        child: CircleAvatar(
-                          // backgroundImage: AssetImage('user.jpeg'),
-                          radius: 40,
+                    children: [
+                      Center(
+                        child: InkWell(
+                          onTap: () {
+                            getImage();
+                          },
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: 50,
+                          ),
                         ),
                       ),
                       Divider(

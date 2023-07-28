@@ -76,8 +76,8 @@ class _FlashScreenState extends State<FlashScreen> {
                 alignment: Alignment.center,
                 height: 300,
                 width: 300,
-                child: Lottie.network(
-                  'https://lottie.host/cf705ad5-184e-4afe-acf1-0ff28c40ebc7/TcC65RZaUt.json',
+                child: Lottie.asset(
+                  'assets/loadingBox.json',
                   repeat: true,
                 ),
               ),
@@ -85,8 +85,8 @@ class _FlashScreenState extends State<FlashScreen> {
                 alignment: Alignment.center,
                 height: 200,
                 width: 300,
-                child: Lottie.network(
-                  'https://lottie.host/fb5e9c6c-88fa-49c9-8a39-1940b667419b/8dtdGB8AC0.json',
+                child: Lottie.asset(
+                  'assets/loadingTxt.json',
                   repeat: true,
                 ),
               ),

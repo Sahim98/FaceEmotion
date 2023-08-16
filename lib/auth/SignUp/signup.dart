@@ -29,6 +29,7 @@ class _SignUpState extends State<SignUp> {
   final passController = TextEditingController();
   final _usrcontroller = TextEditingController();
   final _agecontroller = TextEditingController();
+  final phoneController = TextEditingController();
 
   //-------------------creating table of Username
   final firestore = FirebaseFirestore.instance
@@ -86,7 +87,6 @@ class _SignUpState extends State<SignUp> {
       });
     });
   }
-
 
   @override
   void dispose() {
@@ -240,8 +240,11 @@ class _SignUpState extends State<SignUp> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'E-mail is required';
-                            } else {
-                              return null;
+                            }
+                            if (RegExp(r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")
+                                    .hasMatch(value) ==
+                                false) {
+                              return 'Email is badly formatted';
                             }
                           },
                           controller: emailController,
@@ -251,6 +254,38 @@ class _SignUpState extends State<SignUp> {
                               color: Colors.white,
                             ),
                             labelText: 'E-mail',
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 246, 191, 135),
+                          ),
+                          keyboardType: TextInputType.text,
+                          maxLength: 40,
+                          autocorrect: true,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Phone number is required';
+                            }
+                            if (RegExp(r"^(\+88)?[0-0]{1}[1-1]{1}[0-9]{3}[-]?[0-9]{6}$")
+                                    .hasMatch(value) ==
+                                false) {
+                              return 'Phone number is badly formatted';
+                            }
+                          },
+                          controller: phoneController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.white,
+                            ),
+                            labelText: 'Phone Number',
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
+import 'package:image/image.dart' as img;
 
 class Tensorflow extends StatefulWidget {
   const Tensorflow({super.key});
@@ -31,10 +32,9 @@ class _TensorflowState extends State<Tensorflow> {
 
   loadModel() async {
     await Tflite.loadModel(
-      labels: "assets/labels.txt",
-      model: "assets/model_unquant.tflite",
+      labels: "assets/label.txt",
+      model: "assets/model.tflite",
       numThreads: 1,
-      
     );
   }
 
@@ -58,19 +58,30 @@ class _TensorflowState extends State<Tensorflow> {
     super.dispose();
   }
 
+  File convertToGrayscale(File inputImage, File outputImage) {
+    // Read the input image file
+    img.Image? image = img.decodeImage(inputImage.readAsBytesSync());
+
+    // Convert the image to grayscale
+    img.grayscale(image!);
+
+    // Save the grayscale image to the output file
+    outputImage.writeAsBytesSync(img.encodePng(image));
+    return outputImage;
+  }
+
   void pickimage() async {
     // ignore: deprecated_member_use
     var imgGallery = await imgPicker.getImage(source: ImageSource.camera);
     setState(() {
       _image = File(imgGallery!.path);
     });
-
     classifyImage(_image);
   }
 
   @override
   Widget build(BuildContext context) {
-    List emoji = ["....😀", "...😡", "...😥"];
+    // List emoji = ["....😀", "...😡", "...😥"];
     return Scaffold(
       appBar: AppBar(
         elevation: 3,
@@ -93,8 +104,8 @@ class _TensorflowState extends State<Tensorflow> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             _loading
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height,
+                ? Expanded(
+                    flex: 1,
                     child: Center(
                       child: Text(
                         'Select an image...',
@@ -142,10 +153,8 @@ class _TensorflowState extends State<Tensorflow> {
                                           children: [
                                             Text(
                                               _outputs![0]["label"].substring(
-                                                    1,
-                                                  ) +
-                                                  emoji[int.parse(_outputs![0]
-                                                      ["label"][0])],
+                                                1,
+                                              ),
                                               style: const TextStyle(
                                                   color: Colors.grey,
                                                   fontSize: 15,

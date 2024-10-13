@@ -42,14 +42,13 @@ To generate a release APK:
 
 ## Technology used
 
-<div id="badges" align = "center">
-  <a href="https://flutter.dev/?gclid=Cj0KCQjwidSWBhDdARIsAIoTVb1hFezjDm0JJtHWNxz4pIUygGkz3Y5muVXzJwC9MNA7lUVN-xqDlNsaAmOyEALw_wcB&gclsrc=aw.ds">
-    <img src="https://img.shields.io/badge/Flutter-blue?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter Badge"/>
+<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=dart,flutter,firebase" />
   </a>
-  <a href="https://dart.dev/guides">
-     <img src="https://img.shields.io/badge/Dart-red?style=for-the-badge&logo=dart&logoColor=white" alt="Dart Badge"/>
-  </a>
-</div>
+</p>
+
+
 
 ## Features
 - *Realtime face Emotion Recognition*

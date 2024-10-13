@@ -1,4 +1,9 @@
-# facecam
+
+# **Project Name**
+
+### *FaceCam*
+Recognition
+A Flutter project as a part of  the mobile app development course.
 
 # 🚀 Flutter Project Setup
 ## Prerequisites
@@ -24,7 +29,7 @@ Run the following command to install the required dependencies:
 
 ## Run the Project
 For Android/iOS Emulator:
-Make sure android emulator is running, then use:
+Make sure Android emulator is running, then use:
 ``flutter run``
 
 Build APK (for Android)
@@ -32,6 +37,45 @@ To generate a release APK:
 ```flutter build apk --release```
 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+## Technology used
+
+<div id="badges" align = "center">
+  <a href="https://flutter.dev/?gclid=Cj0KCQjwidSWBhDdARIsAIoTVb1hFezjDm0JJtHWNxz4pIUygGkz3Y5muVXzJwC9MNA7lUVN-xqDlNsaAmOyEALw_wcB&gclsrc=aw.ds">
+    <img src="https://img.shields.io/badge/Flutter-blue?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter Badge"/>
+  </a>
+  <a href="https://dart.dev/guides">
+     <img src="https://img.shields.io/badge/Dart-red?style=for-the-badge&logo=dart&logoColor=white" alt="Dart Badge"/>
+  </a>
+</div>
+
+## Features
+- *Realtime face Emotion Recognition*
+- *Realtime like-dislike features*
+- *Updating profile information features*
+- *Uploading image as a post features*
+- *Deleting post features*
+- *Embedding video from YouTube feature*
+- *Commenting on posts along with deleting or updating features*
+- *Realtime unique username detection while registering*
+- *Date Picker*
+- *Sign-up/Sign in using Firebase authentication*
+- *Remember me sign-in features*
+- *Multiple drop-down features*
+- *Flutter Animation*
+- *Realtime rating update on changing/giving rating*
+- *REST API*
+- *Pagination*
+
+
+## Live App Demo
+<div id="header" align="center">
+  <img src="https://media.giphy.com/media/iTWomlMFQXIA5DN0VZ/giphy.gif" width="200"/>
+</div>
+
+
+
+
+

@@ -1,7 +1,7 @@
 
 # **Project Name**
 
-### *FaceCam*
+### *Face Emotion*
 Recognition
 A Flutter project as a part of  the mobile app development course.
 

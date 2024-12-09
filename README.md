@@ -2,8 +2,7 @@
 # **Project Name**
 
 ### *Face Emotion*
-Recognition
-A Flutter project as a part of  the mobile app development course.
+A social media app developed with Flutter & Firebase
 
 # 🚀 Flutter Project Setup
 ## Prerequisites
